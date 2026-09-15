@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MyTicket</title>
+<meta name="theme-color" content="#0D1117">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{
+  --bg:#0D1117; --card:#161B22; --border:#30363D; --green:#238636; --blue:#58A6FF;
+  --orange:#F0883E; --red:#F85149; --purple:#8957E5; --gray:#6E7681;
+  --text:#FFFFFF; --muted:#8B949E;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
+#app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
+.screen{flex:1;display:flex;flex-direction:column;padding:16px 16px calc(24px + env(safe-area-inset-bottom));animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.appbar{position:sticky;top:0;z-index:10;background:var(--card);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;margin:-16px -16px 16px;}
+.appbar h1{font-size:18px;margin:0;font-weight:700;}
+.appbar .ab-btns{display:flex;gap:4px;}
+.icon-btn{background:none;border:none;color:var(--muted);font-size:20px;padding:8px;cursor:pointer;border-radius:10px;}
+.icon-btn:active{background:#21262D;}
+h2.title{font-size:24px;margin:0 0 4px;font-weight:800;}
+p.sub{color:var(--muted);font-size:14px;margin:0 0 20px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;width:100%;}
+.card h3{margin:0 0 10px;font-size:17px;font-weight:600;}
+.card p.hint{color:var(--muted);font-size:13px;margin:0 0 12px;line-height:1.5;}
+.insight{background:#23863610;border:1px solid #23863640;border-radius:12px;padding:14px;
+  font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;width:100%;}
+.alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:14px;margin-bottom:10px;width:100%;}
+.alert-card .emoji{font-size:26px;line-height:1;}
+.alert-card .t{font-size:14px;font-weight:700;margin-bottom:2px;}
+.alert-card .m{font-size:12px;color:var(--muted);line-height:1.4;}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:none;cursor:pointer;
+  border-radius:16px;padding:18px 20px;font-size:17px;font-weight:700;color:#fff;background:var(--green);
+  margin-bottom:10px;min-height:56px;transition:transform .08s;}
+.btn:active{transform:scale(.97);}
+.btn.small{padding:12px 16px;font-size:14px;border-radius:12px;min-height:44px;width:auto;}
+.btn.blue{background:#1F6FEB;} .btn.purple{background:var(--purple);} .btn.gray{background:var(--gray);}
+.btn.outline{background:transparent;border:2px solid var(--red);color:var(--red);}
+.btn.ghost{background:transparent;color:var(--muted);font-weight:500;}
+.row{display:flex;gap:10px;width:100%;}
+.row.between{justify-content:space-between;align-items:center;}
+.row.wrap{flex-wrap:wrap;}
+.input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--text);
+  padding:14px;font-size:16px;margin-bottom:10px;outline:none;}
+.input:focus{border-color:var(--blue);}
+textarea.input{resize:vertical;min-height:70px;}
+label.lbl{font-size:13px;color:var(--muted);display:block;margin:0 0 6px 2px;}
+select.input{appearance:none;}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+.dot{width:32px;height:6px;border-radius:3px;background:var(--border);}
+.dot.done{background:var(--green);} .dot.cur{background:var(--blue);}
+.opt{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;border:1px solid var(--border);
+  background:var(--card);margin-bottom:8px;cursor:pointer;width:100%;text-align:left;color:var(--text);}
+.opt .em{font-size:24px;}
+.opt .tt{font-size:15px;font-weight:700;} .opt .dd{font-size:12px;color:var(--muted);}
+.opt.sel{background:#23863620;border:2px solid var(--green);margin-bottom:7px;}
+.math-line{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);padding:3px 0;}
+.math-big{font-size:20px;font-weight:800;color:var(--blue);padding:8px 0;}
+.mini-grid{display:flex;gap:10px;width:100%;margin-bottom:14px;}
+.mini{flex:1;background:var(--card);border-radius:12px;padding:14px 8px;text-align:center;}
+.mini .l{font-size:11px;color:var(--muted);} .mini .v{font-size:17px;font-weight:800;margin-top:3px;}
+.pbar-wrap{background:var(--border);border-radius:6px;height:8px;overflow:hidden;display:flex;width:100%;}
+.pbar-wrap.h10{height:10px;border-radius:5px;} .pbar-wrap.h16{height:16px;border-radius:8px;}
+.pbar-spent{background:var(--red);height:100%;}
+.pbar-rest{background:var(--green);height:100%;}
+.pbar-ess{background:var(--green);height:100%;}
+.pbar-fug{background:var(--orange);height:100%;}
+.pbar-fill{background:var(--orange);height:100%;border-radius:5px;}
+.legend{display:flex;gap:14px;justify-content:center;font-size:11px;color:var(--muted);margin-top:8px;align-items:center;}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;width:100%;}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:12px;}
+.bars{display:flex;justify-content:space-around;align-items:flex-end;height:130px;gap:6px;}
+.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;max-width:44px;}
+.bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:26px;}
+.bar-ess{background:var(--green);border-radius:4px 4px 0 0;width:100%;}
+.bar-fug{background:var(--orange);border-radius:0 0 4px 4px;width:100%;}
+.bar-lbl{font-size:10px;color:var(--muted);margin-top:6px;}
+.tx-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;width:100%;}
+.tx-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.tx-name{font-weight:700;font-size:15px;} .tx-amt{font-weight:800;color:var(--blue);white-space:nowrap;}
+.tx-date{font-size:12px;color:var(--muted);margin:4px 0;}
+.chip{display:inline-block;font-size:11px;padding:3px 8px;border-radius:6px;margin-right:6px;}
+.chip.ess{background:#23863615;color:var(--green);} .chip.fug{background:#F0883E15;color:var(--orange);}
+.chip.cat-ess{background:#23863615;color:var(--green);} .chip.cat-fug{background:#F0883E15;color:var(--orange);}
+.tx-notes{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px;}
+.item-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;}
+.item-row .ic{font-size:18px;} .item-row .nm{flex:1;} .item-row .nm .n{font-size:15px;font-weight:600;}
+.item-row .nm .e{font-size:11px;color:var(--muted);} .item-row .pr{font-weight:800;font-size:15px;}
+.switch{position:relative;width:48px;height:28px;flex-shrink:0;}
+.switch input{opacity:0;width:0;height:0;}
+.sl{position:absolute;inset:0;background:var(--border);border-radius:28px;transition:.2s;cursor:pointer;}
+.sl:before{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;}
+.switch input:checked + .sl{background:var(--green);}
+.switch input:checked + .sl:before{transform:translateX(20px);}
+.center{text-align:center;} .muted{color:var(--muted);}
+.big-emoji{font-size:44px;text-align:center;margin:8px 0;}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
+  background:var(--green);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;
+  opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:90%;text-align:center;}
+.toast.err{background:var(--red);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.overlay{position:fixed;inset:0;background:rgba(13,17,23,.92);z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;}
+.overlay.hidden{display:none;}
+.spinner{width:56px;height:56px;border:5px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.modal-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:340px;}
+.empty{padding:40px 16px;text-align:center;color:var(--muted);}
+.empty .ic{font-size:52px;margin-bottom:12px;}
+.avatar{font-size:60px;text-align:center;color:var(--blue);margin-bottom:6px;}
+.divider{height:14px;}
+.stat-line{display:flex;justify-content:space-between;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;font-size:13px;}
+a.link{color:var(--blue);}
+@media (max-width:360px){ h2.title{font-size:21px;} .btn{font-size:16px;padding:16px;} }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<div id="overlay" class="overlay hidden"><div class="modal-card center">
+  <div class="spinner"></div>
+  <div style="font-weight:800;font-size:16px;margin-bottom:6px;">Analizando ticket con IA...</div>
+  <div class="muted" style="font-size:13px;">Leyendo productos y precios</div>
+</div></div>
+<input type="file" id="fileInput" accept="image/*" style="display:none">
+
+<script>
+/* ============================================================
+   MyTicket — Web Edition (GitHub Pages ready)
+   Almacenamiento: localStorage | Backend: URL configurable
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const fileInput = $('#fileInput');
+
+/* ---------- Persistencia ---------- */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('mt_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ localStorage.setItem('mt_'+k, JSON.stringify(v)); }
+};
+let profile = store.get('profile', null);
+let txs = store.get('txs', []);
+let notif = store.get('notif', {scan_reminder:true, budget_alert:true, fugas_alert:true, debt_opportunity:true});
+let apiUrl = store.get('api', '');
+
+let onboardingData = {};
+let lastScan = null;
+
+/* ---------- Utilidades ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money = n => '$ ' + (Number(n)||0).toLocaleString('es-MX',{maximumFractionDigits:0});
+const money2 = n => '$ ' + (Number(n)||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
+const thisMonth = () => new Date().toISOString().slice(0,7);
+const today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+
+function toast(msg, err){
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '');
+  clearTimeout(t._h); t._h = setTimeout(()=> t.className='toast', 3000);
+}
+function overlay(show){ $('#overlay').classList.toggle('hidden', !show); }
+function fmtNumInput(el){
+  const digits = (el.value||'').replace(/\D/g,'').slice(0,10);
+  el.value = digits ? Number(digits).toLocaleString('en-US') : '';
+}
+function parseNum(s){ return Number(String(s||'').replace(/,/g,'').replace('$','').trim()) || 0; }
+
+/* ---------- Lógica de datos (portada de la app Flet) ---------- */
+function monthlySummary(month){
+  month = month || thisMonth();
+  let t=0, spent=0, fugas=0;
+  txs.forEach(x => { if((x.date||'').slice(0,7)===month){ t++; spent+=x.total_amount||0; if(x.category==='Fugas_Invisibles') fugas+=x.total_amount||0; } });
+  return {tickets:t, spent, fugas};
+}
+function weeklyFugas(){
+  const lim = Date.now() - 7*86400000; let s=0;
+  txs.forEach(x => { if(x.category==='Fugas_Invisibles' && new Date(x.date).getTime() >= lim) s += x.total_amount||0; });
+  return s;
+}
+function lastScanDate(){ return txs.length ? txs.map(x=>x.date).sort().pop() : null; }
+function topMerchants(limit){
+  const agg = {};
+  txs.forEach(x => { if((x.date||'').slice(0,7)===thisMonth()) agg[x.merchant_name] = (agg[x.merchant_name]||0) + (x.total_amount||0); });
+  return Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0, limit||5);
+}
+function monthsWithData(){
+  const set = new Set(txs.map(x => (x.date||'').slice(0,7)).filter(Boolean));
+  const m = thisMonth(); if(!set.has(m)) set.add(m);
+  return [...set].sort().reverse();
+}
+function chartData(){
+  const map = {};
+  const now = new Date();
+  for(let i=5;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    map[k] = {total:0, fugas:0};
+  }
+  txs.forEach(x => {
+    const k = (x.date||'').slice(0,7);
+    if(map[k]){ map[k].total += x.total_amount||0; if(x.category==='Fugas_Invisibles') map[k].fugas += x.total_amount||0; }
+  });
+  return Object.entries(map);
+}
+function coachAlerts(){
+  const a = []; if(!profile) return a;
+  const s = monthlySummary();
+  const avail = profile.available_real||0, debt = profile.debt_amount||0, name = profile.name;
+  if(notif.scan_reminder){
+    const l = lastScanDate();
+    if(l){ const days = Math.floor((Date.now()-new Date(l).getTime())/86400000);
+      if(days>7) a.push(['📸',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`,'var(--blue)']);
+    } else if(s.tickets===0) a.push(['🚀','Primer paso',`${name}, escanea tu primer ticket para que tu copiloto empiece a aprender de ti.`,'var(--green)']);
+  }
+  if(notif.fugas_alert && s.spent>0 && (s.fugas/s.spent)>0.25)
+    a.push(['🔥','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%). Es momento de revisar.`,'var(--orange)']);
+  if(notif.budget_alert && avail>0 && s.spent > avail*0.85)
+    a.push(['⚠️','Presupuesto bajo',`Solo te quedan ${money(avail-s.spent)} de tu disponible real. Cuidado con los gastos.`,'var(--red)']);
+  if(notif.debt_opportunity && debt>0 && s.fugas>0){
+    const w = weeklyFugas();
+    if(w>0){ const ms = Math.floor(debt/500 - debt/(500+w/4)); if(ms>0)
+      a.push(['🛣️','Oportunidad de rescate',`Redirige la mitad de tus fugas a tu deuda y terminas ${ms} meses antes.`,'var(--blue)']); }
+  }
+  return a;
+}
+function saveTxLocal(data){
+  txs.unshift({
+    id: Date.now(), date: data.date || today(), merchant_name: data.merchant_name || 'Desconocido',
+    total_amount: data.total_amount||0, currency: data.currency||'MXN',
+    category: data.category||'Gasto_Normal', items: data.items||[], notes: data.notes||'',
+    created_at: new Date().toISOString()
+  });
+  store.set('txs', txs);
+}
+function exportCSV(){
+  let csv = 'Fecha,Comercio,Total,Categoria,Productos Esenciales,Productos No Esenciales,Notas\n';
+  txs.forEach(t => {
+    const ess = (t.items||[]).filter(i=>i.is_essential).length;
+    csv += [t.date, `"${(t.merchant_name||'').replace(/"/g,'""')}"`, t.total_amount, t.category, ess, (t.items||[]).length-ess, `"${(t.notes||'').replace(/"/g,'""')}"`].join(',') + '\n';
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
+  a.download = 'myticket_export.csv'; a.click(); URL.revokeObjectURL(a.href);
+  toast('CSV exportado');
+}
+
+/* ---------- Componentes HTML ---------- */
+const dots = (step, total=5) => `<div class="dots">${Array.from({length:total},(_,i)=>
+  `<div class="dot ${i<step?'done':i===step?'cur':''}"></div>`).join('')}</div>`;
+const insight = t => `<div class="insight">${t}</div>`;
+const alertCard = (e,t,m,c) => `<div class="alert-card" style="background:${c}10;border:1px solid ${c}40;">
+  <div class="emoji">${e}</div><div><div class="t" style="color:${c}">${t}</div><div class="m">${m}</div></div></div>`;
+const mini = (l,v,c) => `<div class="mini"><div class="l">${l}</div><div class="v" style="color:${c||'var(--text)'}">${v}</div></div>`;
+function barChart(){
+  const rows = chartData();
+  if(!txs.length) return `<div class="chart-card center muted">Escanear tickets para ver tu gráfica</div>`;
+  const max = Math.max(...rows.map(r=>r[1].total), 1);
+  const bars = rows.map(([m,d]) => {
+    const th = Math.max(4, d.total/max*110);
+    const fh = d.total>0 ? d.fugas/max*110 : 0;
+    return `<div class="bar-col"><div class="bar-stack" style="height:110px;">
+      <div class="bar-ess" style="height:${Math.max(0,th-fh)}px"></div>
+      <div class="bar-fug" style="height:${fh}px"></div></div>
+      <div class="bar-lbl">${m.slice(5)}</div></div>`;
+  }).join('');
+  return `<div class="chart-card"><div class="chart-title">Gastos últimos meses</div>
+    <div class="bars">${bars}</div>
+    <div class="legend"><span><span class="sw" style="background:var(--green)"></span>Gasto</span>
+    <span><span class="sw" style="background:var(--orange)"></span>Fugas</span></div></div>`;
+}
+
+/* ============================================================
+   ONBOARDING (5 pasos)
+   ============================================================ */
+function renderStep1(){
+  app.innerHTML = `<div class="screen">${dots(0)}
+    <h2 class="title">Bienvenido a MyTicket</h2>
+    <p class="sub">Paso 1 de 5 — Configuración personal</p>
+    <div class="card"><h3>¿Quién usará esta app?</h3>
+      <p class="hint">No necesitamos tu nombre real. Solo un apodo para personalizar tu experiencia.</p>
+      <input class="input" id="ob-name" placeholder="Ej: Papá Juan, Doña María, Yo..." maxlength="30"></div>
+    ${insight('La app dirá "Papá Juan, este mes llevas $340 en antojos" en vez de "Usuario_102". La familiaridad genera confianza.')}
+    <button class="btn" onclick="obNext1()">Siguiente ➜</button></div>`;
+  setTimeout(()=> $('#ob-name').focus(), 100);
+}
+function obNext1(){
+  const v = $('#ob-name').value.trim();
+  if(!v) return toast('Por favor escribe un nombre', true);
+  onboardingData.name = v; renderStep2();
+}
+function renderStep2(){
+  const opts = [['fijo','💼','Salario fijo','Quincena o mensualidad estable'],
+    ['eventual','🔧','Trabajo informal','Ingresos variables, jornales, freelance'],
+    ['negocio','🏪','Negocio propio','Ventas, comercio, servicios propios'],
+    ['pension','🧓','Pensión / Jubilación','Ingreso fijo de retiro']];
+  app.innerHTML = `<div class="screen">${dots(1)}
+    <h2 class="title">Tus ingresos</h2>
+    <p class="sub">Paso 2 de 5 — Sin datos bancarios</p>
+    <div class="card"><h3>¿Cómo llega tu dinero?</h3>
+      ${opts.map(o=>`<button class="opt" data-v="${o[0]}" onclick="obPickType(this)"><span class="em">${o[1]}</span>
+        <span><span class="tt">${o[2]}</span><br><span class="dd">${o[3]}</span></span></button>`).join('')}
+      <div class="divider"></div>
+      <input class="input" id="ob-income" inputmode="numeric" placeholder="¿Cuánto ganas al mes (aprox)?" oninput="fmtNumInput(this)">
+      <div class="center" id="ob-income-disp" style="color:var(--blue);font-weight:700;">$ 0 MXN</div></div>
+    ${insight('Si tu ingreso es eventual, la app te dirá "Llevas 60% de tu promedio mensual" en vez de regañarte. Contexto real.')}
+    <div class="row between">
+      <button class="btn ghost" style="width:auto" onclick="renderStep1()">‹ Atrás</button>
+      <button class="btn" style="width:70%" onclick="obNext2()">Siguiente ➜</button></div></div>`;
+  $('#ob-income').addEventListener('input', ()=> $('#ob-income-disp').textContent = money(parseNum($('#ob-income').value)) + ' MXN');
+  obPickType(document.querySelector('.opt'));
+}
+function obPickType(el){
+  onboardingData.income_type = el.dataset.v;
+  document.querySelectorAll('.opt').forEach(o=> o.classList.toggle('sel', o===el));
+}
+function obNext2(){
+  const amt = parseNum($('#ob-income').value);
+  if(amt<=0) return toast('Por favor ingresa un monto válido', true);
+  onboardingData.income_amount = amt; renderStep3();
+}
+function renderStep3(){
+  const income = onboardingData.income_amount;
+  app.innerHTML = `<div class="screen">${dots(2)}
+    <h2 class="title">Gastos que no puedes evitar</h2>
+    <p class="sub">Paso 3 de 5 — Lo que ya está comprometido</p>
+    <div class="card"><h3>¿Qué pagas SÍ o SÍ cada mes?</h3>
+      <p class="hint">Renta, luz, agua, internet, teléfono, gasolina fija, medicinas recurrentes...</p>
+      <input class="input" id="ob-fixed" inputmode="numeric" placeholder="Ej: 8,500" oninput="fmtNumInput(this);obMath()">
+      <div class="center" id="ob-fixed-disp" style="color:var(--blue);font-weight:700;">$ 0 MXN</div></div>
+    <div class="card" id="ob-math"></div>
+    ${insight('La app calcula tu "dinero de verdad". Si escaneas un ticket de $200, sabe qué representa de tu disponible REAL.')}
+    <div class="row between">
+      <button class="btn ghost" style="width:auto" onclick="renderStep2()">‹ Atrás</button>
+      <button class="btn" style="width:70%" onclick="obNext3()">Siguiente ➜</button></div></div>`;
+  obMath();
+}
+function obMath(){
+  const income = onboardingData.income_amount;
+  const fixed = parseNum($('#ob-fixed')?.value);
+  $('#ob-fixed-disp') && ($('#ob-fixed-disp').textContent = money(fixed) + ' MXN');
+  const avail = Math.max(0, income - fixed);
+  $('#ob-math').innerHTML = `<h3>Tu matemática real:</h3>
+    <div class="math-line"><span>Ingreso mensual</span><span>${money(income)}</span></div>
+    <div class="math-line"><span>Gastos fijos</span><span>${money(fixed)}</span></div>
+    <div class="math-big center">Dinero REAL disponible: ${money(avail)}</div>
+    <p class="hint center" style="margin:0">Ese es tu mundo. De ahí salen los tickets que escanearás.</p>`;
+}
+function obNext3(){
+  onboardingData.fixed_expenses = parseNum($('#ob-fixed').value);
+  onboardingData.available_real = Math.max(0, onboardingData.income_amount - onboardingData.fixed_expenses);
+  renderStep4();
+}
+function renderStep4(){
+  app.innerHTML = `<div class="screen">${dots(3)}
+    <h2 class="title">Tu Ruta de Rescate</h2>
+    <p class="sub">Paso 4 de 5 — Opcional pero transformador</p>
+    <div class="card"><h3>¿Tienes deudas activas?</h3>
+      <div class="row" style="margin-bottom:12px">
+        <button class="opt" id="debt-si" onclick="obDebt('si')" style="flex:1;justify-content:center"><span class="tt">Sí, tengo deudas</span></button>
+        <button class="opt sel" id="debt-no" onclick="obDebt('no')" style="flex:1;justify-content:center"><span class="tt">No tengo deudas</span></button></div>
+      <div id="debt-fields" style="display:none">
+        <input class="input" id="ob-debt" inputmode="numeric" placeholder="¿Cuánto debes en total?" oninput="fmtNumInput(this)">
+        <input class="input" id="ob-interest" inputmode="numeric" placeholder="¿Qué interés anual pagas? (aprox) %"></div></div>
+    <div class="card" style="border:2px solid var(--orange)"><h3 style="color:var(--orange)">Lo que pasará si lo configuras:</h3>
+      <p class="hint">1. Escaneas un ticket<br>2. La app detecta $60 en "fugas"<br>3. Sugiere: "¿Rediriges $30 a tu deuda?"<br><br>
+      <b style="color:var(--text)">Así terminas meses antes y ahorras en intereses.</b></p></div>
+    ${insight('La deuda deja de ser un monstruo abstracto y se convierte en una barra de progreso.')}
+    <div class="row between">
+      <button class="btn ghost" style="width:auto" onclick="renderStep3()">‹ Atrás</button>
+      <button class="btn" style="width:70%" onclick="obNext4()">Siguiente ➜</button></div></div>`;
+}
+function obDebt(v){
+  onboardingData._hasDebt = v;
+  $('#debt-si').classList.toggle('sel', v==='si');
+  $('#debt-no').classList.toggle('sel', v==='no');
+  $('#debt-fields').style.display = v==='si' ? 'block' : 'none';
+}
+function obNext4(){
+  if(onboardingData._hasDebt==='si'){
+    onboardingData.debt_amount = parseNum($('#ob-debt').value);
+    onboardingData.debt_interest = parseNum($('#ob-interest').value);
+  } else { onboardingData.debt_amount = 0; onboardingData.debt_interest = 0; }
+  renderStep5();
+}
+function renderStep5(){
+  const d = onboardingData, rescue = d.debt_amount>0 ? Math.floor(d.debt_amount/500) : 0;
+  const feat = (e,t,s)=>`<div class="mini" style="padding:12px 6px"><div style="font-size:24px">${e}</div>
+    <div style="font-size:11px;font-weight:700;margin:4px 0 2px">${t}</div>
+    <div style="font-size:10px;color:var(--muted)">${s}</div></div>`;
+  app.innerHTML = `<div class="screen">${dots(4)}
+    <h2 class="title">Tu perfil está listo</h2>
+    <p class="sub">Esto es lo que MyTicket sabe de ti</p>
+    <div class="card center"><h3 style="font-size:20px">${esc(d.name)}</h3>
+      <p class="hint" style="margin:6px 0">Ingreso: <b style="color:var(--text)">${money(d.income_amount)} MXN</b><br>
+      Gastos fijos: <b style="color:var(--text)">${money(d.fixed_expenses)} MXN</b></p>
+      <div class="math-big">Disponible REAL: ${money(d.available_real)}</div></div>
+    ${d.debt_amount>0 ? `<div class="card" style="border:2px solid var(--orange)">
+      <h3 style="color:var(--orange)">Objetivo activo</h3>
+      <p class="hint">Deuda: <b style="color:var(--text)">${money(d.debt_amount)} MXN</b><br>
+      Si rediriges 50% de fugas: libre en ~${rescue} meses</p></div>`
+    : `<div class="card center" style="border:2px solid var(--green)"><h3 style="color:var(--green)">✓ Sin deudas activas</h3>
+      <p class="hint" style="margin:0">¡Estás libre de deudas!</p></div>`}
+    <p class="sub" style="margin-top:6px">Las 4 funciones que usarás:</p>
+    <div class="mini-grid">${feat('📸','Snap & Extract','Foto al ticket → IA lo lee')}${feat('🚨','Radar de Fugas','Detecta gastos hormiga')}</div>
+    <div class="mini-grid" style="margin-top:-4px">${feat('🛣️','Ruta de Rescate','Cada ticket acerca la meta')}${feat('💬','Coach Personal','Frases con TUS datos')}</div>
+    <div class="divider"></div>
+    <div class="row between">
+      <button class="btn ghost" style="width:auto" onclick="renderStep4()">‹ Atrás</button>
+      <button class="btn" style="width:70%" onclick="finishOnboarding()">🚀 ¡Empezar!</button></div></div>`;
+}
+function finishOnboarding(){
+  profile = { name:onboardingData.name, income_type:onboardingData.income_type||'fijo',
+    income_amount:onboardingData.income_amount, fixed_expenses:onboardingData.fixed_expenses,
+    available_real:onboardingData.available_real, debt_amount:onboardingData.debt_amount||0,
+    debt_interest:onboardingData.debt_interest||0, savings_goal:0, currency:'MXN' };
+  store.set('profile', profile);
+  toast(`¡Bienvenido, ${profile.name}! Tu copiloto está listo.`);
+  renderHome();
+}
+
+/* ============================================================
+   HOME / DASHBOARD
+   ============================================================ */
+function appbar(title, back, actions){
+  return `<div class="appbar"><div style="width:44px">${back?`<button class="icon-btn" onclick="${back}">‹</button>`:''}</div>
+    <h1>${title}</h1><div class="ab-btns" style="width:88px;justify-content:flex-end">${actions||''}</div></div>`;
+}
+function renderHome(){
+  if(!profile) return renderStep1();
+  const s = monthlySummary(), avail = profile.available_real||0, debt = profile.debt_amount||0;
+  const wf = weeklyFugas();
+  const fugasPct = s.spent>0 ? s.fugas/s.spent*100 : 0;
+  const spentPct = avail>0 ? Math.min(100, s.spent/avail*100) : 0;
+  const restPct = Math.max(0, 100-spentPct);
+  const ac = fugasPct<10 ? 'var(--green)' : fugasPct<20 ? 'var(--orange)' : 'var(--red)';
+
+  let coach;
+  if(s.tickets===0) coach = `Hola ${esc(profile.name)}, escanea tu primer ticket para empezar a tomar control.`;
+  else if(fugasPct<5) coach = `¡Vas excelente ${esc(profile.name)}! Solo el ${fugasPct.toFixed(0)}% de fugas este mes.`;
+  else if(fugasPct<15) coach = `Cuidado ${esc(profile.name)}, llevas ${fugasPct.toFixed(0)}% en fugas. Un ojo ahí.`;
+  else coach = `¡Alerta ${esc(profile.name)}! ${fugasPct.toFixed(0)}% de tu gasto son fugas.`;
+  if(debt>0 && wf>0) coach += ` Si rediriges la mitad de tus fugas (${money(wf/2)}/sem) a tu deuda, terminas antes.`;
+
+  const alerts = coachAlerts().slice(0,2).map(a=>alertCard(...a)).join('');
+
+  app.innerHTML = `<div class="screen">
+    ${appbar(`Hola, ${esc(profile.name)}`, null,
+      `<button class="icon-btn" onclick="renderNotif()">🔔</button><button class="icon-btn" onclick="renderProfile()">⚙️</button>`)}
+    <div class="alert-card" style="background:#58A6FF10;border:1px solid #58A6FF30;">
+      <div class="emoji">💬</div><div><div class="m" style="font-size:13px;line-height:1.5">${coach}</div></div></div>
+    ${alerts}
+    <div class="card center">
+      <div style="font-size:13px;color:var(--muted)">Disponible REAL este mes</div>
+      <div style="font-size:40px;font-weight:800;margin:4px 0">${money(Math.max(0, avail - s.spent))}</div>
+      <div style="font-size:13px;color:var(--muted)">de ${money(avail)} MXN</div>
+      <div class="divider"></div>
+      <div class="pbar-wrap"><div class="pbar-spent" style="width:${spentPct}%"></div><div class="pbar-rest" style="width:${restPct}%"></div></div>
+      <div class="row between" style="margin-top:6px">
+        <span style="font-size:11px;color:var(--red)">Gastado: ${spentPct.toFixed(0)}%</span>
+        <span style="font-size:11px;color:var(--green)">Restante: ${restPct.toFixed(0)}%</span></div>
+      <div class="divider"></div>
+      <div style="font-size:13px;color:var(--muted)">🧾 ${s.tickets} tickets este mes</div></div>
+    <div class="mini-grid">${mini('Gastado', money(s.spent))}${mini('Fugas', money(s.fugas), ac)}${mini('Restante', restPct.toFixed(0)+'%', 'var(--blue)')}</div>
+    ${barChart()}
+    <div class="divider"></div>
+    <button class="btn" onclick="openScanDialog()">📸 Escanear Ticket</button>
+    <button class="btn blue" onclick="renderHistory()">🕘 Ver Historial</button>
+    <button class="btn purple" onclick="renderStats()">📊 Estadísticas</button>
+    <button class="btn gray" onclick="renderProfile()">👤 Mi Perfil</button></div>`;
+}
+
+/* ============================================================
+   ESCANEO
+   ============================================================ */
+function openScanDialog(){
+  overlay(false);
+  app.insertAdjacentHTML('beforeend', `<div class="overlay" id="scanDlg"><div class="modal-card">
+    <h3 style="margin:0 0 4px">Escanear ticket</h3>
+    <p class="muted" style="font-size:13px;margin:0 0 16px">¿Cómo quieres capturarlo?</p>
+    <button class="btn" onclick="pickImage('camera')">📷 Tomar foto</button>
+    <button class="btn blue" onclick="pickImage('gallery')">🖼️ Elegir de galería</button>
+    <button class="btn ghost" onclick="$('#scanDlg').remove()">Cancelar</button></div></div>`);
+}
+function pickImage(source){
+  $('#scanDlg').remove();
+  if(source==='camera') fileInput.setAttribute('capture','environment'); else fileInput.removeAttribute('capture');
+  fileInput.value = ''; fileInput.click();
+}
+fileInput.addEventListener('change', () => { if(fileInput.files[0]) processScan(fileInput.files[0]); });
+
+function compressImage(file){
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const max = 1024; let w = img.width, h = img.height;
+      if(w > max){ h = Math.round(h * max/w); w = max; }
+      const c = document.createElement('canvas'); c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      c.toBlob(b => resolve(b || file), 'image/jpeg', 0.85);
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = () => resolve(file);
+    img.src = URL.createObjectURL(file);
+  });
+}
+async function processScan(file){
+  if(!apiUrl){ toast('⚠️ Primero configura la URL de tu backend en Mi Perfil', true); return renderProfile(); }
+  overlay(true);
+  try{
+    const blob = await compressImage(file);
+    const fd = new FormData();
+    fd.append('file', blob, 'ticket.jpg');
+    let result = null, err = '';
+    for(let attempt=0; attempt<2 && !result; attempt++){
+      try{
+        const r = await fetch(apiUrl.replace(/\/+$/,'') + '/scan-ticket', { method:'POST', body:fd });
+        const j = await r.json();
+        if(r.ok && !j.error) result = j; else err = j.error || ('Error del servidor: ' + r.status);
+      }catch(ex){ err = ex.message; }
+      if(!result && attempt===0) await new Promise(r=>setTimeout(r,2000));
+    }
+    overlay(false);
+    if(result){ lastScan = result; renderResult(); }
+    else toast('Error: ' + (err || 'no se pudo analizar'), true);
+  }catch(e){ overlay(false); toast('Error: ' + e.message, true); }
+}
+
+/* ============================================================
+   RESULTADO
+   ============================================================ */
+function renderResult(){
+  const d = lastScan; if(!d) return renderHome();
+  const avail = profile.available_real||0, debt = profile.debt_amount||0;
+  const items = d.items || [];
+  let essT = 0, fugT = 0;
+  items.forEach(i => { i.is_essential ? essT += (i.price||0) : fugT += (i.price||0); });
+  const total = d.total_amount || essT + fugT;
+  const fugasPct = total>0 ? fugT/total*100 : 0;
+  const category = fugasPct > 30 ? 'Fugas_Invisibles' : 'Gasto_Normal';
+  const realPct = avail>0 ? total/avail*100 : 0;
+  const essPct = total>0 ? essT/total*100 : 0, fugPct = total>0 ? fugT/total*100 : 0;
+
+  const sug = [];
+  if(realPct > 20) sug.push(`Este ticket representa el <b>${realPct.toFixed(1)}%</b> de tu dinero disponible del mes.`);
+  if(fugT > 0){ const proj = (weeklyFugas()+fugT)*4; sug.push(`Si sigues así, tus fugas este mes serían ~${money(proj)}.`); }
+  if(debt>0 && fugT>0){
+    const red = fugT*0.5;
+    const ms = Math.floor(debt/500 - debt/(500+red*4));
+    if(ms>0) sug.push(`Redirige <b>${money(red)}</b> de este ticket a tu deuda y terminas <b>${ms} meses</b> antes.`);
+  }
+  if(fugT===0 && total>0) sug.push(`¡Compra 100% esencial, ${esc(profile.name)}! Así se construye la libertad financiera.`);
+  const coachText = sug.length ? sug.join('<br><br>') : 'Ticket analizado correctamente.';
+
+  app.innerHTML = `<div class="screen">
+    ${appbar('Resultado del Escaneo', 'renderHome()')}
+    <div class="card center"><h3 style="font-size:20px">${esc(d.merchant_name||'Desconocido')}</h3>
+      <p class="muted" style="font-size:13px;margin:4px 0 10px">${esc(d.date||'Sin fecha')}</p>
+      <div style="font-size:26px;font-weight:800;color:var(--blue)">Total: ${money2(total)} MXN</div></div>
+    <div class="card center"><div style="font-size:12px;color:var(--muted);margin-bottom:8px">Distribución de la compra</div>
+      <div class="pbar-wrap h10" style="max-width:280px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
+      <div class="legend" style="max-width:280px;margin:8px auto 0">
+        <span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+    <div class="card" style="font-size:13px;color:var(--muted);line-height:1.6">${coachText}</div>
+    <div class="mini-grid">${mini('Esencial', money2(essT), 'var(--green)')}${mini('No Esencial', money2(fugT), 'var(--orange)')}</div>
+    ${fugasPct>30 ? `<div class="card center" style="background:#DA363220;border-color:#DA3632;color:var(--red);font-weight:700;font-size:14px">⚠️ ${fugasPct.toFixed(0)}% de este ticket son fugas</div>`:''}
+    ${debt>0 && fugT>0 ? `<div class="card" style="background:#F0883E15;border-color:#F0883E40">
+      <h3 style="color:var(--orange);font-size:14px">🛣️ Oportunidad de Ruta de Rescate</h3>
+      <p class="hint" style="margin:0">Si rediriges la mitad de estas fugas (${money(fugT/2)}) a tu deuda de ${money(debt)}, te acercas a la libertad.</p></div>`:''}
+    <p style="font-size:15px;font-weight:600;margin:4px 0 10px">Productos detectados:</p>
+    <div style="max-height:260px;overflow-y:auto;margin-bottom:14px">
+      ${items.length ? items.map(i=>`<div class="item-row">
+        <span class="ic">${i.is_essential?'🟢':'🟠'}</span>
+        <span class="nm"><span class="n">${esc(i.name||'Desconocido')}</span><br><span class="e">${i.is_essential?'Esencial':'No esencial'}</span></span>
+        <span class="pr">${money2(i.price||0)}</span></div>`).join('') : '<div class="empty">Sin productos detectados</div>'}</div>
+    <div class="card"><h3 style="font-size:14px">Agregar nota (opcional)</h3>
+      <textarea class="input" id="res-notes" placeholder="Ej: Compra del súper del fin de semana..."></textarea></div>
+    <button class="btn" onclick="saveResult(true)">💾 Guardar y seguir</button>
+    <button class="btn blue" onclick="saveResult(false)">🕘 Guardar y ver historial</button>
+    <button class="btn outline" onclick="renderHome()">Descartar</button></div>`;
+}
+function saveResult(goHome){
+  const d = lastScan || {};
+  const items = d.items || [];
+  const fugT = items.filter(i=>!i.is_essential).reduce((s,i)=>s+(i.price||0),0);
+  const total = d.total_amount || items.reduce((s,i)=>s+(i.price||0),0);
+  d.category = (total>0 && fugT/total>0.3) ? 'Fugas_Invisibles' : 'Gasto_Normal';
+  d.notes = $('#res-notes') ? $('#res-notes').value : '';
+  saveTxLocal(d);
+  toast('¡Ticket guardado! Tu copiloto aprendió de este gasto.');
+  goHome ? renderHome() : renderHistory();
+}
+
+/* ============================================================
+   HISTORIAL
+   ============================================================ */
+let histMonth = thisMonth();
+function renderHistory(){
+  const months = monthsWithData();
+  if(!months.includes(histMonth)) histMonth = months[0];
+  app.innerHTML = `<div class="screen">
+    ${appbar('Historial', 'renderHome()', `<button class="icon-btn" onclick="exportCSV()" title="Exportar CSV">⬇️</button>`)}
+    <div class="row between" style="margin-bottom:10px">
+      <span style="font-size:13px;color:var(--muted)">Filtrar por mes:</span>
+      <select class="input" style="width:150px;margin:0;padding:10px" onchange="histMonth=this.value;renderHistory()">
+        ${months.map(m=>`<option value="${m}" ${m===histMonth?'selected':''}>${m}</option>`).join('')}</select></div>
+    <p class="muted" id="hist-summary" style="font-size:13px"></p>
+    <div id="hist-list" style="flex:1"></div></div>`;
+  renderHistList();
+}
+function renderHistList(){
+  const list = txs.filter(x => (x.date||'').slice(0,7) === histMonth);
+  let tm = 0, tf = 0;
+  list.forEach(t => { tm += t.total_amount||0; if(t.category==='Fugas_Invisibles') tf += t.total_amount||0; });
+  $('#hist-summary').textContent = `Total: ${money2(tm)} | Fugas: ${money2(tf)} | Tickets: ${list.length}`;
+  $('#hist-list').innerHTML = list.length ? list.map(t => {
+    const ess = (t.items||[]).filter(i=>i.is_essential).length, non = (t.items||[]).length - ess;
+    const isF = t.category === 'Fugas_Invisibles';
+    return `<div class="tx-item">
+      <div class="tx-top"><span>${isF?'🟠':'🟢'} <span class="tx-name">${esc(t.merchant_name)}</span></span>
+        <span class="tx-amt">${money2(t.total_amount)}</span></div>
+      <div class="tx-date">${esc(t.date)}</div>
+      <div><span class="chip ess">${ess} esencial</span>${non>0?`<span class="chip fug">${non} no esencial</span>`:''}
+        <span class="chip ${isF?'cat-fug':'cat-ess'}">${t.category.replace('_',' ')}</span></div>
+      ${t.notes ? `<div class="tx-notes">"${esc(t.notes)}"</div>` : ''}</div>`;
+  }).join('') : `<div class="empty"><div class="ic">📭</div>No hay tickets en este mes<br><br>
+    <button class="btn small" onclick="renderHome()">📸 Escanear ahora</button></div>`;
+}
+
+/* ============================================================
+   ESTADÍSTICAS
+   ============================================================ */
+function renderStats(){
+  const totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0);
+  const avg = txs.length ? totalAll/txs.length : 0;
+  const tops = topMerchants(5);
+  let essT=0, fugT=0;
+  txs.forEach(t => (t.items||[]).forEach(i => i.is_essential ? essT+=(i.price||0) : fugT+=(i.price||0)));
+  const ti = essT+fugT, essPct = ti>0 ? essT/ti*100 : 0, fugPct = ti>0 ? fugT/ti*100 : 0;
+  app.innerHTML = `<div class="screen">
+    ${appbar('Estadísticas', 'renderHome()')}
+    <h2 class="title">Resumen de ${esc(profile.name)}</h2>
+    <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
+    <div class="chart-card"><div class="chart-title">Distribución histórica</div>
+      <div class="pbar-wrap h16" style="max-width:240px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
+      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+    ${barChart()}
+    <p style="font-size:16px;font-weight:600;margin:6px 0 10px">Top comercios (este mes)</p>
+    ${tops.length ? tops.map((t,i)=>`<div class="stat-line"><span>${i+1}. ${esc(t[0])}</span><b style="color:var(--blue)">${money(t[1])}</b></div>`).join('')
+      : '<p class="muted" style="font-size:12px">Aún no hay datos suficientes</p>'}
+    <div class="divider"></div>
+    <p style="font-size:16px;font-weight:600;margin:6px 0 10px">Contexto financiero</p>
+    <div class="card" style="font-size:14px;color:var(--muted)">
+      Ingreso mensual: <b style="color:var(--text)">${money(profile.income_amount)} MXN</b><br>
+      Disponible real: <b style="color:var(--text)">${money(profile.available_real)} MXN</b><br>
+      Deuda activa: <b style="color:var(--text)">${money(profile.debt_amount)} MXN</b><br><br>
+      Total gastado (histórico): <b style="color:var(--text)">${money(totalAll)} MXN</b><br>
+      De eso, fugas: <span style="color:var(--orange)">${money(fugT)} MXN (${fugPct.toFixed(0)}%)</span></div></div>`;
+}
+
+/* ============================================================
+   NOTIFICACIONES
+   ============================================================ */
+function renderNotif(){
+  const row = (key, t, d) => `<div class="card row between" style="margin-bottom:10px">
+    <div><div style="font-size:15px;font-weight:700">${t}</div><div class="muted" style="font-size:12px">${d}</div></div>
+    <label class="switch"><input type="checkbox" id="nt-${key}" ${notif[key]?'checked':''}><span class="sl"></span></label></div>`;
+  app.innerHTML = `<div class="screen">
+    ${appbar('Alertas del Coach', 'renderHome()')}
+    <p class="muted" style="font-size:14px">Elige qué alertas quieres recibir</p>
+    ${row('scan_reminder','Recordatorio de escaneo','Si llevas más de 7 días sin escanear')}
+    ${row('budget_alert','Alerta de presupuesto','Cuando tu disponible real baje del 15%')}
+    ${row('fugas_alert','Alerta de fugas','Cuando tus gastos no esenciales superen el 25%')}
+    ${row('debt_opportunity','Oportunidades de deuda','Sugerencias para acelerar tu Ruta de Rescate')}
+    ${insight('Estas alertas aparecen en la pantalla principal. En el futuro podrán llegar como notificaciones push.')}
+    <button class="btn" onclick="saveNotif()">💾 Guardar configuración</button></div>`;
+}
+function saveNotif(){
+  ['scan_reminder','budget_alert','fugas_alert','debt_opportunity'].forEach(k => notif[k] = $('#nt-'+k).checked);
+  store.set('notif', notif);
+  toast('Configuración de alertas guardada');
+  renderHome();
+}
+
+/* ============================================================
+   PERFIL
+   ============================================================ */
+function renderProfile(){
+  const p = profile, totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0), avg = txs.length ? totalAll/txs.length : 0;
+  const tops = topMerchants(3);
+  const types = [['fijo','💼','Salario fijo'],['eventual','🔧','Informal'],['negocio','🏪','Negocio'],['pension','🧓','Pensión']];
+  const progress = p.debt_amount>0 ? Math.min(100, (txs.filter(t=>t.category==='Fugas_Invisibles').reduce((s,t)=>s+(t.total_amount||0),0)*0.3)/p.debt_amount*100) : 0;
+  app.innerHTML = `<div class="screen">
+    ${appbar('Mi Perfil', 'renderHome()')}
+    <div class="avatar">👤</div>
+    <h2 class="center title">${esc(p.name)}</h2>
+    <p class="sub center" style="margin-bottom:16px">Configuración financiera</p>
+    <div class="row wrap" style="margin-bottom:14px" id="prof-types">
+      ${types.map(t=>`<button class="opt ${p.income_type===t[0]?'sel':''}" data-v="${t[0]}" onclick="profPickType(this)" style="width:auto;padding:8px 12px;margin:0 6px 8px 0">
+        <span style="font-size:18px">${t[1]}</span><span class="tt" style="font-size:13px">${t[2]}</span></button>`).join('')}</div>
+    <label class="lbl">Nombre / Apodo</label><input class="input" id="pf-name" value="${esc(p.name)}">
+    <label class="lbl">Ingreso mensual</label><input class="input" id="pf-income" inputmode="numeric" value="${(p.income_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
+    <label class="lbl">Gastos fijos</label><input class="input" id="pf-fixed" inputmode="numeric" value="${(p.fixed_expenses||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
+    <div class="center" id="pf-avail" style="color:var(--blue);font-weight:800;font-size:17px;margin:6px 0 12px"></div>
+    <label class="lbl">Deuda total</label><input class="input" id="pf-debt" inputmode="numeric" value="${(p.debt_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
+    <label class="lbl">Interés anual aprox (%)</label><input class="input" id="pf-interest" inputmode="numeric" value="${p.debt_interest||''}">
+    <label class="lbl">Meta de ahorro mensual</label><input class="input" id="pf-savings" inputmode="numeric" value="${p.savings_goal?(p.savings_goal).toLocaleString('en-US'):''}" oninput="fmtNumInput(this)">
+    <div class="divider"></div>
+    <div class="card" style="border-color:var(--blue)"><h3 style="font-size:14px;color:var(--blue)">🔌 Backend (donde vive tu key de Groq)</h3>
+      <p class="hint">Pega aquí la URL de tu backend (Cloudflare Worker). Tu API key <b>NUNCA</b> se guarda en esta web; vive solo en el servidor.</p>
+      <input class="input" id="pf-api" placeholder="https://tu-worker.tu-usuario.workers.dev" value="${esc(apiUrl)}" autocapitalize="off" autocorrect="off" spellcheck="false">
+      <p class="hint" style="margin:0;font-size:12px">📖 Guía para crearlo: busca "Cloudflare Workers" en la documentación que te compartí.</p></div>
+    ${p.debt_amount>0?`<div class="card" style="border-color:#F0883E40"><div style="font-size:14px;font-weight:700;color:var(--orange)">🛣️ Progreso Ruta de Rescate</div>
+      <div class="pbar-wrap" style="margin:10px 0 6px"><div class="pbar-fill" style="width:${progress}%"></div></div>
+      <p class="muted" style="font-size:12px;margin:0">Estimado pagado: ${money(p.debt_amount*progress/100)} de ${money(p.debt_amount)} (${progress.toFixed(1)}%)</p></div>`:''}
+    <p style="font-size:16px;font-weight:600;margin:8px 0 10px">Tus estadísticas</p>
+    <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
+    <p style="font-size:14px;font-weight:600;margin:4px 0 8px">Comercios más frecuentes</p>
+    ${tops.length ? tops.map(t=>`<div class="stat-line"><span>${esc(t[0])}</span><b style="color:var(--blue)">${money(t[1])}</b></div>`).join('')
+      : '<p class="muted" style="font-size:12px">Aún no hay datos suficientes</p>'}
+    <div class="divider"></div>
+    <button class="btn" onclick="saveProfile()">💾 Guardar Cambios</button>
+    <button class="btn outline" onclick="resetApp()">🗑️ Reiniciar app (borrar todo)</button></div>`;
+  profCalc();
+}
+let profType = profile ? profile.income_type : 'fijo';
+function profPickType(el){ profType = el.dataset.v; document.querySelectorAll('#prof-types .opt').forEach(o=>o.classList.toggle('sel', o===el)); }
+function profCalc(){
+  const avail = Math.max(0, parseNum($('#pf-income').value) - parseNum($('#pf-fixed').value));
+  $('#pf-avail').textContent = 'Disponible REAL: ' + money(avail) + ' MXN';
+}
+function saveProfile(){
+  const inc = parseNum($('#pf-income').value), fix = parseNum($('#pf-fixed').value);
+  profile = { ...profile, name: $('#pf-name').value.trim() || profile.name, income_type: profType,
+    income_amount: inc, fixed_expenses: fix, available_real: Math.max(0, inc-fix),
+    debt_amount: parseNum($('#pf-debt').value), debt_interest: parseNum($('#pf-interest').value),
+    savings_goal: parseNum($('#pf-savings').value) };
+  apiUrl = $('#pf-api').value.trim();
+  store.set('profile', profile); store.set('api', apiUrl);
+  toast('Perfil actualizado correctamente');
+  renderHome();
+}
+function resetApp(){
+  if(!confirm('¿Reiniciar MyTicket?\n\nSe borrarán TODOS tus datos: perfil, tickets e historial. Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem('mt_profile'); localStorage.removeItem('mt_txs');
+  localStorage.removeItem('mt_notif');
+  profile = null; txs = []; notif = {scan_reminder:true,budget_alert:true,fugas_alert:true,debt_opportunity:true};
+  toast('App reiniciada. Configura tu perfil de nuevo.');
+  renderStep1();
+}
+
+/* ---------- Arranque ---------- */
+profile ? renderHome() : renderStep1();
+</script>
+</body>
+</html>
