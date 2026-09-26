@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  
     <!-- El Favicon clásico para la pestaña del navegador -->
 <link rel="icon" type="image/png" href="./favicon.png">
 
@@ -14,143 +13,229 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MyTicket</title>
-<meta name="theme-color" content="#0D1117">
+<meta name="theme-color" content="#F2F5F9">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0D1117; --card:#161B22; --border:#30363D; --green:#238636; --blue:#58A6FF;
-  --orange:#F0883E; --red:#F85149; --purple:#8957E5; --gray:#6E7681;
-  --text:#FFFFFF; --muted:#8B949E;
+  --bg:#F2F5F9; --card:#FFFFFF; --border:#E6EBF2; --ink:#0F1D2E; --muted:#5B6B7C;
+  --primary:#0A5CFF; --primary-dark:#0041B8; --green:#0FA958; --green-soft:#E7F7EE;
+  --orange:#F79009; --orange-soft:#FEF3E2; --red:#E5484D; --red-soft:#FDECEC;
+  --blue-soft:#EAF1FF; --radius:20px;
+  --shadow:0 2px 10px rgba(15,29,46,.06), 0 8px 24px rgba(15,29,46,.06);
+  --shadow-lg:0 12px 32px rgba(10,92,255,.25);
 }
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
-#app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;}
-.screen{flex:1;display:flex;flex-direction:column;padding:16px 16px calc(24px + env(safe-area-inset-bottom));animation:fade .25s ease;}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.appbar{position:sticky;top:0;z-index:10;background:var(--card);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 12px 10px;margin:-16px -16px 16px;}
-.appbar h1{font-size:18px;margin:0;font-weight:700;}
-.appbar .ab-btns{display:flex;gap:4px;}
-.icon-btn{background:none;border:none;color:var(--muted);font-size:20px;padding:8px;cursor:pointer;border-radius:10px;}
-.icon-btn:active{background:#21262D;}
-h2.title{font-size:24px;margin:0 0 4px;font-weight:800;}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+#app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;}
+.screen{flex:1;display:flex;flex-direction:column;padding:16px 16px 24px;animation:fade .3s ease;}
+.screen.withtab{padding-bottom:calc(110px + env(safe-area-inset-bottom));}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- Header ---------- */
+.appbar{position:sticky;top:0;z-index:20;background:rgba(242,245,249,.92);backdrop-filter:blur(12px);
+  display:flex;align-items:center;gap:8px;padding:calc(12px + env(safe-area-inset-top)) 4px 12px;margin:-16px -16px 16px;}
+.appbar .back{width:42px;height:42px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;}
+.appbar h1{font-size:19px;font-weight:800;flex:1;}
+.appbar .hbtn{width:42px;height:42px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;position:relative;}
+.hbtn .badge{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--card);}
+
+/* ---------- Bottom tab bar ---------- */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:30;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);
+  display:flex;align-items:flex-end;justify-content:space-around;padding:8px 8px calc(10px + env(safe-area-inset-bottom));}
+.tab{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);
+  font-size:11px;font-weight:600;cursor:pointer;padding:4px 10px;min-width:60px;font-family:inherit;}
+.tab.on{color:var(--primary);}
+.tab:active{transform:scale(.94);}
+.fab{width:60px;height:60px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--primary),#00B4A6);
+  color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-30px;
+  box-shadow:var(--shadow-lg);transition:transform .12s;}
+.fab:active{transform:scale(.92);}
+
+/* ---------- Tarjetas / texto ---------- */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;
+  margin-bottom:14px;width:100%;box-shadow:var(--shadow);}
+.card h3{margin:0 0 10px;font-size:18px;font-weight:800;}
+.card p.hint{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.55;}
+h2.title{font-size:25px;margin:0 0 4px;font-weight:800;letter-spacing:-.3px;}
 p.sub{color:var(--muted);font-size:14px;margin:0 0 20px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:14px;width:100%;}
-.card h3{margin:0 0 10px;font-size:17px;font-weight:600;}
-.card p.hint{color:var(--muted);font-size:13px;margin:0 0 12px;line-height:1.5;}
-.insight{background:#23863610;border:1px solid #23863640;border-radius:12px;padding:14px;
-  font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;width:100%;}
-.alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:14px;margin-bottom:10px;width:100%;}
-.alert-card .emoji{font-size:26px;line-height:1;}
-.alert-card .t{font-size:14px;font-weight:700;margin-bottom:2px;}
-.alert-card .m{font-size:12px;color:var(--muted);line-height:1.4;}
+.center{text-align:center;} .muted{color:var(--muted);} .divider{height:12px;}
+
+.insight{background:var(--green-soft);border-radius:16px;padding:16px;font-size:13.5px;color:#1E6B41;
+  line-height:1.6;margin-bottom:14px;width:100%;display:flex;gap:10px;}
+.insight:before{content:"💡";}
+
+.alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:15px;margin-bottom:10px;width:100%;}
+.alert-card .aico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px;}
+.alert-card .t{font-size:14.5px;font-weight:800;margin-bottom:2px;}
+.alert-card .m{font-size:13px;color:var(--muted);line-height:1.45;}
+
+/* ---------- Botones ---------- */
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:none;cursor:pointer;
-  border-radius:16px;padding:18px 20px;font-size:17px;font-weight:700;color:#fff;background:var(--green);
-  margin-bottom:10px;min-height:56px;transition:transform .08s;}
+  border-radius:999px;padding:18px 24px;font-size:16.5px;font-weight:800;color:#fff;background:var(--primary);
+  margin-bottom:10px;min-height:58px;font-family:inherit;box-shadow:0 6px 16px rgba(10,92,255,.28);transition:transform .1s;}
 .btn:active{transform:scale(.97);}
-.btn.small{padding:12px 16px;font-size:14px;border-radius:12px;min-height:44px;width:auto;}
-.btn.blue{background:#1F6FEB;} .btn.purple{background:var(--purple);} .btn.gray{background:var(--gray);}
-.btn.outline{background:transparent;border:2px solid var(--red);color:var(--red);}
-.btn.ghost{background:transparent;color:var(--muted);font-weight:500;}
-.row{display:flex;gap:10px;width:100%;}
-.row.between{justify-content:space-between;align-items:center;}
-.row.wrap{flex-wrap:wrap;}
-.input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--text);
-  padding:14px;font-size:16px;margin-bottom:10px;outline:none;}
-.input:focus{border-color:var(--blue);}
-textarea.input{resize:vertical;min-height:70px;}
-label.lbl{font-size:13px;color:var(--muted);display:block;margin:0 0 6px 2px;}
-select.input{appearance:none;}
-.dots{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
-.dot{width:32px;height:6px;border-radius:3px;background:var(--border);}
-.dot.done{background:var(--green);} .dot.cur{background:var(--blue);}
-.opt{display:flex;gap:12px;align-items:center;padding:14px;border-radius:12px;border:1px solid var(--border);
-  background:var(--card);margin-bottom:8px;cursor:pointer;width:100%;text-align:left;color:var(--text);}
-.opt .em{font-size:24px;}
-.opt .tt{font-size:15px;font-weight:700;} .opt .dd{font-size:12px;color:var(--muted);}
-.opt.sel{background:#23863620;border:2px solid var(--green);margin-bottom:7px;}
-.math-line{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);padding:3px 0;}
-.math-big{font-size:20px;font-weight:800;color:var(--blue);padding:8px 0;}
+.btn.blue{background:#6E3AFF;box-shadow:0 6px 16px rgba(110,58,255,.28);} .btn.purple{background:#6E3AFF;box-shadow:0 6px 16px rgba(110,58,255,.28);}
+.btn.gray{background:#425466;box-shadow:none;}
+.btn.outline{background:transparent;border:2px solid var(--red);color:var(--red);box-shadow:none;}
+.btn.ghost{background:transparent;color:var(--muted);box-shadow:none;font-weight:700;}
+.btn.small{padding:12px 18px;font-size:14px;min-height:46px;width:auto;box-shadow:none;}
+.row{display:flex;gap:10px;width:100%;} .row.between{justify-content:space-between;align-items:center;} .row.wrap{flex-wrap:wrap;}
+
+/* ---------- Inputs ---------- */
+.input{width:100%;background:#EEF2F7;border:1.5px solid transparent;border-radius:14px;color:var(--ink);
+  padding:16px;font-size:17px;margin-bottom:12px;outline:none;font-family:inherit;font-weight:500;transition:border .15s;}
+.input:focus{border-color:var(--primary);background:#fff;}
+textarea.input{resize:vertical;min-height:76px;}
+label.lbl{font-size:13.5px;color:var(--muted);display:block;margin:0 0 6px 4px;font-weight:600;}
+select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235B6B7C' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;}
+
+/* ---------- Onboarding ---------- */
+.dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
+.dot{width:34px;height:7px;border-radius:4px;background:#D8E0EA;transition:.25s;}
+.dot.done{background:var(--green);} .dot.cur{background:var(--primary);width:46px;}
+.opt{display:flex;gap:14px;align-items:center;padding:16px;border-radius:16px;border:2px solid var(--border);
+  background:#fff;margin-bottom:10px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:inherit;transition:.15s;}
+.opt .em{font-size:26px;}
+.opt .tt{font-size:16px;font-weight:800;} .opt .dd{font-size:13px;color:var(--muted);}
+.opt.sel{border-color:var(--primary);background:var(--blue-soft);box-shadow:0 4px 14px rgba(10,92,255,.15);}
+.math-line{display:flex;justify-content:space-between;font-size:14.5px;color:var(--muted);padding:4px 0;font-weight:500;}
+.math-big{font-size:22px;font-weight:800;color:var(--primary);padding:10px 0;}
+
+/* ---------- Tarjeta saldo (estilo banco) ---------- */
+.hero{background:linear-gradient(135deg,#0A5CFF 0%,#00B4A6 100%);border-radius:26px;padding:24px 22px;margin-bottom:14px;
+  color:#fff;position:relative;overflow:hidden;box-shadow:0 16px 36px rgba(10,92,255,.35);width:100%;}
+.hero:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);top:-90px;right:-60px;}
+.hero:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);bottom:-70px;left:-40px;}
+.hero .hl{font-size:13px;opacity:.85;font-weight:600;}
+.hero .hv{font-size:42px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;}
+.hero .hs{font-size:14px;opacity:.85;font-weight:500;}
+.hero .pbar-wrap{background:rgba(255,255,255,.25);margin:16px 0 8px;}
+.hero .pbar-spent{background:#fff;}
+.hero .pbar-rest{background:rgba(255,255,255,.45);}
+.hero .pl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;}
+.hero .foot{display:flex;align-items:center;gap:7px;font-size:13.5px;opacity:.9;margin-top:14px;font-weight:600;}
+
+/* ---------- Stats / barras ---------- */
 .mini-grid{display:flex;gap:10px;width:100%;margin-bottom:14px;}
-.mini{flex:1;background:var(--card);border-radius:12px;padding:14px 8px;text-align:center;}
-.mini .l{font-size:11px;color:var(--muted);} .mini .v{font-size:17px;font-weight:800;margin-top:3px;}
-.pbar-wrap{background:var(--border);border-radius:6px;height:8px;overflow:hidden;display:flex;width:100%;}
-.pbar-wrap.h10{height:10px;border-radius:5px;} .pbar-wrap.h16{height:16px;border-radius:8px;}
-.pbar-spent{background:var(--red);height:100%;}
-.pbar-rest{background:var(--green);height:100%;}
-.pbar-ess{background:var(--green);height:100%;}
-.pbar-fug{background:var(--orange);height:100%;}
-.pbar-fill{background:var(--orange);height:100%;border-radius:5px;}
-.legend{display:flex;gap:14px;justify-content:center;font-size:11px;color:var(--muted);margin-top:8px;align-items:center;}
-.legend .sw{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px;width:100%;}
-.chart-title{font-size:14px;font-weight:700;margin-bottom:12px;}
+.mini{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px 8px;text-align:center;box-shadow:var(--shadow);}
+.mini .l{font-size:11.5px;color:var(--muted);font-weight:600;} .mini .v{font-size:17px;font-weight:800;margin-top:4px;letter-spacing:-.3px;}
+.pbar-wrap{background:#E3EAF2;border-radius:99px;height:8px;overflow:hidden;display:flex;width:100%;}
+.pbar-wrap.h10{height:11px;} .pbar-wrap.h16{height:16px;}
+.pbar-spent{background:var(--red);height:100%;border-radius:99px;}
+.pbar-rest{background:var(--green);height:100%;border-radius:99px;}
+.pbar-ess{background:var(--green);height:100%;border-radius:99px 0 0 99px;}
+.pbar-fug{background:var(--orange);height:100%;border-radius:0 99px 99px 0;}
+.pbar-fill{background:linear-gradient(90deg,var(--orange),#FFB25E);height:100%;border-radius:99px;}
+.legend{display:flex;gap:16px;justify-content:center;font-size:12px;color:var(--muted);margin-top:10px;align-items:center;font-weight:600;}
+.legend .sw{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px;}
+
+/* ---------- Gráfica ---------- */
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:14px;width:100%;box-shadow:var(--shadow);}
+.chart-title{font-size:15px;font-weight:800;margin-bottom:14px;}
 .bars{display:flex;justify-content:space-around;align-items:flex-end;height:130px;gap:6px;}
-.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;max-width:44px;}
-.bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:26px;}
-.bar-ess{background:var(--green);border-radius:4px 4px 0 0;width:100%;}
-.bar-fug{background:var(--orange);border-radius:0 0 4px 4px;width:100%;}
-.bar-lbl{font-size:10px;color:var(--muted);margin-top:6px;}
-.tx-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px;width:100%;}
+.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;max-width:46px;}
+.bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:24px;}
+.bar-ess{background:linear-gradient(180deg,#33A1FF,var(--primary));border-radius:6px 6px 0 0;width:100%;}
+.bar-fug{background:linear-gradient(180deg,#FFB25E,var(--orange));border-radius:0 0 6px 6px;width:100%;}
+.bar-lbl{font-size:10.5px;color:var(--muted);margin-top:7px;font-weight:600;}
+
+/* ---------- Movimientos ---------- */
+.tx-item{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:10px;width:100%;box-shadow:var(--shadow);}
 .tx-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
-.tx-name{font-weight:700;font-size:15px;} .tx-amt{font-weight:800;color:var(--blue);white-space:nowrap;}
-.tx-date{font-size:12px;color:var(--muted);margin:4px 0;}
-.chip{display:inline-block;font-size:11px;padding:3px 8px;border-radius:6px;margin-right:6px;}
-.chip.ess{background:#23863615;color:var(--green);} .chip.fug{background:#F0883E15;color:var(--orange);}
-.chip.cat-ess{background:#23863615;color:var(--green);} .chip.cat-fug{background:#F0883E15;color:var(--orange);}
-.tx-notes{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px;}
-.item-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:8px;}
-.item-row .ic{font-size:18px;} .item-row .nm{flex:1;} .item-row .nm .n{font-size:15px;font-weight:600;}
-.item-row .nm .e{font-size:11px;color:var(--muted);} .item-row .pr{font-weight:800;font-size:15px;}
-.switch{position:relative;width:48px;height:28px;flex-shrink:0;}
+.tx-ico{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.tx-name{font-weight:800;font-size:15.5px;} .tx-amt{font-weight:800;color:var(--primary);white-space:nowrap;font-size:15.5px;}
+.tx-date{font-size:12.5px;color:var(--muted);margin:3px 0 8px;font-weight:500;}
+.chip{display:inline-block;font-size:11.5px;padding:4px 10px;border-radius:99px;margin-right:6px;font-weight:700;}
+.chip.ess{background:var(--green-soft);color:var(--green);} .chip.fug{background:var(--orange-soft);color:#B25E09;}
+.chip.cat-ess{background:var(--green-soft);color:var(--green);} .chip.cat-fug{background:var(--orange-soft);color:#B25E09;}
+.tx-notes{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:8px;}
+
+/* ---------- Items de resultado ---------- */
+.item-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px 15px;margin-bottom:8px;box-shadow:var(--shadow);}
+.item-row .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.item-row .nm{flex:1;} .item-row .nm .n{font-size:15.5px;font-weight:700;}
+.item-row .nm .e{font-size:11.5px;color:var(--muted);font-weight:600;}
+.item-row .pr{font-weight:800;font-size:15px;}
+
+/* ---------- Switch ---------- */
+.switch{position:relative;width:52px;height:32px;flex-shrink:0;}
 .switch input{opacity:0;width:0;height:0;}
-.sl{position:absolute;inset:0;background:var(--border);border-radius:28px;transition:.2s;cursor:pointer;}
-.sl:before{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;}
+.sl{position:absolute;inset:0;background:#D8E0EA;border-radius:99px;transition:.2s;cursor:pointer;}
+.sl:before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.2);}
 .switch input:checked + .sl{background:var(--green);}
 .switch input:checked + .sl:before{transform:translateX(20px);}
-.center{text-align:center;} .muted{color:var(--muted);}
-.big-emoji{font-size:44px;text-align:center;margin:8px 0;}
-.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
-  background:var(--green);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:600;
-  opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:90%;text-align:center;}
+
+/* ---------- Toast / overlay ---------- */
+.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
+  background:#0F1D2E;color:#fff;padding:14px 22px;border-radius:16px;font-size:14px;font-weight:700;
+  opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:88%;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.3);}
 .toast.err{background:var(--red);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.overlay{position:fixed;inset:0;background:rgba(13,17,23,.92);z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;}
+.overlay{position:fixed;inset:0;background:rgba(15,29,46,.55);backdrop-filter:blur(4px);z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;}
 .overlay.hidden{display:none;}
-.spinner{width:56px;height:56px;border:5px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+.spinner{width:54px;height:54px;border:5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.modal-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;width:100%;max-width:340px;}
-.empty{padding:40px 16px;text-align:center;color:var(--muted);}
-.empty .ic{font-size:52px;margin-bottom:12px;}
-.avatar{font-size:60px;text-align:center;color:var(--blue);margin-bottom:6px;}
-.divider{height:14px;}
-.stat-line{display:flex;justify-content:space-between;padding:8px 12px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:8px;font-size:13px;}
-a.link{color:var(--blue);}
-@media (max-width:360px){ h2.title{font-size:21px;} .btn{font-size:16px;padding:16px;} }
+.modal-card{background:#fff;border-radius:26px;padding:28px 24px;width:100%;max-width:350px;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:pop .25s ease;}
+@keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-card h3{font-size:19px;font-weight:800;margin-bottom:4px;}
+
+.empty{padding:44px 16px;text-align:center;color:var(--muted);}
+.empty .ic{font-size:54px;margin-bottom:14px;}
+.avatar{width:76px;height:76px;border-radius:26px;background:linear-gradient(135deg,var(--primary),#00B4A6);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:34px;margin:6px auto 12px;box-shadow:var(--shadow-lg);}
+.stat-line{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--card);
+  border:1px solid var(--border);border-radius:14px;margin-bottom:8px;font-size:14px;font-weight:600;box-shadow:var(--shadow);}
+.badge-num{width:24px;height:24px;border-radius:8px;background:var(--blue-soft);color:var(--primary);
+  display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-right:8px;}
+@media (max-width:360px){ .hero .hv{font-size:36px;} h2.title{font-size:22px;} }
 </style>
+<base target="_blank">
 </head>
 <body>
 <div id="app"></div>
 <div id="toast" class="toast"></div>
 <div id="overlay" class="overlay hidden"><div class="modal-card center">
   <div class="spinner"></div>
-  <div style="font-weight:800;font-size:16px;margin-bottom:6px;">Analizando ticket con IA...</div>
-  <div class="muted" style="font-size:13px;">Leyendo productos y precios</div>
+  <div style="font-weight:800;font-size:16.5px;margin-bottom:6px;">Analizando tu ticket…</div>
+  <div class="muted" style="font-size:13.5px;">La IA está leyendo productos y precios</div>
 </div></div>
 <input type="file" id="fileInput" accept="image/*" style="display:none">
 
 <script>
 /* ============================================================
-   MyTicket — Web Edition (GitHub Pages ready)
-   Almacenamiento: localStorage | Backend: URL configurable
+   MyTicket — Web Edition · UI 2.0 (estilo banca)
+   Misma lógica y datos que la v1. Solo rediseño visual.
    ============================================================ */
 const $ = s => document.querySelector(s);
 const app = $('#app');
 const fileInput = $('#fileInput');
 
-/* ---------- Persistencia ---------- */
+/* ---------- Íconos SVG ---------- */
+const IC = (p)=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICONS = {
+  home: IC('<path d="m3 10.5 9-7.5 9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>'),
+  clock: IC('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  chart: IC('<path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/>'),
+  user: IC('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/>'),
+  bell: IC('<path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/>'),
+  gear: IC('<circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h0a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55h0a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v0a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.55 1z"/>'),
+  camera: IC('<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/>'),
+  back: IC('<path d="m15 18-6-6 6-6"/>'),
+  download: IC('<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/>'),
+  check: IC('<path d="m4.5 12.5 5 5 10-11"/>'),
+  warn: IC('<path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17.2" r=".5" fill="currentColor"/>'),
+  spark: IC('<path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/>'),
+  trend: IC('<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>'),
+};
+
+/* ---------- Persistencia (mismas keys que v1) ---------- */
 const store = {
   get(k, d){ try{ const v = localStorage.getItem('mt_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
   set(k, v){ localStorage.setItem('mt_'+k, JSON.stringify(v)); }
@@ -181,7 +266,7 @@ function fmtNumInput(el){
 }
 function parseNum(s){ return Number(String(s||'').replace(/,/g,'').replace('$','').trim()) || 0; }
 
-/* ---------- Lógica de datos (portada de la app Flet) ---------- */
+/* ---------- Lógica de datos (idéntica a v1) ---------- */
 function monthlySummary(month){
   month = month || thisMonth();
   let t=0, spent=0, fugas=0;
@@ -225,17 +310,17 @@ function coachAlerts(){
   if(notif.scan_reminder){
     const l = lastScanDate();
     if(l){ const days = Math.floor((Date.now()-new Date(l).getTime())/86400000);
-      if(days>7) a.push(['📸',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`,'var(--blue)']);
-    } else if(s.tickets===0) a.push(['🚀','Primer paso',`${name}, escanea tu primer ticket para que tu copiloto empiece a aprender de ti.`,'var(--green)']);
+      if(days>7) a.push(['📸','#EAF1FF','var(--primary)',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`]);
+    } else if(s.tickets===0) a.push(['🚀','var(--green-soft)','var(--green)','Primer paso',`${name}, escanea tu primer ticket para que tu copiloto empiece a aprender de ti.`]);
   }
   if(notif.fugas_alert && s.spent>0 && (s.fugas/s.spent)>0.25)
-    a.push(['🔥','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%). Es momento de revisar.`,'var(--orange)']);
+    a.push(['🔥','var(--orange-soft)','#B25E09','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%). Es momento de revisar.`]);
   if(notif.budget_alert && avail>0 && s.spent > avail*0.85)
-    a.push(['⚠️','Presupuesto bajo',`Solo te quedan ${money(avail-s.spent)} de tu disponible real. Cuidado con los gastos.`,'var(--red)']);
+    a.push(['⚠️','var(--red-soft)','var(--red)','Presupuesto bajo',`Solo te quedan ${money(avail-s.spent)} de tu disponible real. Cuidado con los gastos.`]);
   if(notif.debt_opportunity && debt>0 && s.fugas>0){
     const w = weeklyFugas();
     if(w>0){ const ms = Math.floor(debt/500 - debt/(500+w/4)); if(ms>0)
-      a.push(['🛣️','Oportunidad de rescate',`Redirige la mitad de tus fugas a tu deuda y terminas ${ms} meses antes.`,'var(--blue)']); }
+      a.push(['🛣️','#EAF1FF','var(--primary)','Oportunidad de rescate',`Redirige la mitad de tus fugas a tu deuda y terminas ${ms} meses antes.`]); }
   }
   return a;
 }
@@ -260,13 +345,14 @@ function exportCSV(){
   toast('CSV exportado');
 }
 
-/* ---------- Componentes HTML ---------- */
+/* ---------- Componentes ---------- */
 const dots = (step, total=5) => `<div class="dots">${Array.from({length:total},(_,i)=>
   `<div class="dot ${i<step?'done':i===step?'cur':''}"></div>`).join('')}</div>`;
 const insight = t => `<div class="insight">${t}</div>`;
-const alertCard = (e,t,m,c) => `<div class="alert-card" style="background:${c}10;border:1px solid ${c}40;">
-  <div class="emoji">${e}</div><div><div class="t" style="color:${c}">${t}</div><div class="m">${m}</div></div></div>`;
-const mini = (l,v,c) => `<div class="mini"><div class="l">${l}</div><div class="v" style="color:${c||'var(--text)'}">${v}</div></div>`;
+const alertCard = (e,bg,c,t,m) => `<div class="alert-card" style="background:${bg};">
+  <div class="aico" style="background:${c}18;color:${c};">${e}</div>
+  <div><div class="t" style="color:${c};">${t}</div><div class="m">${m}</div></div></div>`;
+const mini = (l,v,c) => `<div class="mini"><div class="l">${l}</div><div class="v" style="color:${c||'var(--ink)'}">${v}</div></div>`;
 function barChart(){
   const rows = chartData();
   if(!txs.length) return `<div class="chart-card center muted">Escanear tickets para ver tu gráfica</div>`;
@@ -281,12 +367,26 @@ function barChart(){
   }).join('');
   return `<div class="chart-card"><div class="chart-title">Gastos últimos meses</div>
     <div class="bars">${bars}</div>
-    <div class="legend"><span><span class="sw" style="background:var(--green)"></span>Gasto</span>
+    <div class="legend"><span><span class="sw" style="background:var(--primary)"></span>Gasto</span>
     <span><span class="sw" style="background:var(--orange)"></span>Fugas</span></div></div>`;
+}
+function tabbar(active){
+  const t = (id, icon, label, fn) => `<button class="tab ${active===id?'on':''}" onclick="${fn}">${icon}<span>${label}</span></button>`;
+  return `<div class="tabbar">
+    ${t('home', ICONS.home, 'Inicio', 'renderHome()')}
+    ${t('hist', ICONS.clock, 'Movimientos', 'renderHistory()')}
+    <button class="fab" onclick="openScanDialog()" aria-label="Escanear ticket">${ICONS.camera}</button>
+    ${t('stats', ICONS.chart, 'Análisis', 'renderStats()')}
+    ${t('prof', ICONS.user, 'Perfil', 'renderProfile()')}
+  </div>`;
+}
+function appbar(title, back, actions){
+  return `<div class="appbar">${back?`<button class="back" onclick="${back}">${ICONS.back}</button>`:'<div style="width:42px"></div>'}
+    <h1>${title}</h1><div style="display:flex;gap:8px;">${actions||''}</div></div>`;
 }
 
 /* ============================================================
-   ONBOARDING (5 pasos)
+   ONBOARDING (5 pasos — mismo flujo)
    ============================================================ */
 function renderStep1(){
   app.innerHTML = `<div class="screen">${dots(0)}
@@ -296,7 +396,7 @@ function renderStep1(){
       <p class="hint">No necesitamos tu nombre real. Solo un apodo para personalizar tu experiencia.</p>
       <input class="input" id="ob-name" placeholder="Ej: Papá Juan, Doña María, Yo..." maxlength="30"></div>
     ${insight('La app dirá "Papá Juan, este mes llevas $340 en antojos" en vez de "Usuario_102". La familiaridad genera confianza.')}
-    <button class="btn" onclick="obNext1()">Siguiente ➜</button></div>`;
+    <button class="btn" onclick="obNext1()">Siguiente</button></div>`;
   setTimeout(()=> $('#ob-name').focus(), 100);
 }
 function obNext1(){
@@ -317,11 +417,11 @@ function renderStep2(){
         <span><span class="tt">${o[2]}</span><br><span class="dd">${o[3]}</span></span></button>`).join('')}
       <div class="divider"></div>
       <input class="input" id="ob-income" inputmode="numeric" placeholder="¿Cuánto ganas al mes (aprox)?" oninput="fmtNumInput(this)">
-      <div class="center" id="ob-income-disp" style="color:var(--blue);font-weight:700;">$ 0 MXN</div></div>
+      <div class="center" id="ob-income-disp" style="color:var(--primary);font-weight:800;font-size:16px;">$ 0 MXN</div></div>
     ${insight('Si tu ingreso es eventual, la app te dirá "Llevas 60% de tu promedio mensual" en vez de regañarte. Contexto real.')}
     <div class="row between">
       <button class="btn ghost" style="width:auto" onclick="renderStep1()">‹ Atrás</button>
-      <button class="btn" style="width:70%" onclick="obNext2()">Siguiente ➜</button></div></div>`;
+      <button class="btn" style="width:70%" onclick="obNext2()">Siguiente</button></div></div>`;
   $('#ob-income').addEventListener('input', ()=> $('#ob-income-disp').textContent = money(parseNum($('#ob-income').value)) + ' MXN');
   obPickType(document.querySelector('.opt'));
 }
@@ -335,19 +435,18 @@ function obNext2(){
   onboardingData.income_amount = amt; renderStep3();
 }
 function renderStep3(){
-  const income = onboardingData.income_amount;
   app.innerHTML = `<div class="screen">${dots(2)}
     <h2 class="title">Gastos que no puedes evitar</h2>
     <p class="sub">Paso 3 de 5 — Lo que ya está comprometido</p>
     <div class="card"><h3>¿Qué pagas SÍ o SÍ cada mes?</h3>
       <p class="hint">Renta, luz, agua, internet, teléfono, gasolina fija, medicinas recurrentes...</p>
       <input class="input" id="ob-fixed" inputmode="numeric" placeholder="Ej: 8,500" oninput="fmtNumInput(this);obMath()">
-      <div class="center" id="ob-fixed-disp" style="color:var(--blue);font-weight:700;">$ 0 MXN</div></div>
+      <div class="center" id="ob-fixed-disp" style="color:var(--primary);font-weight:800;font-size:16px;">$ 0 MXN</div></div>
     <div class="card" id="ob-math"></div>
     ${insight('La app calcula tu "dinero de verdad". Si escaneas un ticket de $200, sabe qué representa de tu disponible REAL.')}
     <div class="row between">
       <button class="btn ghost" style="width:auto" onclick="renderStep2()">‹ Atrás</button>
-      <button class="btn" style="width:70%" onclick="obNext3()">Siguiente ➜</button></div></div>`;
+      <button class="btn" style="width:70%" onclick="obNext3()">Siguiente</button></div></div>`;
   obMath();
 }
 function obMath(){
@@ -379,11 +478,11 @@ function renderStep4(){
         <input class="input" id="ob-interest" inputmode="numeric" placeholder="¿Qué interés anual pagas? (aprox) %"></div></div>
     <div class="card" style="border:2px solid var(--orange)"><h3 style="color:var(--orange)">Lo que pasará si lo configuras:</h3>
       <p class="hint">1. Escaneas un ticket<br>2. La app detecta $60 en "fugas"<br>3. Sugiere: "¿Rediriges $30 a tu deuda?"<br><br>
-      <b style="color:var(--text)">Así terminas meses antes y ahorras en intereses.</b></p></div>
+      <b style="color:var(--ink)">Así terminas meses antes y ahorras en intereses.</b></p></div>
     ${insight('La deuda deja de ser un monstruo abstracto y se convierte en una barra de progreso.')}
     <div class="row between">
       <button class="btn ghost" style="width:auto" onclick="renderStep3()">‹ Atrás</button>
-      <button class="btn" style="width:70%" onclick="obNext4()">Siguiente ➜</button></div></div>`;
+      <button class="btn" style="width:70%" onclick="obNext4()">Siguiente</button></div></div>`;
 }
 function obDebt(v){
   onboardingData._hasDebt = v;
@@ -400,19 +499,19 @@ function obNext4(){
 }
 function renderStep5(){
   const d = onboardingData, rescue = d.debt_amount>0 ? Math.floor(d.debt_amount/500) : 0;
-  const feat = (e,t,s)=>`<div class="mini" style="padding:12px 6px"><div style="font-size:24px">${e}</div>
-    <div style="font-size:11px;font-weight:700;margin:4px 0 2px">${t}</div>
-    <div style="font-size:10px;color:var(--muted)">${s}</div></div>`;
+  const feat = (e,t,s)=>`<div class="mini" style="padding:14px 6px"><div style="font-size:26px">${e}</div>
+    <div style="font-size:12px;font-weight:800;margin:5px 0 3px">${t}</div>
+    <div style="font-size:11px;color:var(--muted)">${s}</div></div>`;
   app.innerHTML = `<div class="screen">${dots(4)}
     <h2 class="title">Tu perfil está listo</h2>
     <p class="sub">Esto es lo que MyTicket sabe de ti</p>
-    <div class="card center"><h3 style="font-size:20px">${esc(d.name)}</h3>
-      <p class="hint" style="margin:6px 0">Ingreso: <b style="color:var(--text)">${money(d.income_amount)} MXN</b><br>
-      Gastos fijos: <b style="color:var(--text)">${money(d.fixed_expenses)} MXN</b></p>
+    <div class="card center"><h3 style="font-size:21px">${esc(d.name)}</h3>
+      <p class="hint" style="margin:8px 0">Ingreso: <b style="color:var(--ink)">${money(d.income_amount)} MXN</b><br>
+      Gastos fijos: <b style="color:var(--ink)">${money(d.fixed_expenses)} MXN</b></p>
       <div class="math-big">Disponible REAL: ${money(d.available_real)}</div></div>
     ${d.debt_amount>0 ? `<div class="card" style="border:2px solid var(--orange)">
       <h3 style="color:var(--orange)">Objetivo activo</h3>
-      <p class="hint">Deuda: <b style="color:var(--text)">${money(d.debt_amount)} MXN</b><br>
+      <p class="hint">Deuda: <b style="color:var(--ink)">${money(d.debt_amount)} MXN</b><br>
       Si rediriges 50% de fugas: libre en ~${rescue} meses</p></div>`
     : `<div class="card center" style="border:2px solid var(--green)"><h3 style="color:var(--green)">✓ Sin deudas activas</h3>
       <p class="hint" style="margin:0">¡Estás libre de deudas!</p></div>`}
@@ -437,10 +536,6 @@ function finishOnboarding(){
 /* ============================================================
    HOME / DASHBOARD
    ============================================================ */
-function appbar(title, back, actions){
-  return `<div class="appbar"><div style="width:44px">${back?`<button class="icon-btn" onclick="${back}">‹</button>`:''}</div>
-    <h1>${title}</h1><div class="ab-btns" style="width:88px;justify-content:flex-end">${actions||''}</div></div>`;
-}
 function renderHome(){
   if(!profile) return renderStep1();
   const s = monthlySummary(), avail = profile.available_real||0, debt = profile.debt_amount||0;
@@ -459,30 +554,22 @@ function renderHome(){
 
   const alerts = coachAlerts().slice(0,2).map(a=>alertCard(...a)).join('');
 
-  app.innerHTML = `<div class="screen">
+  app.innerHTML = `<div class="screen withtab">
     ${appbar(`Hola, ${esc(profile.name)}`, null,
-      `<button class="icon-btn" onclick="renderNotif()">🔔</button><button class="icon-btn" onclick="renderProfile()">⚙️</button>`)}
-    <div class="alert-card" style="background:#58A6FF10;border:1px solid #58A6FF30;">
-      <div class="emoji">💬</div><div><div class="m" style="font-size:13px;line-height:1.5">${coach}</div></div></div>
+      `<button class="hbtn" onclick="renderNotif()">${ICONS.bell}${alerts?'<span class="badge"></span>':''}</button>
+       <button class="hbtn" onclick="renderProfile()">${ICONS.gear}</button>`)}
+    ${alertCard('💬','#EAF1FF','var(--primary)','Tu copiloto financiero',coach)}
     ${alerts}
-    <div class="card center">
-      <div style="font-size:13px;color:var(--muted)">Disponible REAL este mes</div>
-      <div style="font-size:40px;font-weight:800;margin:4px 0">${money(Math.max(0, avail - s.spent))}</div>
-      <div style="font-size:13px;color:var(--muted)">de ${money(avail)} MXN</div>
-      <div class="divider"></div>
+    <div class="hero">
+      <div class="hl">Disponible REAL este mes</div>
+      <div class="hv">${money(Math.max(0, avail - s.spent))}</div>
+      <div class="hs">de ${money(avail)} MXN</div>
       <div class="pbar-wrap"><div class="pbar-spent" style="width:${spentPct}%"></div><div class="pbar-rest" style="width:${restPct}%"></div></div>
-      <div class="row between" style="margin-top:6px">
-        <span style="font-size:11px;color:var(--red)">Gastado: ${spentPct.toFixed(0)}%</span>
-        <span style="font-size:11px;color:var(--green)">Restante: ${restPct.toFixed(0)}%</span></div>
-      <div class="divider"></div>
-      <div style="font-size:13px;color:var(--muted)">🧾 ${s.tickets} tickets este mes</div></div>
-    <div class="mini-grid">${mini('Gastado', money(s.spent))}${mini('Fugas', money(s.fugas), ac)}${mini('Restante', restPct.toFixed(0)+'%', 'var(--blue)')}</div>
-    ${barChart()}
-    <div class="divider"></div>
-    <button class="btn" onclick="openScanDialog()">📸 Escanear Ticket</button>
-    <button class="btn blue" onclick="renderHistory()">🕘 Ver Historial</button>
-    <button class="btn purple" onclick="renderStats()">📊 Estadísticas</button>
-    <button class="btn gray" onclick="renderProfile()">👤 Mi Perfil</button></div>`;
+      <div class="pl"><span>Gastado ${spentPct.toFixed(0)}%</span><span>Restante ${restPct.toFixed(0)}%</span></div>
+      <div class="foot">🧾 ${s.tickets} tickets este mes</div></div>
+    <div class="mini-grid">${mini('Gastado', money(s.spent))}${mini('Fugas', money(s.fugas), ac)}${mini('Restante', restPct.toFixed(0)+'%', 'var(--primary)')}</div>
+    ${barChart()}</div>
+    ${tabbar('home')}`;
 }
 
 /* ============================================================
@@ -491,9 +578,9 @@ function renderHome(){
 function openScanDialog(){
   overlay(false);
   app.insertAdjacentHTML('beforeend', `<div class="overlay" id="scanDlg"><div class="modal-card">
-    <h3 style="margin:0 0 4px">Escanear ticket</h3>
-    <p class="muted" style="font-size:13px;margin:0 0 16px">¿Cómo quieres capturarlo?</p>
-    <button class="btn" onclick="pickImage('camera')">📷 Tomar foto</button>
+    <h3>Escanear ticket</h3>
+    <p class="muted" style="font-size:13.5px;margin:2px 0 18px">¿Cómo quieres capturarlo?</p>
+    <button class="btn" onclick="pickImage('camera')">${ICONS.camera} Tomar foto</button>
     <button class="btn blue" onclick="pickImage('gallery')">🖼️ Elegir de galería</button>
     <button class="btn ghost" onclick="$('#scanDlg').remove()">Cancelar</button></div></div>`);
 }
@@ -552,7 +639,6 @@ function renderResult(){
   items.forEach(i => { i.is_essential ? essT += (i.price||0) : fugT += (i.price||0); });
   const total = d.total_amount || essT + fugT;
   const fugasPct = total>0 ? fugT/total*100 : 0;
-  const category = fugasPct > 30 ? 'Fugas_Invisibles' : 'Gasto_Normal';
   const realPct = avail>0 ? total/avail*100 : 0;
   const essPct = total>0 ? essT/total*100 : 0, fugPct = total>0 ? fugT/total*100 : 0;
 
@@ -569,26 +655,26 @@ function renderResult(){
 
   app.innerHTML = `<div class="screen">
     ${appbar('Resultado del Escaneo', 'renderHome()')}
-    <div class="card center"><h3 style="font-size:20px">${esc(d.merchant_name||'Desconocido')}</h3>
-      <p class="muted" style="font-size:13px;margin:4px 0 10px">${esc(d.date||'Sin fecha')}</p>
-      <div style="font-size:26px;font-weight:800;color:var(--blue)">Total: ${money2(total)} MXN</div></div>
-    <div class="card center"><div style="font-size:12px;color:var(--muted);margin-bottom:8px">Distribución de la compra</div>
-      <div class="pbar-wrap h10" style="max-width:280px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
-      <div class="legend" style="max-width:280px;margin:8px auto 0">
-        <span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
-    <div class="card" style="font-size:13px;color:var(--muted);line-height:1.6">${coachText}</div>
-    <div class="mini-grid">${mini('Esencial', money2(essT), 'var(--green)')}${mini('No Esencial', money2(fugT), 'var(--orange)')}</div>
-    ${fugasPct>30 ? `<div class="card center" style="background:#DA363220;border-color:#DA3632;color:var(--red);font-weight:700;font-size:14px">⚠️ ${fugasPct.toFixed(0)}% de este ticket son fugas</div>`:''}
-    ${debt>0 && fugT>0 ? `<div class="card" style="background:#F0883E15;border-color:#F0883E40">
-      <h3 style="color:var(--orange);font-size:14px">🛣️ Oportunidad de Ruta de Rescate</h3>
+    <div class="card center"><h3 style="font-size:21px">${esc(d.merchant_name||'Desconocido')}</h3>
+      <p class="muted" style="font-size:13.5px;margin:5px 0 12px;font-weight:600">${esc(d.date||'Sin fecha')}</p>
+      <div style="font-size:28px;font-weight:800;color:var(--primary);letter-spacing:-.5px;">Total: ${money2(total)} <span style="font-size:15px;color:var(--muted);font-weight:600">MXN</span></div></div>
+    <div class="card center"><div style="font-size:12.5px;color:var(--muted);margin-bottom:12px;font-weight:700;">DISTRIBUCIÓN DE LA COMPRA</div>
+      <div class="pbar-wrap h10" style="max-width:290px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%;border-radius:99px;"></div><div class="pbar-fug" style="width:${fugPct}%;border-radius:99px;"></div></div>
+      <div class="legend" style="max-width:290px;margin:10px auto 0">
+        <span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:#B25E09">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+    <div class="card" style="font-size:13.5px;color:var(--muted);line-height:1.65">${coachText}</div>
+    <div class="mini-grid">${mini('Esencial', money2(essT), 'var(--green)')}${mini('No Esencial', money2(fugT), '#B25E09')}</div>
+    ${fugasPct>30 ? `<div class="card center" style="background:var(--red-soft);border-color:#F6C8CA;color:var(--red);font-weight:800;font-size:14px">⚠️ ${fugasPct.toFixed(0)}% de este ticket son fugas</div>`:''}
+    ${debt>0 && fugT>0 ? `<div class="card" style="background:var(--orange-soft);border-color:#F9DFB8">
+      <h3 style="color:#B25E09;font-size:14.5px">🛣️ Oportunidad de Ruta de Rescate</h3>
       <p class="hint" style="margin:0">Si rediriges la mitad de estas fugas (${money(fugT/2)}) a tu deuda de ${money(debt)}, te acercas a la libertad.</p></div>`:''}
-    <p style="font-size:15px;font-weight:600;margin:4px 0 10px">Productos detectados:</p>
+    <p style="font-size:15.5px;font-weight:800;margin:4px 0 12px 4px;">Productos detectados</p>
     <div style="max-height:260px;overflow-y:auto;margin-bottom:14px">
       ${items.length ? items.map(i=>`<div class="item-row">
-        <span class="ic">${i.is_essential?'🟢':'🟠'}</span>
-        <span class="nm"><span class="n">${esc(i.name||'Desconocido')}</span><br><span class="e">${i.is_essential?'Esencial':'No esencial'}</span></span>
+        <span class="ic" style="background:${i.is_essential?'var(--green-soft)':'var(--orange-soft)'};color:${i.is_essential?'var(--green)':'#B25E09'}">${i.is_essential?ICONS.check:ICONS.warn}</span>
+        <span class="nm"><span class="n">${esc(i.name||'Desconocido')}</span><br><span class="e">${i.is_essential?'ESENCIAL':'NO ESENCIAL'}</span></span>
         <span class="pr">${money2(i.price||0)}</span></div>`).join('') : '<div class="empty">Sin productos detectados</div>'}</div>
-    <div class="card"><h3 style="font-size:14px">Agregar nota (opcional)</h3>
+    <div class="card"><h3 style="font-size:14.5px">Agregar nota (opcional)</h3>
       <textarea class="input" id="res-notes" placeholder="Ej: Compra del súper del fin de semana..."></textarea></div>
     <button class="btn" onclick="saveResult(true)">💾 Guardar y seguir</button>
     <button class="btn blue" onclick="saveResult(false)">🕘 Guardar y ver historial</button>
@@ -613,26 +699,29 @@ let histMonth = thisMonth();
 function renderHistory(){
   const months = monthsWithData();
   if(!months.includes(histMonth)) histMonth = months[0];
-  app.innerHTML = `<div class="screen">
-    ${appbar('Historial', 'renderHome()', `<button class="icon-btn" onclick="exportCSV()" title="Exportar CSV">⬇️</button>`)}
-    <div class="row between" style="margin-bottom:10px">
-      <span style="font-size:13px;color:var(--muted)">Filtrar por mes:</span>
-      <select class="input" style="width:150px;margin:0;padding:10px" onchange="histMonth=this.value;renderHistory()">
+  app.innerHTML = `<div class="screen withtab">
+    ${appbar('Movimientos', null, `<button class="hbtn" onclick="exportCSV()" title="Exportar CSV">${ICONS.download}</button>`)}
+    <div class="row between" style="margin-bottom:12px">
+      <span style="font-size:13.5px;color:var(--muted);font-weight:600">Filtrar por mes:</span>
+      <select class="input" style="width:150px;margin:0;padding:11px 34px 11px 14px;" onchange="histMonth=this.value;renderHistory()">
         ${months.map(m=>`<option value="${m}" ${m===histMonth?'selected':''}>${m}</option>`).join('')}</select></div>
-    <p class="muted" id="hist-summary" style="font-size:13px"></p>
-    <div id="hist-list" style="flex:1"></div></div>`;
+    <p class="muted" id="hist-summary" style="font-size:13px;font-weight:600;margin:0 4px 12px;"></p>
+    <div id="hist-list" style="flex:1"></div></div>
+    ${tabbar('hist')}`;
   renderHistList();
 }
 function renderHistList(){
   const list = txs.filter(x => (x.date||'').slice(0,7) === histMonth);
   let tm = 0, tf = 0;
   list.forEach(t => { tm += t.total_amount||0; if(t.category==='Fugas_Invisibles') tf += t.total_amount||0; });
-  $('#hist-summary').textContent = `Total: ${money2(tm)} | Fugas: ${money2(tf)} | Tickets: ${list.length}`;
+  $('#hist-summary').textContent = `Total: ${money2(tm)}  ·  Fugas: ${money2(tf)}  ·  Tickets: ${list.length}`;
   $('#hist-list').innerHTML = list.length ? list.map(t => {
     const ess = (t.items||[]).filter(i=>i.is_essential).length, non = (t.items||[]).length - ess;
     const isF = t.category === 'Fugas_Invisibles';
     return `<div class="tx-item">
-      <div class="tx-top"><span>${isF?'🟠':'🟢'} <span class="tx-name">${esc(t.merchant_name)}</span></span>
+      <div class="tx-top"><span style="display:flex;align-items:center;gap:10px;">
+        <span class="tx-ico" style="background:${isF?'var(--orange-soft)':'var(--green-soft)'}">${isF?'🟠':'🟢'}</span>
+        <span class="tx-name">${esc(t.merchant_name)}</span></span>
         <span class="tx-amt">${money2(t.total_amount)}</span></div>
       <div class="tx-date">${esc(t.date)}</div>
       <div><span class="chip ess">${ess} esencial</span>${non>0?`<span class="chip fug">${non} no esencial</span>`:''}
@@ -652,25 +741,27 @@ function renderStats(){
   let essT=0, fugT=0;
   txs.forEach(t => (t.items||[]).forEach(i => i.is_essential ? essT+=(i.price||0) : fugT+=(i.price||0)));
   const ti = essT+fugT, essPct = ti>0 ? essT/ti*100 : 0, fugPct = ti>0 ? fugT/ti*100 : 0;
-  app.innerHTML = `<div class="screen">
-    ${appbar('Estadísticas', 'renderHome()')}
+  app.innerHTML = `<div class="screen withtab">
+    ${appbar('Análisis', null, '')}
     <h2 class="title">Resumen de ${esc(profile.name)}</h2>
+    <p class="sub">Tu panorama financiero completo</p>
     <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
     <div class="chart-card"><div class="chart-title">Distribución histórica</div>
-      <div class="pbar-wrap h16" style="max-width:240px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
-      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+      <div class="pbar-wrap h16" style="max-width:250px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%;border-radius:99px;"></div><div class="pbar-fug" style="width:${fugPct}%;border-radius:99px;"></div></div>
+      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:#B25E09">Fugas ${fugPct.toFixed(0)}%</span></div></div>
     ${barChart()}
-    <p style="font-size:16px;font-weight:600;margin:6px 0 10px">Top comercios (este mes)</p>
-    ${tops.length ? tops.map((t,i)=>`<div class="stat-line"><span>${i+1}. ${esc(t[0])}</span><b style="color:var(--blue)">${money(t[1])}</b></div>`).join('')
-      : '<p class="muted" style="font-size:12px">Aún no hay datos suficientes</p>'}
+    <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Top comercios (este mes)</p>
+    ${tops.length ? tops.map((t,i)=>`<div class="stat-line"><span><span class="badge-num">${i+1}</span>${esc(t[0])}</span><b style="color:var(--primary)">${money(t[1])}</b></div>`).join('')
+      : '<p class="muted" style="font-size:12.5px;margin:0 4px;">Aún no hay datos suficientes</p>'}
     <div class="divider"></div>
-    <p style="font-size:16px;font-weight:600;margin:6px 0 10px">Contexto financiero</p>
-    <div class="card" style="font-size:14px;color:var(--muted)">
-      Ingreso mensual: <b style="color:var(--text)">${money(profile.income_amount)} MXN</b><br>
-      Disponible real: <b style="color:var(--text)">${money(profile.available_real)} MXN</b><br>
-      Deuda activa: <b style="color:var(--text)">${money(profile.debt_amount)} MXN</b><br><br>
-      Total gastado (histórico): <b style="color:var(--text)">${money(totalAll)} MXN</b><br>
-      De eso, fugas: <span style="color:var(--orange)">${money(fugT)} MXN (${fugPct.toFixed(0)}%)</span></div></div>`;
+    <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Contexto financiero</p>
+    <div class="card" style="font-size:14.5px;color:var(--muted);line-height:2;">
+      Ingreso mensual: <b style="color:var(--ink)">${money(profile.income_amount)} MXN</b><br>
+      Disponible real: <b style="color:var(--ink)">${money(profile.available_real)} MXN</b><br>
+      Deuda activa: <b style="color:var(--ink)">${money(profile.debt_amount)} MXN</b><br>
+      Total gastado (histórico): <b style="color:var(--ink)">${money(totalAll)} MXN</b><br>
+      De eso, fugas: <span style="color:#B25E09;font-weight:700;">${money(fugT)} MXN (${fugPct.toFixed(0)}%)</span></div></div>
+    ${tabbar('stats')}`;
 }
 
 /* ============================================================
@@ -678,11 +769,11 @@ function renderStats(){
    ============================================================ */
 function renderNotif(){
   const row = (key, t, d) => `<div class="card row between" style="margin-bottom:10px">
-    <div><div style="font-size:15px;font-weight:700">${t}</div><div class="muted" style="font-size:12px">${d}</div></div>
+    <div><div style="font-size:15.5px;font-weight:800">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px;">${d}</div></div>
     <label class="switch"><input type="checkbox" id="nt-${key}" ${notif[key]?'checked':''}><span class="sl"></span></label></div>`;
   app.innerHTML = `<div class="screen">
     ${appbar('Alertas del Coach', 'renderHome()')}
-    <p class="muted" style="font-size:14px">Elige qué alertas quieres recibir</p>
+    <p class="muted" style="font-size:14px;margin:0 4px 16px;">Elige qué alertas quieres recibir</p>
     ${row('scan_reminder','Recordatorio de escaneo','Si llevas más de 7 días sin escanear')}
     ${row('budget_alert','Alerta de presupuesto','Cuando tu disponible real baje del 15%')}
     ${row('fugas_alert','Alerta de fugas','Cuando tus gastos no esenciales superen el 25%')}
@@ -705,37 +796,39 @@ function renderProfile(){
   const tops = topMerchants(3);
   const types = [['fijo','💼','Salario fijo'],['eventual','🔧','Informal'],['negocio','🏪','Negocio'],['pension','🧓','Pensión']];
   const progress = p.debt_amount>0 ? Math.min(100, (txs.filter(t=>t.category==='Fugas_Invisibles').reduce((s,t)=>s+(t.total_amount||0),0)*0.3)/p.debt_amount*100) : 0;
-  app.innerHTML = `<div class="screen">
-    ${appbar('Mi Perfil', 'renderHome()')}
-    <div class="avatar">👤</div>
+  app.innerHTML = `<div class="screen withtab">
+    ${appbar('Mi Perfil', null, '')}
+    <div class="avatar">${ICONS.user}</div>
     <h2 class="center title">${esc(p.name)}</h2>
     <p class="sub center" style="margin-bottom:16px">Configuración financiera</p>
     <div class="row wrap" style="margin-bottom:14px" id="prof-types">
-      ${types.map(t=>`<button class="opt ${p.income_type===t[0]?'sel':''}" data-v="${t[0]}" onclick="profPickType(this)" style="width:auto;padding:8px 12px;margin:0 6px 8px 0">
-        <span style="font-size:18px">${t[1]}</span><span class="tt" style="font-size:13px">${t[2]}</span></button>`).join('')}</div>
+      ${types.map(t=>`<button class="opt ${p.income_type===t[0]?'sel':''}" data-v="${t[0]}" onclick="profPickType(this)" style="width:auto;padding:9px 14px;margin:0 6px 8px 0">
+        <span style="font-size:19px">${t[1]}</span><span class="tt" style="font-size:13.5px">${t[2]}</span></button>`).join('')}</div>
     <label class="lbl">Nombre / Apodo</label><input class="input" id="pf-name" value="${esc(p.name)}">
     <label class="lbl">Ingreso mensual</label><input class="input" id="pf-income" inputmode="numeric" value="${(p.income_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
     <label class="lbl">Gastos fijos</label><input class="input" id="pf-fixed" inputmode="numeric" value="${(p.fixed_expenses||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
-    <div class="center" id="pf-avail" style="color:var(--blue);font-weight:800;font-size:17px;margin:6px 0 12px"></div>
+    <div class="center" id="pf-avail" style="color:var(--primary);font-weight:800;font-size:18px;margin:2px 0 14px;"></div>
     <label class="lbl">Deuda total</label><input class="input" id="pf-debt" inputmode="numeric" value="${(p.debt_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
     <label class="lbl">Interés anual aprox (%)</label><input class="input" id="pf-interest" inputmode="numeric" value="${p.debt_interest||''}">
     <label class="lbl">Meta de ahorro mensual</label><input class="input" id="pf-savings" inputmode="numeric" value="${p.savings_goal?(p.savings_goal).toLocaleString('en-US'):''}" oninput="fmtNumInput(this)">
     <div class="divider"></div>
-    <div class="card" style="border-color:var(--blue)"><h3 style="font-size:14px;color:var(--blue)">🔌 Backend (donde vive tu key de Groq)</h3>
+    <div class="card" style="border:2px solid #CFE0FF"><h3 style="font-size:14.5px;color:var(--primary)">🔌 Backend (donde vive tu key de Groq)</h3>
       <p class="hint">Pega aquí la URL de tu backend (Cloudflare Worker). Tu API key <b>NUNCA</b> se guarda en esta web; vive solo en el servidor.</p>
       <input class="input" id="pf-api" placeholder="https://tu-worker.tu-usuario.workers.dev" value="${esc(apiUrl)}" autocapitalize="off" autocorrect="off" spellcheck="false">
       <p class="hint" style="margin:0;font-size:12px">📖 Guía para crearlo: busca "Cloudflare Workers" en la documentación que te compartí.</p></div>
-    ${p.debt_amount>0?`<div class="card" style="border-color:#F0883E40"><div style="font-size:14px;font-weight:700;color:var(--orange)">🛣️ Progreso Ruta de Rescate</div>
-      <div class="pbar-wrap" style="margin:10px 0 6px"><div class="pbar-fill" style="width:${progress}%"></div></div>
-      <p class="muted" style="font-size:12px;margin:0">Estimado pagado: ${money(p.debt_amount*progress/100)} de ${money(p.debt_amount)} (${progress.toFixed(1)}%)</p></div>`:''}
-    <p style="font-size:16px;font-weight:600;margin:8px 0 10px">Tus estadísticas</p>
+    ${p.debt_amount>0?`<div class="card" style="background:var(--orange-soft);border-color:#F9DFB8">
+      <div style="font-size:14.5px;font-weight:800;color:#B25E09">🛣️ Progreso Ruta de Rescate</div>
+      <div class="pbar-wrap" style="margin:12px 0 8px"><div class="pbar-fill" style="width:${progress}%"></div></div>
+      <p class="muted" style="font-size:12.5px;margin:0;font-weight:600;">Estimado pagado: ${money(p.debt_amount*progress/100)} de ${money(p.debt_amount)} (${progress.toFixed(1)}%)</p></div>`:''}
+    <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Tus estadísticas</p>
     <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
-    <p style="font-size:14px;font-weight:600;margin:4px 0 8px">Comercios más frecuentes</p>
-    ${tops.length ? tops.map(t=>`<div class="stat-line"><span>${esc(t[0])}</span><b style="color:var(--blue)">${money(t[1])}</b></div>`).join('')
-      : '<p class="muted" style="font-size:12px">Aún no hay datos suficientes</p>'}
+    <p style="font-size:14.5px;font-weight:800;margin:4px 4px 10px;">Comercios más frecuentes</p>
+    ${tops.length ? tops.map(t=>`<div class="stat-line"><span>${esc(t[0])}</span><b style="color:var(--primary)">${money(t[1])}</b></div>`).join('')
+      : '<p class="muted" style="font-size:12.5px;margin:0 4px;">Aún no hay datos suficientes</p>'}
     <div class="divider"></div>
     <button class="btn" onclick="saveProfile()">💾 Guardar Cambios</button>
-    <button class="btn outline" onclick="resetApp()">🗑️ Reiniciar app (borrar todo)</button></div>`;
+    <button class="btn outline" onclick="resetApp()">🗑️ Reiniciar app (borrar todo)</button></div>
+    ${tabbar('prof')}`;
   profCalc();
 }
 let profType = profile ? profile.income_type : 'fijo';
