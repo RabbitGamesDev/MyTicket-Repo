@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
-    <!-- El Favicon clásico para la pestaña del navegador -->
+    
+<!-- El Favicon clásico para la pestaña del navegador -->
 <link rel="icon" type="image/png" href="./favicon.png">
 
 <!-- El icono para iPhone / iOS -->
@@ -9,7 +10,7 @@
 
 <!-- El archivo de configuración para Android -->
 <link rel="manifest" href="./manifest.json">
-  
+    
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MyTicket</title>
@@ -19,59 +20,72 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ===================== TEMA CLARO (azul/blanco) ===================== */
 :root{
   --bg:#F2F5F9; --card:#FFFFFF; --border:#E6EBF2; --ink:#0F1D2E; --muted:#5B6B7C;
-  --primary:#0A5CFF; --primary-dark:#0041B8; --green:#0FA958; --green-soft:#E7F7EE;
-  --orange:#F79009; --orange-soft:#FEF3E2; --red:#E5484D; --red-soft:#FDECEC;
-  --blue-soft:#EAF1FF; --radius:20px;
+  --primary:#0A5CFF; --primary-dark:#0041B8; --green:#0FA958; --green-soft:#E7F7EE; --green-ink:#1E6B41;
+  --orange:#F79009; --orange-soft:#FEF3E2; --orange-border:#F9DFB8; --orange-ink:#B25E09;
+  --red:#E5484D; --red-soft:#FDECEC; --red-border:#F6C8CA;
+  --blue-soft:#EAF1FF; --blue-border:#CFE0FF;
+  --input-bg:#EEF2F7; --track:#E3EAF2; --radius:20px;
+  --appbar-bg:rgba(242,245,249,.92); --tabbar-bg:rgba(255,255,255,.96);
+  --hero-grad:linear-gradient(135deg,#0A5CFF 0%,#00B4A6 100%);
   --shadow:0 2px 10px rgba(15,29,46,.06), 0 8px 24px rgba(15,29,46,.06);
-  --shadow-lg:0 12px 32px rgba(10,92,255,.25);
+  --shadow-lg:0 12px 32px rgba(10,92,255,.30);
+}
+/* ===================== TEMA OSCURO (negro/gris + morado claro) ===================== */
+[data-theme="dark"]{
+  --bg:#0D0B13; --card:#181423; --border:#2C2440; --ink:#F2EEFB; --muted:#A79FBE;
+  --primary:#A78BFA; --primary-dark:#8B5CF6; --green:#3DD68C; --green-soft:#152A20; --green-ink:#5FE3A6;
+  --orange:#FFB020; --orange-soft:#2C2213; --orange-border:#4A3A1C; --orange-ink:#FFC65C;
+  --red:#FF6166; --red-soft:#2E1719; --red-border:#4E2226;
+  --blue-soft:#241C3D; --blue-border:#3B2E63;
+  --input-bg:#211A33; --track:#2C2440;
+  --appbar-bg:rgba(13,11,19,.92); --tabbar-bg:rgba(24,20,35,.96);
+  --hero-grad:linear-gradient(135deg,#7C3AED 0%,#A78BFA 100%);
+  --shadow:0 2px 10px rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.40);
+  --shadow-lg:0 12px 32px rgba(139,92,246,.35);
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; margin:0; padding:0;}
-html,body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+html,body{background:var(--bg);color:var(--ink);font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;transition:background .3s;}
 #app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;position:relative;}
 .screen{flex:1;display:flex;flex-direction:column;padding:16px 16px 24px;animation:fade .3s ease;}
 .screen.withtab{padding-bottom:calc(110px + env(safe-area-inset-bottom));}
 @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
 /* ---------- Header ---------- */
-.appbar{position:sticky;top:0;z-index:20;background:rgba(242,245,249,.92);backdrop-filter:blur(12px);
-  display:flex;align-items:center;gap:8px;padding:calc(12px + env(safe-area-inset-top)) 4px 12px;margin:-16px -16px 16px;}
+.appbar{position:sticky;top:0;z-index:20;background:var(--appbar-bg);backdrop-filter:blur(12px);
+  display:flex;align-items:center;gap:8px;padding:calc(12px + env(safe-area-inset-top)) 4px 12px;margin:-16px -16px 16px;transition:background .3s;}
 .appbar .back{width:42px;height:42px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);
   display:flex;align-items:center;justify-content:center;color:var(--ink);cursor:pointer;}
 .appbar h1{font-size:19px;font-weight:800;flex:1;}
 .appbar .hbtn{width:42px;height:42px;border-radius:14px;border:none;background:var(--card);box-shadow:var(--shadow);
-  display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;position:relative;}
+  display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;position:relative;transition:background .3s;}
 .hbtn .badge{position:absolute;top:9px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--card);}
 
-/* ---------- Bottom tab bar ---------- */
+/* ---------- Tab bar ---------- */
 .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;z-index:30;
-  background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);
-  display:flex;align-items:flex-end;justify-content:space-around;padding:8px 8px calc(10px + env(safe-area-inset-bottom));}
+  background:var(--tabbar-bg);backdrop-filter:blur(14px);border-top:1px solid var(--border);
+  display:flex;align-items:flex-end;justify-content:space-around;padding:8px 8px calc(10px + env(safe-area-inset-bottom));transition:background .3s;}
 .tab{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);
   font-size:11px;font-weight:600;cursor:pointer;padding:4px 10px;min-width:60px;font-family:inherit;}
 .tab.on{color:var(--primary);}
 .tab:active{transform:scale(.94);}
-.fab{width:60px;height:60px;border-radius:50%;border:none;background:linear-gradient(135deg,var(--primary),#00B4A6);
-  color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-30px;
-  box-shadow:var(--shadow-lg);transition:transform .12s;}
+.fab{width:60px;height:60px;border-radius:50%;border:none;background:var(--hero-grad);color:#fff;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:-30px;box-shadow:var(--shadow-lg);transition:transform .12s;}
 .fab:active{transform:scale(.92);}
 
-/* ---------- Tarjetas / texto ---------- */
-.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;
-  margin-bottom:14px;width:100%;box-shadow:var(--shadow);}
+/* ---------- Tarjetas ---------- */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:14px;width:100%;box-shadow:var(--shadow);transition:background .3s;}
 .card h3{margin:0 0 10px;font-size:18px;font-weight:800;}
 .card p.hint{color:var(--muted);font-size:14px;margin:0 0 12px;line-height:1.55;}
 h2.title{font-size:25px;margin:0 0 4px;font-weight:800;letter-spacing:-.3px;}
 p.sub{color:var(--muted);font-size:14px;margin:0 0 20px;}
 .center{text-align:center;} .muted{color:var(--muted);} .divider{height:12px;}
-
-.insight{background:var(--green-soft);border-radius:16px;padding:16px;font-size:13.5px;color:#1E6B41;
-  line-height:1.6;margin-bottom:14px;width:100%;display:flex;gap:10px;}
-.insight:before{content:"💡";}
-
+.insight{background:var(--green-soft);border-radius:16px;padding:16px;font-size:13.5px;color:var(--green-ink);line-height:1.6;margin-bottom:14px;width:100%;}
+.insight:before{content:"💡 ";}
 .alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:15px;margin-bottom:10px;width:100%;}
-.alert-card .aico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px;}
+.alert-card .aico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:19px;background:rgba(127,127,127,.12);}
 .alert-card .t{font-size:14.5px;font-weight:800;margin-bottom:2px;}
 .alert-card .m{font-size:13px;color:var(--muted);line-height:1.45;}
 
@@ -79,54 +93,58 @@ p.sub{color:var(--muted);font-size:14px;margin:0 0 20px;}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:none;cursor:pointer;
   border-radius:999px;padding:18px 24px;font-size:16.5px;font-weight:800;color:#fff;background:var(--primary);
   margin-bottom:10px;min-height:58px;font-family:inherit;box-shadow:0 6px 16px rgba(10,92,255,.28);transition:transform .1s;}
+[data-theme="dark"] .btn{box-shadow:0 6px 16px rgba(139,92,246,.30);}
 .btn:active{transform:scale(.97);}
-.btn.blue{background:#6E3AFF;box-shadow:0 6px 16px rgba(110,58,255,.28);} .btn.purple{background:#6E3AFF;box-shadow:0 6px 16px rgba(110,58,255,.28);}
+.btn.blue{background:#6E3AFF;box-shadow:0 6px 16px rgba(110,58,255,.28);}
 .btn.gray{background:#425466;box-shadow:none;}
 .btn.outline{background:transparent;border:2px solid var(--red);color:var(--red);box-shadow:none;}
 .btn.ghost{background:transparent;color:var(--muted);box-shadow:none;font-weight:700;}
 .btn.small{padding:12px 18px;font-size:14px;min-height:46px;width:auto;box-shadow:none;}
 .row{display:flex;gap:10px;width:100%;} .row.between{justify-content:space-between;align-items:center;} .row.wrap{flex-wrap:wrap;}
+.icon-mini{background:none;border:none;font-size:17px;color:var(--red);cursor:pointer;padding:8px;}
 
 /* ---------- Inputs ---------- */
-.input{width:100%;background:#EEF2F7;border:1.5px solid transparent;border-radius:14px;color:var(--ink);
-  padding:16px;font-size:17px;margin-bottom:12px;outline:none;font-family:inherit;font-weight:500;transition:border .15s;}
-.input:focus{border-color:var(--primary);background:#fff;}
+.input{width:100%;background:var(--input-bg);border:1.5px solid transparent;border-radius:14px;color:var(--ink);
+  padding:16px;font-size:17px;margin-bottom:12px;outline:none;font-family:inherit;font-weight:500;transition:.15s;}
+.input:focus{border-color:var(--primary);background:var(--card);}
 textarea.input{resize:vertical;min-height:76px;}
 label.lbl{font-size:13.5px;color:var(--muted);display:block;margin:0 0 6px 4px;font-weight:600;}
 select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235B6B7C' stroke-width='2.5'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 14px center;}
 
+/* ---------- Segmented control ---------- */
+.seg{display:flex;background:var(--input-bg);border-radius:14px;padding:5px;gap:5px;margin-bottom:12px;}
+.seg button{flex:1;border:none;background:transparent;padding:12px 6px;border-radius:10px;font-weight:700;font-size:13.5px;color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s;}
+.seg button.on{background:var(--card);color:var(--primary);box-shadow:var(--shadow);}
+
 /* ---------- Onboarding ---------- */
 .dots{display:flex;gap:7px;justify-content:center;margin-bottom:22px;}
-.dot{width:34px;height:7px;border-radius:4px;background:#D8E0EA;transition:.25s;}
+.dot{width:34px;height:7px;border-radius:4px;background:var(--track);transition:.25s;}
 .dot.done{background:var(--green);} .dot.cur{background:var(--primary);width:46px;}
 .opt{display:flex;gap:14px;align-items:center;padding:16px;border-radius:16px;border:2px solid var(--border);
-  background:#fff;margin-bottom:10px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:inherit;transition:.15s;}
-.opt .em{font-size:26px;}
-.opt .tt{font-size:16px;font-weight:800;} .opt .dd{font-size:13px;color:var(--muted);}
+  background:var(--card);margin-bottom:10px;cursor:pointer;width:100%;text-align:left;color:var(--ink);font-family:inherit;transition:.15s;}
+.opt .em{font-size:26px;} .opt .tt{font-size:16px;font-weight:800;} .opt .dd{font-size:13px;color:var(--muted);}
 .opt.sel{border-color:var(--primary);background:var(--blue-soft);box-shadow:0 4px 14px rgba(10,92,255,.15);}
 .math-line{display:flex;justify-content:space-between;font-size:14.5px;color:var(--muted);padding:4px 0;font-weight:500;}
 .math-big{font-size:22px;font-weight:800;color:var(--primary);padding:10px 0;}
 
-/* ---------- Tarjeta saldo (estilo banco) ---------- */
-.hero{background:linear-gradient(135deg,#0A5CFF 0%,#00B4A6 100%);border-radius:26px;padding:24px 22px;margin-bottom:14px;
-  color:#fff;position:relative;overflow:hidden;box-shadow:0 16px 36px rgba(10,92,255,.35);width:100%;}
+/* ---------- Hero saldo ---------- */
+.hero{background:var(--hero-grad);border-radius:26px;padding:24px 22px;margin-bottom:14px;color:#fff;position:relative;overflow:hidden;box-shadow:var(--shadow-lg);width:100%;transition:background .3s;}
 .hero:before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);top:-90px;right:-60px;}
 .hero:after{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.07);bottom:-70px;left:-40px;}
 .hero .hl{font-size:13px;opacity:.85;font-weight:600;}
 .hero .hv{font-size:42px;font-weight:800;letter-spacing:-1px;margin:6px 0 2px;}
 .hero .hs{font-size:14px;opacity:.85;font-weight:500;}
 .hero .pbar-wrap{background:rgba(255,255,255,.25);margin:16px 0 8px;}
-.hero .pbar-spent{background:#fff;}
-.hero .pbar-rest{background:rgba(255,255,255,.45);}
+.hero .pbar-spent{background:#fff;} .hero .pbar-rest{background:rgba(255,255,255,.45);}
 .hero .pl{display:flex;justify-content:space-between;font-size:12px;font-weight:700;}
 .hero .foot{display:flex;align-items:center;gap:7px;font-size:13.5px;opacity:.9;margin-top:14px;font-weight:600;}
 
-/* ---------- Stats / barras ---------- */
+/* ---------- Stats ---------- */
 .mini-grid{display:flex;gap:10px;width:100%;margin-bottom:14px;}
 .mini{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:15px 8px;text-align:center;box-shadow:var(--shadow);}
 .mini .l{font-size:11.5px;color:var(--muted);font-weight:600;} .mini .v{font-size:17px;font-weight:800;margin-top:4px;letter-spacing:-.3px;}
-.pbar-wrap{background:#E3EAF2;border-radius:99px;height:8px;overflow:hidden;display:flex;width:100%;}
+.pbar-wrap{background:var(--track);border-radius:99px;height:8px;overflow:hidden;display:flex;width:100%;}
 .pbar-wrap.h10{height:11px;} .pbar-wrap.h16{height:16px;}
 .pbar-spent{background:var(--red);height:100%;border-radius:99px;}
 .pbar-rest{background:var(--green);height:100%;border-radius:99px;}
@@ -143,6 +161,7 @@ select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xml
 .bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;max-width:46px;}
 .bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:24px;}
 .bar-ess{background:linear-gradient(180deg,#33A1FF,var(--primary));border-radius:6px 6px 0 0;width:100%;}
+[data-theme="dark"] .bar-ess{background:linear-gradient(180deg,#C4B5FD,var(--primary));}
 .bar-fug{background:linear-gradient(180deg,#FFB25E,var(--orange));border-radius:0 0 6px 6px;width:100%;}
 .bar-lbl{font-size:10.5px;color:var(--muted);margin-top:7px;font-weight:600;}
 
@@ -153,48 +172,70 @@ select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xml
 .tx-name{font-weight:800;font-size:15.5px;} .tx-amt{font-weight:800;color:var(--primary);white-space:nowrap;font-size:15.5px;}
 .tx-date{font-size:12.5px;color:var(--muted);margin:3px 0 8px;font-weight:500;}
 .chip{display:inline-block;font-size:11.5px;padding:4px 10px;border-radius:99px;margin-right:6px;font-weight:700;}
-.chip.ess{background:var(--green-soft);color:var(--green);} .chip.fug{background:var(--orange-soft);color:#B25E09;}
-.chip.cat-ess{background:var(--green-soft);color:var(--green);} .chip.cat-fug{background:var(--orange-soft);color:#B25E09;}
+.chip.ess{background:var(--green-soft);color:var(--green);} .chip.fug{background:var(--orange-soft);color:var(--orange-ink);}
+.chip.cat-ess{background:var(--green-soft);color:var(--green);} .chip.cat-fug{background:var(--orange-soft);color:var(--orange-ink);}
+.chip.mth{background:var(--blue-soft);color:var(--primary);}
 .tx-notes{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:8px;}
 
-/* ---------- Items de resultado ---------- */
-.item-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px 15px;margin-bottom:8px;box-shadow:var(--shadow);}
-.item-row .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+/* ---------- Items resultado ---------- */
+.item-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:13px 15px;margin-bottom:8px;box-shadow:var(--shadow);cursor:pointer;transition:transform .1s;}
+.item-row:active{transform:scale(.98);}
+.item-row .ic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .item-row .nm{flex:1;} .item-row .nm .n{font-size:15.5px;font-weight:700;}
-.item-row .nm .e{font-size:11.5px;color:var(--muted);font-weight:600;}
+.item-row .nm .e{font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:.4px;}
 .item-row .pr{font-weight:800;font-size:15px;}
 
 /* ---------- Switch ---------- */
 .switch{position:relative;width:52px;height:32px;flex-shrink:0;}
 .switch input{opacity:0;width:0;height:0;}
-.sl{position:absolute;inset:0;background:#D8E0EA;border-radius:99px;transition:.2s;cursor:pointer;}
+.sl{position:absolute;inset:0;background:var(--track);border-radius:99px;transition:.2s;cursor:pointer;}
 .sl:before{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.2s;box-shadow:0 2px 6px rgba(0,0,0,.2);}
 .switch input:checked + .sl{background:var(--green);}
 .switch input:checked + .sl:before{transform:translateX(20px);}
 
-/* ---------- Toast / overlay ---------- */
-.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);
-  background:#0F1D2E;color:#fff;padding:14px 22px;border-radius:16px;font-size:14px;font-weight:700;
-  opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:88%;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.3);}
+/* ---------- Toast con volteo 3D ---------- */
+.toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(24px);
+  background:#0F1D2E;color:#fff;border-radius:18px;font-size:14.5px;font-weight:700;width:min(92%,400px);
+  opacity:0;pointer-events:none;transition:opacity .25s, transform .25s;z-index:100;box-shadow:0 14px 40px rgba(0,0,0,.4);perspective:800px;}
 .toast.err{background:var(--red);}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+.toast-inner{position:relative;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.toast.flipped .toast-inner{transform:rotateY(180deg);}
+.face{padding:16px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+.face.back{position:absolute;inset:0;transform:rotateY(180deg);background:rgba(0,0,0,.25);border-radius:18px;overflow:auto;}
+.face .raw{font-family:ui-monospace,Menlo,monospace;font-size:11px;font-weight:500;text-align:left;word-break:break-word;line-height:1.5;max-height:130px;overflow-y:auto;width:100%;}
+.tbtn{background:rgba(255,255,255,.16);border:none;color:#fff;font-size:12px;font-weight:700;padding:7px 13px;border-radius:99px;cursor:pointer;font-family:inherit;}
+.tbtn:active{background:rgba(255,255,255,.28);}
+
+/* ---------- Overlay / modal ---------- */
 .overlay{position:fixed;inset:0;background:rgba(15,29,46,.55);backdrop-filter:blur(4px);z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;}
+[data-theme="dark"] .overlay{background:rgba(0,0,0,.65);}
 .overlay.hidden{display:none;}
-.spinner{width:54px;height:54px;border:5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+.spinner{width:54px;height:54px;border:5px solid var(--track);border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-.modal-card{background:#fff;border-radius:26px;padding:28px 24px;width:100%;max-width:350px;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:pop .25s ease;}
+.modal-card{background:var(--card);border-radius:26px;padding:28px 24px;width:100%;max-width:350px;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:pop .25s ease;}
 @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
 .modal-card h3{font-size:19px;font-weight:800;margin-bottom:4px;}
-
 .empty{padding:44px 16px;text-align:center;color:var(--muted);}
 .empty .ic{font-size:54px;margin-bottom:14px;}
-.avatar{width:76px;height:76px;border-radius:26px;background:linear-gradient(135deg,var(--primary),#00B4A6);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-size:34px;margin:6px auto 12px;box-shadow:var(--shadow-lg);}
-.stat-line{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--card);
-  border:1px solid var(--border);border-radius:14px;margin-bottom:8px;font-size:14px;font-weight:600;box-shadow:var(--shadow);}
-.badge-num{width:24px;height:24px;border-radius:8px;background:var(--blue-soft);color:var(--primary);
-  display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-right:8px;}
-@media (max-width:360px){ .hero .hv{font-size:36px;} h2.title{font-size:22px;} }
+.avatar{width:76px;height:76px;border-radius:26px;background:var(--hero-grad);color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;margin:6px auto 12px;box-shadow:var(--shadow-lg);}
+.stat-line{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;font-size:14px;font-weight:600;box-shadow:var(--shadow);}
+.badge-num{width:24px;height:24px;border-radius:8px;background:var(--blue-soft);color:var(--primary);display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;margin-right:8px;}
+
+/* ---------- PIN ---------- */
+.pindots{display:flex;gap:16px;justify-content:center;margin:18px 0 26px;}
+.pindot{width:16px;height:16px;border-radius:50%;border:2px solid var(--border);transition:.15s;}
+.pindot.on{background:var(--primary);border-color:var(--primary);}
+.pad{display:grid;grid-template-columns:repeat(3,76px);gap:12px;justify-content:center;}
+.padkey{height:66px;border-radius:50%;border:none;background:var(--card);box-shadow:var(--shadow);font-size:25px;font-weight:700;color:var(--ink);cursor:pointer;font-family:inherit;transition:transform .08s;}
+.padkey:active{transform:scale(.92);background:var(--blue-soft);}
+.pin-err{animation:shake .35s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+/* ---------- Filas editables (fuentes/pagos) ---------- */
+.edit-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;width:100%;}
+.edit-row .input{margin:0;}
+@media (max-width:360px){ .hero .hv{font-size:36px;} h2.title{font-size:22px;} .pad{grid-template-columns:repeat(3,68px);} }
 </style>
 <base target="_blank">
 </head>
@@ -207,17 +248,21 @@ select.input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xml
   <div class="muted" style="font-size:13.5px;">La IA está leyendo productos y precios</div>
 </div></div>
 <input type="file" id="fileInput" accept="image/*" style="display:none">
+<input type="file" id="importInput" accept=".json,application/json" style="display:none">
 
 <script>
 /* ============================================================
-   MyTicket — Web Edition · UI 2.0 (estilo banca)
-   Misma lógica y datos que la v1. Solo rediseño visual.
+   MyTicket — Web Edition · v3 DEFINITIVA
+   Temas claro/oscuro · Categorías editables · Efectivo/Tarjeta
+   Fuentes de ingreso múltiples · Pagos fijos con recordatorio
+   Presupuesto quincenal · Respaldo/Restaurar · PIN
+   Errores amigables con volteo 3D al detalle técnico
    ============================================================ */
 const $ = s => document.querySelector(s);
 const app = $('#app');
 const fileInput = $('#fileInput');
+const importInput = $('#importInput');
 
-/* ---------- Íconos SVG ---------- */
 const IC = (p)=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
 const ICONS = {
   home: IC('<path d="m3 10.5 9-7.5 9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>'),
@@ -229,24 +274,46 @@ const ICONS = {
   camera: IC('<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.6"/>'),
   back: IC('<path d="m15 18-6-6 6-6"/>'),
   download: IC('<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/>'),
+  upload: IC('<path d="M12 21V9"/><path d="m7 14 5-5 5 5"/><path d="M4 3h16"/>'),
   check: IC('<path d="m4.5 12.5 5 5 10-11"/>'),
   warn: IC('<path d="M12 3 2.5 20h19L12 3z"/><path d="M12 10v4"/><circle cx="12" cy="17.2" r=".5" fill="currentColor"/>'),
-  spark: IC('<path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/>'),
-  trend: IC('<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>'),
+  moon: IC('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'),
+  sun: IC('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+  lock: IC('<rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+  save: IC('<path d="M5 3h11l5 5v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M8 3v5h7V3"/><rect x="7.5" y="13" width="9" height="7" rx="1"/>'),
+  wallet: IC('<path d="M3 7a2 2 0 0 1 2-2h13v3"/><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="16.5" cy="13" r="1.3" fill="currentColor"/>'),
+  cal: IC('<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M8 3v4M16 3v4M3 10h18"/>'),
 };
 
-/* ---------- Persistencia (mismas keys que v1) ---------- */
+/* ---------- Persistencia ---------- */
 const store = {
   get(k, d){ try{ const v = localStorage.getItem('mt_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
   set(k, v){ localStorage.setItem('mt_'+k, JSON.stringify(v)); }
 };
 let profile = store.get('profile', null);
 let txs = store.get('txs', []);
-let notif = store.get('notif', {scan_reminder:true, budget_alert:true, fugas_alert:true, debt_opportunity:true});
+let notif = store.get('notif', {scan_reminder:true, budget_alert:true, fugas_alert:true, debt_opportunity:true, bills_reminder:true});
+if(notif.bills_reminder === undefined) notif.bills_reminder = true;
 let apiUrl = store.get('api', '');
+let theme = store.get('theme', 'light');
+let pinHash = store.get('pin', null);
+let lastMethod = store.get('method', 'efectivo');
 
 let onboardingData = {};
 let lastScan = null;
+let screenFn = null;
+let resMethod = 'efectivo';
+
+/* ---------- Migración de perfiles de versiones anteriores ---------- */
+function migrateProfile(){
+  if(!profile) return;
+  if(!Array.isArray(profile.sources)) profile.sources = [{name: profile.income_type==='pension' ? 'Pensión' : 'Ingreso principal', amount: profile.income_amount||0}];
+  if(!Array.isArray(profile.bills)) profile.bills = [];
+  if(!profile.budget_period) profile.budget_period = 'mensual';
+  profile.income_amount = (profile.sources||[]).reduce((s,x)=>s+(Number(x.amount)||0),0) || profile.income_amount || 0;
+  store.set('profile', profile);
+}
+migrateProfile();
 
 /* ---------- Utilidades ---------- */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -255,10 +322,48 @@ const money2 = n => '$ ' + (Number(n)||0).toLocaleString('es-MX',{minimumFractio
 const thisMonth = () => new Date().toISOString().slice(0,7);
 const today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
 
-function toast(msg, err){
-  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '');
-  clearTimeout(t._h); t._h = setTimeout(()=> t.className='toast', 3000);
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', theme);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if(meta) meta.content = theme==='dark' ? '#0D0B13' : '#F2F5F9';
 }
+function toggleTheme(){ theme = theme==='light' ? 'dark' : 'light'; store.set('theme', theme); applyTheme(); if(screenFn) screenFn(); }
+const themeBtn = () => `<button class="hbtn" onclick="toggleTheme()" title="Cambiar tema">${theme==='light'?ICONS.moon:ICONS.sun}</button>`;
+
+/* ---------- Toast con volteo 3D ---------- */
+let toastTimer = null;
+function toast(msg, opts={}){
+  const t = $('#toast'); const detail = opts.detail || ''; const isErr = !!opts.err;
+  if(isErr && detail){
+    t.innerHTML = `<div class="toast-inner">
+      <div class="face front"><div>${esc(msg)}</div><button class="tbtn" onclick="flipToast(event)">Ver detalle técnico ▸</button></div>
+      <div class="face back"><div class="raw">${esc(detail)}</div><button class="tbtn" onclick="flipToast(event)">‹ Volver</button></div>
+    </div>`;
+  } else {
+    t.innerHTML = `<div class="toast-inner"><div class="face front">${esc(msg)}</div></div>`;
+  }
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ t.className='toast'; }, detail ? 9000 : 3200);
+}
+function flipToast(e){ e && e.stopPropagation(); $('#toast').classList.toggle('flipped'); }
+
+/* ---------- Errores amigables para adultos ---------- */
+function friendlyError(err){
+  const e = String(err || '');
+  if(/429|rate.?limit|too many/i.test(e))
+    return {msg:'⏳ La IA está ocupada en este momento. Espera unos 20 segundos y vuelve a intentar.', detail:e};
+  if(/401|403|invalid_api_key|unauthorized|authentication/i.test(e))
+    return {msg:'🔑 El servidor tiene un problema con la clave de la IA. Avísale a quien configuró la app.', detail:e};
+  if(/404|model_not_found/i.test(e))
+    return {msg:'⚙️ El servidor necesita actualizar el modelo de IA. Avísale a quien configuró la app.', detail:e};
+  if(/failed to fetch|network|timeout|servidor no responde/i.test(e))
+    return {msg:'📡 No hubo conexión con el servidor. Revisa tu internet o la URL del backend en Mi Perfil.', detail:e};
+  if(/5\d\d/.test(e))
+    return {msg:'🛠️ El servidor tuvo un problema. Intenta de nuevo en un momento.', detail:e};
+  return {msg:'😕 No se pudo analizar el ticket. Intenta tomar la foto de nuevo, con buena luz.', detail:e};
+}
+
 function overlay(show){ $('#overlay').classList.toggle('hidden', !show); }
 function fmtNumInput(el){
   const digits = (el.value||'').replace(/\D/g,'').slice(0,10);
@@ -266,12 +371,28 @@ function fmtNumInput(el){
 }
 function parseNum(s){ return Number(String(s||'').replace(/,/g,'').replace('$','').trim()) || 0; }
 
-/* ---------- Lógica de datos (idéntica a v1) ---------- */
+/* ---------- Datos ---------- */
 function monthlySummary(month){
   month = month || thisMonth();
   let t=0, spent=0, fugas=0;
   txs.forEach(x => { if((x.date||'').slice(0,7)===month){ t++; spent+=x.total_amount||0; if(x.category==='Fugas_Invisibles') fugas+=x.total_amount||0; } });
   return {tickets:t, spent, fugas};
+}
+function periodInfo(){
+  const now = new Date(); const y=now.getFullYear(), m=now.getMonth();
+  const q = now.getDate() <= 15 ? 1 : 2;
+  const start = q===1 ? `${y}-${String(m+1).padStart(2,'0')}-01` : `${y}-${String(m+1).padStart(2,'0')}-16`;
+  const endDay = q===1 ? '15' : String(new Date(y, m+1, 0).getDate()).padStart(2,'0');
+  return {q, start, end: `${y}-${String(m+1).padStart(2,'0')}-${endDay}`, label: q===1 ? '1ª quincena' : '2ª quincena'};
+}
+function periodSummary(){
+  const p = periodInfo(); let t=0, spent=0, fugas=0;
+  txs.forEach(x => { if((x.date||'') >= p.start && (x.date||'') <= p.end){ t++; spent+=x.total_amount||0; if(x.category==='Fugas_Invisibles') fugas+=x.total_amount||0; } });
+  return {tickets:t, spent, fugas};
+}
+function summaryNow(){
+  if(profile && profile.budget_period==='quincenal') return {s: periodSummary(), avail: (profile.available_real||0)/2, period: periodInfo()};
+  return {s: monthlySummary(), avail: profile ? (profile.available_real||0) : 0, period: null};
 }
 function weeklyFugas(){
   const lim = Date.now() - 7*86400000; let s=0;
@@ -303,6 +424,12 @@ function chartData(){
   });
   return Object.entries(map);
 }
+function upcomingBills(withinDays){
+  const bills = (profile && profile.bills) || [];
+  const d = new Date().getDate();
+  return bills.map(b => { let dist = (Number(b.day) - d + 31) % 31; return {...b, dist}; })
+    .filter(b => b.dist <= withinDays).sort((a,b)=>a.dist-b.dist);
+}
 function coachAlerts(){
   const a = []; if(!profile) return a;
   const s = monthlySummary();
@@ -310,17 +437,21 @@ function coachAlerts(){
   if(notif.scan_reminder){
     const l = lastScanDate();
     if(l){ const days = Math.floor((Date.now()-new Date(l).getTime())/86400000);
-      if(days>7) a.push(['📸','#EAF1FF','var(--primary)',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`]);
+      if(days>7) a.push(['📸','var(--blue-soft)','var(--primary)',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`]);
     } else if(s.tickets===0) a.push(['🚀','var(--green-soft)','var(--green)','Primer paso',`${name}, escanea tu primer ticket para que tu copiloto empiece a aprender de ti.`]);
   }
+  if(notif.bills_reminder && (profile.bills||[]).length){
+    const ups = upcomingBills(3);
+    ups.slice(0,1).forEach(b => a.push(['🗓️','var(--orange-soft)','var(--orange-ink)', b.dist===0 ? `Hoy toca pagar: ${b.name}` : `Pronto: ${b.name}`, `${money(b.amount)} · día ${b.day} de cada mes. Tenlo a la mano.`]));
+  }
   if(notif.fugas_alert && s.spent>0 && (s.fugas/s.spent)>0.25)
-    a.push(['🔥','var(--orange-soft)','#B25E09','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%). Es momento de revisar.`]);
+    a.push(['🔥','var(--orange-soft)','var(--orange-ink)','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%). Es momento de revisar.`]);
   if(notif.budget_alert && avail>0 && s.spent > avail*0.85)
     a.push(['⚠️','var(--red-soft)','var(--red)','Presupuesto bajo',`Solo te quedan ${money(avail-s.spent)} de tu disponible real. Cuidado con los gastos.`]);
   if(notif.debt_opportunity && debt>0 && s.fugas>0){
     const w = weeklyFugas();
     if(w>0){ const ms = Math.floor(debt/500 - debt/(500+w/4)); if(ms>0)
-      a.push(['🛣️','#EAF1FF','var(--primary)','Oportunidad de rescate',`Redirige la mitad de tus fugas a tu deuda y terminas ${ms} meses antes.`]); }
+      a.push(['🛣️','var(--blue-soft)','var(--primary)','Oportunidad de rescate',`Redirige la mitad de tus fugas a tu deuda y terminas ${ms} meses antes.`]); }
   }
   return a;
 }
@@ -329,20 +460,10 @@ function saveTxLocal(data){
     id: Date.now(), date: data.date || today(), merchant_name: data.merchant_name || 'Desconocido',
     total_amount: data.total_amount||0, currency: data.currency||'MXN',
     category: data.category||'Gasto_Normal', items: data.items||[], notes: data.notes||'',
+    method: data.method || 'efectivo',
     created_at: new Date().toISOString()
   });
   store.set('txs', txs);
-}
-function exportCSV(){
-  let csv = 'Fecha,Comercio,Total,Categoria,Productos Esenciales,Productos No Esenciales,Notas\n';
-  txs.forEach(t => {
-    const ess = (t.items||[]).filter(i=>i.is_essential).length;
-    csv += [t.date, `"${(t.merchant_name||'').replace(/"/g,'""')}"`, t.total_amount, t.category, ess, (t.items||[]).length-ess, `"${(t.notes||'').replace(/"/g,'""')}"`].join(',') + '\n';
-  });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
-  a.download = 'myticket_export.csv'; a.click(); URL.revokeObjectURL(a.href);
-  toast('CSV exportado');
 }
 
 /* ---------- Componentes ---------- */
@@ -350,7 +471,7 @@ const dots = (step, total=5) => `<div class="dots">${Array.from({length:total},(
   `<div class="dot ${i<step?'done':i===step?'cur':''}"></div>`).join('')}</div>`;
 const insight = t => `<div class="insight">${t}</div>`;
 const alertCard = (e,bg,c,t,m) => `<div class="alert-card" style="background:${bg};">
-  <div class="aico" style="background:${c}18;color:${c};">${e}</div>
+  <div class="aico" style="color:${c};">${e}</div>
   <div><div class="t" style="color:${c};">${t}</div><div class="m">${m}</div></div></div>`;
 const mini = (l,v,c) => `<div class="mini"><div class="l">${l}</div><div class="v" style="color:${c||'var(--ink)'}">${v}</div></div>`;
 function barChart(){
@@ -386,29 +507,76 @@ function appbar(title, back, actions){
 }
 
 /* ============================================================
-   ONBOARDING (5 pasos — mismo flujo)
+   BLOQUEO PIN
+   ============================================================ */
+function hashPin(p){ let h=5381; for(const c of p) h=(((h<<5)+h)+c.charCodeAt(0))>>>0; return 'h'+h; }
+let lockBuf = '';
+function renderLock(){
+  screenFn = renderLock;
+  lockBuf = '';
+  app.innerHTML = `<div class="screen center" style="justify-content:center">
+    <div class="avatar">${ICONS.lock}</div>
+    <h2 class="title">MyTicket</h2>
+    <p class="sub">Ingresa tu PIN de 4 dígitos</p>
+    <div class="pindots" id="pindots">${[0,1,2,3].map(i=>`<div class="pindot" id="pd${i}"></div>`).join('')}</div>
+    <div class="pad">${[1,2,3,4,5,6,7,8,9,'·',0,'⌫'].map(k=>
+      k==='·' ? '<div></div>' : `<button class="padkey" onclick="pinKey('${k}')">${k}</button>`).join('')}</div>
+    <p class="muted" style="font-size:12px;margin-top:22px;">Privacidad para tu información financiera</p></div>`;
+}
+function pinKey(k){
+  if(k==='⌫'){ lockBuf = lockBuf.slice(0,-1); }
+  else if(lockBuf.length<4){ lockBuf += k; }
+  [0,1,2,3].forEach(i => { const d=$('#pd'+i); if(d) d.classList.toggle('on', i<lockBuf.length); });
+  if(lockBuf.length===4){
+    if(hashPin(lockBuf) === pinHash){
+      toast(`Bienvenido de nuevo${profile?', '+profile.name:''}`);
+      profile ? renderHome() : renderStep1();
+    } else {
+      lockBuf='';
+      const pd = $('#pindots'); pd.classList.add('pin-err');
+      setTimeout(()=>{ pd.classList.remove('pin-err'); [0,1,2,3].forEach(i=>$('#pd'+i)?.classList.remove('on')); }, 380);
+    }
+  }
+}
+
+/* ============================================================
+   ONBOARDING
    ============================================================ */
 function renderStep1(){
+  screenFn = renderStep1;
   app.innerHTML = `<div class="screen">${dots(0)}
     <h2 class="title">Bienvenido a MyTicket</h2>
     <p class="sub">Paso 1 de 5 — Configuración personal</p>
     <div class="card"><h3>¿Quién usará esta app?</h3>
       <p class="hint">No necesitamos tu nombre real. Solo un apodo para personalizar tu experiencia.</p>
-      <input class="input" id="ob-name" placeholder="Ej: Papá Juan, Doña María, Yo..." maxlength="30"></div>
+      <input class="input" id="ob-name" placeholder="Ej: Papá Juan, Doña María, Yo..." maxlength="30" value="${esc(onboardingData.name||'')}"></div>
     ${insight('La app dirá "Papá Juan, este mes llevas $340 en antojos" en vez de "Usuario_102". La familiaridad genera confianza.')}
     <button class="btn" onclick="obNext1()">Siguiente</button></div>`;
-  setTimeout(()=> $('#ob-name').focus(), 100);
 }
 function obNext1(){
   const v = $('#ob-name').value.trim();
-  if(!v) return toast('Por favor escribe un nombre', true);
+  if(!v) return toast('Por favor escribe un nombre', {err:true});
   onboardingData.name = v; renderStep2();
 }
+function obSources(){
+  if(!Array.isArray(onboardingData.sources) || !onboardingData.sources.length)
+    onboardingData.sources = [{name: onboardingData.income_type==='pension' ? 'Pensión' : 'Ingreso principal', amount:''}];
+  return onboardingData.sources;
+}
+function obCollect(){
+  onboardingData.name = $('#ob-name') ? $('#ob-name').value : onboardingData.name;
+  document.querySelectorAll('.src-row').forEach((r,i) => {
+    if(onboardingData.sources[i]){ onboardingData.sources[i].name = r.querySelector('[data-n]').value; onboardingData.sources[i].amount = r.querySelector('[data-a]').value; }
+  });
+}
 function renderStep2(){
+  screenFn = renderStep2;
   const opts = [['fijo','💼','Salario fijo','Quincena o mensualidad estable'],
     ['eventual','🔧','Trabajo informal','Ingresos variables, jornales, freelance'],
     ['negocio','🏪','Negocio propio','Ventas, comercio, servicios propios'],
     ['pension','🧓','Pensión / Jubilación','Ingreso fijo de retiro']];
+  const srcs = obSources();
+  const total = srcs.reduce((s,x)=>s+parseNum(x.amount),0);
   app.innerHTML = `<div class="screen">${dots(1)}
     <h2 class="title">Tus ingresos</h2>
     <p class="sub">Paso 2 de 5 — Sin datos bancarios</p>
@@ -416,25 +584,48 @@ function renderStep2(){
       ${opts.map(o=>`<button class="opt" data-v="${o[0]}" onclick="obPickType(this)"><span class="em">${o[1]}</span>
         <span><span class="tt">${o[2]}</span><br><span class="dd">${o[3]}</span></span></button>`).join('')}
       <div class="divider"></div>
-      <input class="input" id="ob-income" inputmode="numeric" placeholder="¿Cuánto ganas al mes (aprox)?" oninput="fmtNumInput(this)">
-      <div class="center" id="ob-income-disp" style="color:var(--primary);font-weight:800;font-size:16px;">$ 0 MXN</div></div>
-    ${insight('Si tu ingreso es eventual, la app te dirá "Llevas 60% de tu promedio mensual" en vez de regañarte. Contexto real.')}
+      <label class="lbl">¿Cada cuándo presupuestas?</label>
+      <div class="seg" id="ob-period">
+        <button class="${(onboardingData.budget_period||'mensual')==='mensual'?'on':''}" onclick="obPeriod('mensual')">📅 Mensual</button>
+        <button class="${onboardingData.budget_period==='quincenal'?'on':''}" onclick="obPeriod('quincenal')">📆 Por quincenas</button></div>
+      <label class="lbl">Tus fuentes de ingreso (puedes agregar varias)</label>
+      ${srcs.map((s,i)=>`<div class="edit-row src-row">
+        <input class="input" style="flex:1.3" data-n placeholder="Fuente (ej. Pensión IMSS)" value="${esc(s.name)}">
+        <input class="input" style="flex:1" data-a inputmode="numeric" placeholder="$ mensual" value="${s.amount}" oninput="fmtNumInput(this);obTotal()">
+        ${srcs.length>1?`<button class="icon-mini" onclick="obDelSrc(${i})">✕</button>`:''}
+      </div>`).join('')}
+      <button class="btn ghost small" onclick="obAddSrc()">＋ Agregar otra fuente</button>
+      <div class="center" style="color:var(--primary);font-weight:800;font-size:17px;margin-top:8px;">Total: ${money(total)} MXN / mes</div></div>
+    ${insight('¿Pensión IMSS + pensión privada + apoyo de un hijo? Agrégalas como fuentes separadas. La app las suma sola.')}
     <div class="row between">
-      <button class="btn ghost" style="width:auto" onclick="renderStep1()">‹ Atrás</button>
+      <button class="btn ghost" style="width:auto" onclick="obCollect();renderStep1()">‹ Atrás</button>
       <button class="btn" style="width:70%" onclick="obNext2()">Siguiente</button></div></div>`;
-  $('#ob-income').addEventListener('input', ()=> $('#ob-income-disp').textContent = money(parseNum($('#ob-income').value)) + ' MXN');
-  obPickType(document.querySelector('.opt'));
 }
 function obPickType(el){
+  obCollect();
   onboardingData.income_type = el.dataset.v;
   document.querySelectorAll('.opt').forEach(o=> o.classList.toggle('sel', o===el));
 }
+function obPeriod(v){ obCollect(); onboardingData.budget_period = v; renderStep2(); }
+function obAddSrc(){ obCollect(); onboardingData.sources.push({name:'', amount:''}); renderStep2(); }
+function obDelSrc(i){ obCollect(); onboardingData.sources.splice(i,1); renderStep2(); }
+function obTotal(){
+  let total = 0;
+  document.querySelectorAll('.src-row').forEach(r => total += parseNum(r.querySelector('[data-a]').value));
+  const cards = document.querySelectorAll('.card');
+  const disp = cards[cards.length-1].querySelector('div[style*="font-weight:800"]');
+  if(disp) disp.textContent = `Total: ${money(total)} MXN / mes`;
+}
 function obNext2(){
-  const amt = parseNum($('#ob-income').value);
-  if(amt<=0) return toast('Por favor ingresa un monto válido', true);
-  onboardingData.income_amount = amt; renderStep3();
+  obCollect();
+  const total = onboardingData.sources.reduce((s,x)=>s+parseNum(x.amount),0);
+  if(total<=0) return toast('Ingresa al menos una fuente con un monto válido', {err:true});
+  onboardingData.income_amount = total;
+  onboardingData.budget_period = onboardingData.budget_period || 'mensual';
+  renderStep3();
 }
 function renderStep3(){
+  screenFn = renderStep3;
   app.innerHTML = `<div class="screen">${dots(2)}
     <h2 class="title">Gastos que no puedes evitar</h2>
     <p class="sub">Paso 3 de 5 — Lo que ya está comprometido</p>
@@ -443,7 +634,7 @@ function renderStep3(){
       <input class="input" id="ob-fixed" inputmode="numeric" placeholder="Ej: 8,500" oninput="fmtNumInput(this);obMath()">
       <div class="center" id="ob-fixed-disp" style="color:var(--primary);font-weight:800;font-size:16px;">$ 0 MXN</div></div>
     <div class="card" id="ob-math"></div>
-    ${insight('La app calcula tu "dinero de verdad". Si escaneas un ticket de $200, sabe qué representa de tu disponible REAL.')}
+    ${insight('Después, en tu Perfil podrás registrar cada pago por separado (luz día 5, internet día 18...) y la app te avisará antes de que se junte.')}
     <div class="row between">
       <button class="btn ghost" style="width:auto" onclick="renderStep2()">‹ Atrás</button>
       <button class="btn" style="width:70%" onclick="obNext3()">Siguiente</button></div></div>`;
@@ -466,6 +657,7 @@ function obNext3(){
   renderStep4();
 }
 function renderStep4(){
+  screenFn = renderStep4;
   app.innerHTML = `<div class="screen">${dots(3)}
     <h2 class="title">Tu Ruta de Rescate</h2>
     <p class="sub">Paso 4 de 5 — Opcional pero transformador</p>
@@ -476,7 +668,7 @@ function renderStep4(){
       <div id="debt-fields" style="display:none">
         <input class="input" id="ob-debt" inputmode="numeric" placeholder="¿Cuánto debes en total?" oninput="fmtNumInput(this)">
         <input class="input" id="ob-interest" inputmode="numeric" placeholder="¿Qué interés anual pagas? (aprox) %"></div></div>
-    <div class="card" style="border:2px solid var(--orange)"><h3 style="color:var(--orange)">Lo que pasará si lo configuras:</h3>
+    <div class="card" style="border:2px solid var(--orange-border)"><h3 style="color:var(--orange-ink)">Lo que pasará si lo configuras:</h3>
       <p class="hint">1. Escaneas un ticket<br>2. La app detecta $60 en "fugas"<br>3. Sugiere: "¿Rediriges $30 a tu deuda?"<br><br>
       <b style="color:var(--ink)">Así terminas meses antes y ahorras en intereses.</b></p></div>
     ${insight('La deuda deja de ser un monstruo abstracto y se convierte en una barra de progreso.')}
@@ -498,6 +690,7 @@ function obNext4(){
   renderStep5();
 }
 function renderStep5(){
+  screenFn = renderStep5;
   const d = onboardingData, rescue = d.debt_amount>0 ? Math.floor(d.debt_amount/500) : 0;
   const feat = (e,t,s)=>`<div class="mini" style="padding:14px 6px"><div style="font-size:26px">${e}</div>
     <div style="font-size:12px;font-weight:800;margin:5px 0 3px">${t}</div>
@@ -506,11 +699,12 @@ function renderStep5(){
     <h2 class="title">Tu perfil está listo</h2>
     <p class="sub">Esto es lo que MyTicket sabe de ti</p>
     <div class="card center"><h3 style="font-size:21px">${esc(d.name)}</h3>
-      <p class="hint" style="margin:8px 0">Ingreso: <b style="color:var(--ink)">${money(d.income_amount)} MXN</b><br>
+      <p class="hint" style="margin:8px 0">Ingreso (${d.budget_period==='quincenal'?'por quincenas':'mensual'}): <b style="color:var(--ink)">${money(d.income_amount)} MXN</b><br>
       Gastos fijos: <b style="color:var(--ink)">${money(d.fixed_expenses)} MXN</b></p>
-      <div class="math-big">Disponible REAL: ${money(d.available_real)}</div></div>
-    ${d.debt_amount>0 ? `<div class="card" style="border:2px solid var(--orange)">
-      <h3 style="color:var(--orange)">Objetivo activo</h3>
+      <div class="math-big">Disponible REAL: ${money(d.available_real)}</div>
+      ${d.sources.length>1?`<p class="hint" style="margin:6px 0 0;">Fuentes: ${d.sources.map(s=>esc(s.name||'Ingreso')).join(' · ')}</p>`:''}</div>
+    ${d.debt_amount>0 ? `<div class="card" style="border:2px solid var(--orange-border)">
+      <h3 style="color:var(--orange-ink)">Objetivo activo</h3>
       <p class="hint">Deuda: <b style="color:var(--ink)">${money(d.debt_amount)} MXN</b><br>
       Si rediriges 50% de fugas: libre en ~${rescue} meses</p></div>`
     : `<div class="card center" style="border:2px solid var(--green)"><h3 style="color:var(--green)">✓ Sin deudas activas</h3>
@@ -527,18 +721,22 @@ function finishOnboarding(){
   profile = { name:onboardingData.name, income_type:onboardingData.income_type||'fijo',
     income_amount:onboardingData.income_amount, fixed_expenses:onboardingData.fixed_expenses,
     available_real:onboardingData.available_real, debt_amount:onboardingData.debt_amount||0,
-    debt_interest:onboardingData.debt_interest||0, savings_goal:0, currency:'MXN' };
+    debt_interest:onboardingData.debt_interest||0, savings_goal:0, currency:'MXN',
+    sources: onboardingData.sources.map(s=>({name:s.name||'Ingreso', amount:parseNum(s.amount)})),
+    bills: [], budget_period: onboardingData.budget_period||'mensual' };
   store.set('profile', profile);
   toast(`¡Bienvenido, ${profile.name}! Tu copiloto está listo.`);
   renderHome();
 }
 
 /* ============================================================
-   HOME / DASHBOARD
+   HOME
    ============================================================ */
 function renderHome(){
+  screenFn = renderHome;
   if(!profile) return renderStep1();
-  const s = monthlySummary(), avail = profile.available_real||0, debt = profile.debt_amount||0;
+  const {s, avail, period} = summaryNow();
+  const debt = profile.debt_amount||0;
   const wf = weeklyFugas();
   const fugasPct = s.spent>0 ? s.fugas/s.spent*100 : 0;
   const spentPct = avail>0 ? Math.min(100, s.spent/avail*100) : 0;
@@ -547,27 +745,37 @@ function renderHome(){
 
   let coach;
   if(s.tickets===0) coach = `Hola ${esc(profile.name)}, escanea tu primer ticket para empezar a tomar control.`;
-  else if(fugasPct<5) coach = `¡Vas excelente ${esc(profile.name)}! Solo el ${fugasPct.toFixed(0)}% de fugas este mes.`;
+  else if(fugasPct<5) coach = `¡Vas excelente ${esc(profile.name)}! Solo el ${fugasPct.toFixed(0)}% de fugas en esta ${period?'quincena':'etapa'}.`;
   else if(fugasPct<15) coach = `Cuidado ${esc(profile.name)}, llevas ${fugasPct.toFixed(0)}% en fugas. Un ojo ahí.`;
   else coach = `¡Alerta ${esc(profile.name)}! ${fugasPct.toFixed(0)}% de tu gasto son fugas.`;
   if(debt>0 && wf>0) coach += ` Si rediriges la mitad de tus fugas (${money(wf/2)}/sem) a tu deuda, terminas antes.`;
 
   const alerts = coachAlerts().slice(0,2).map(a=>alertCard(...a)).join('');
 
+  // Próximos pagos fijos
+  const bills = profile.bills || [];
+  let billsCard = '';
+  if(bills.length){
+    const ups = upcomingBills(30).slice(0,3);
+    billsCard = `<div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.cal} Próximos pagos</h3>
+      ${ups.length ? ups.map(b => `<div class="math-line"><span>📌 ${esc(b.name)}</span><span style="font-weight:800;color:var(--ink)">${money(b.amount)}${b.dist===0?' · <b style="color:var(--red)">HOY</b>':b.dist===1?' · mañana':` · en ${b.dist} días`}</span></div>`).join('')
+        : '<p class="hint" style="margin:0">Sin pagos próximos. Todo al corriente. ✅</p>'}</div>`;
+  }
+
   app.innerHTML = `<div class="screen withtab">
     ${appbar(`Hola, ${esc(profile.name)}`, null,
-      `<button class="hbtn" onclick="renderNotif()">${ICONS.bell}${alerts?'<span class="badge"></span>':''}</button>
-       <button class="hbtn" onclick="renderProfile()">${ICONS.gear}</button>`)}
-    ${alertCard('💬','#EAF1FF','var(--primary)','Tu copiloto financiero',coach)}
+      themeBtn() + `<button class="hbtn" onclick="renderNotif()">${ICONS.bell}${alerts?'<span class="badge"></span>':''}</button>`)}
+    ${alertCard('💬','var(--blue-soft)','var(--primary)','Tu copiloto financiero',coach)}
     ${alerts}
     <div class="hero">
-      <div class="hl">Disponible REAL este mes</div>
+      <div class="hl">${period ? 'Disponible de esta quincena' : 'Disponible REAL este mes'}</div>
       <div class="hv">${money(Math.max(0, avail - s.spent))}</div>
-      <div class="hs">de ${money(avail)} MXN</div>
+      <div class="hs">de ${money(avail)} MXN${period ? ' · ' + period.label : ''}</div>
       <div class="pbar-wrap"><div class="pbar-spent" style="width:${spentPct}%"></div><div class="pbar-rest" style="width:${restPct}%"></div></div>
       <div class="pl"><span>Gastado ${spentPct.toFixed(0)}%</span><span>Restante ${restPct.toFixed(0)}%</span></div>
-      <div class="foot">🧾 ${s.tickets} tickets este mes</div></div>
+      <div class="foot">🧾 ${s.tickets} tickets ${period?'en esta quincena':'este mes'}</div></div>
     <div class="mini-grid">${mini('Gastado', money(s.spent))}${mini('Fugas', money(s.fugas), ac)}${mini('Restante', restPct.toFixed(0)+'%', 'var(--primary)')}</div>
+    ${billsCard}
     ${barChart()}</div>
     ${tabbar('home')}`;
 }
@@ -607,7 +815,7 @@ function compressImage(file){
   });
 }
 async function processScan(file){
-  if(!apiUrl){ toast('⚠️ Primero configura la URL de tu backend en Mi Perfil', true); return renderProfile(); }
+  if(!apiUrl){ toast('⚠️ Primero configura la URL de tu backend en Mi Perfil', {err:true}); return renderProfile(); }
   overlay(true);
   try{
     const blob = await compressImage(file);
@@ -619,26 +827,38 @@ async function processScan(file){
         const r = await fetch(apiUrl.replace(/\/+$/,'') + '/scan-ticket', { method:'POST', body:fd });
         const j = await r.json();
         if(r.ok && !j.error) result = j; else err = j.error || ('Error del servidor: ' + r.status);
-      }catch(ex){ err = ex.message; }
+      }catch(ex){ err = 'No hubo conexión: ' + ex.message; }
       if(!result && attempt===0) await new Promise(r=>setTimeout(r,2000));
     }
     overlay(false);
     if(result){ lastScan = result; renderResult(); }
-    else toast('Error: ' + (err || 'no se pudo analizar'), true);
-  }catch(e){ overlay(false); toast('Error: ' + e.message, true); }
+    else { const fe = friendlyError(err); toast(fe.msg, {err:true, detail: fe.detail}); }
+  }catch(e){ overlay(false); toast('😕 Algo salió mal al preparar la foto. Intenta de nuevo.', {err:true, detail:e.message}); }
 }
 
 /* ============================================================
-   RESULTADO
+   RESULTADO (con edición de categorías y método de pago)
    ============================================================ */
+function resPreserve(){ if($('#res-notes')) lastScan.notes = $('#res-notes').value; }
+function resToggleItem(i){ resPreserve(); lastScan.items[i].is_essential = !lastScan.items[i].is_essential; renderResult(); }
+function resMethodSet(v){ resPreserve(); resMethod = v; store.set('method', v); renderResult(); }
+function resCat(v){ resPreserve(); lastScan.catOverride = v || null; renderResult(); }
+function effCategory(d, fugasPct){
+  if(d.catOverride==='fugas') return 'Fugas_Invisibles';
+  if(d.catOverride==='normal') return 'Gasto_Normal';
+  return fugasPct > 30 ? 'Fugas_Invisibles' : 'Gasto_Normal';
+}
 function renderResult(){
+  screenFn = renderResult;
   const d = lastScan; if(!d) return renderHome();
+  resMethod = d.method || resMethod || lastMethod;
   const avail = profile.available_real||0, debt = profile.debt_amount||0;
   const items = d.items || [];
   let essT = 0, fugT = 0;
   items.forEach(i => { i.is_essential ? essT += (i.price||0) : fugT += (i.price||0); });
   const total = d.total_amount || essT + fugT;
   const fugasPct = total>0 ? fugT/total*100 : 0;
+  const category = effCategory(d, fugasPct);
   const realPct = avail>0 ? total/avail*100 : 0;
   const essPct = total>0 ? essT/total*100 : 0, fugPct = total>0 ? fugT/total*100 : 0;
 
@@ -653,31 +873,50 @@ function renderResult(){
   if(fugT===0 && total>0) sug.push(`¡Compra 100% esencial, ${esc(profile.name)}! Así se construye la libertad financiera.`);
   const coachText = sug.length ? sug.join('<br><br>') : 'Ticket analizado correctamente.';
 
+  const ov = d.catOverride;
   app.innerHTML = `<div class="screen">
     ${appbar('Resultado del Escaneo', 'renderHome()')}
     <div class="card center"><h3 style="font-size:21px">${esc(d.merchant_name||'Desconocido')}</h3>
       <p class="muted" style="font-size:13.5px;margin:5px 0 12px;font-weight:600">${esc(d.date||'Sin fecha')}</p>
       <div style="font-size:28px;font-weight:800;color:var(--primary);letter-spacing:-.5px;">Total: ${money2(total)} <span style="font-size:15px;color:var(--muted);font-weight:600">MXN</span></div></div>
-    <div class="card center"><div style="font-size:12.5px;color:var(--muted);margin-bottom:12px;font-weight:700;">DISTRIBUCIÓN DE LA COMPRA</div>
+
+    <div class="card"><h3 style="font-size:15px;">¿Con qué pagaste?</h3>
+      <div class="seg">
+        <button class="${resMethod==='efectivo'?'on':''}" onclick="resMethodSet('efectivo')">💵 Efectivo</button>
+        <button class="${resMethod==='tarjeta'?'on':''}" onclick="resMethodSet('tarjeta')">💳 Tarjeta</button></div>
+      <p class="hint" style="margin:0;">Así sabrás después si el dinero salió de tu cartera o de tu tarjeta.</p></div>
+
+    <div class="card center"><div style="font-size:11.5px;color:var(--muted);margin-bottom:12px;font-weight:800;letter-spacing:.6px;">DISTRIBUCIÓN DE LA COMPRA</div>
       <div class="pbar-wrap h10" style="max-width:290px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%;border-radius:99px;"></div><div class="pbar-fug" style="width:${fugPct}%;border-radius:99px;"></div></div>
       <div class="legend" style="max-width:290px;margin:10px auto 0">
-        <span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:#B25E09">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+        <span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange-ink)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+
+    <div class="card"><h3 style="font-size:15px;">¿Qué tipo de gasto fue?</h3>
+      <div class="seg">
+        <button class="${!ov?'on':''}" onclick="resCat('')">🤖 Automático</button>
+        <button class="${ov==='normal'?'on':''}" onclick="resCat('normal')">✅ Normal</button>
+        <button class="${ov==='fugas'?'on':''}" onclick="resCat('fugas')">🔥 Fugas</button></div>
+      <p class="hint" style="margin:0;">Automático decide según el porcentaje de fugas. Puedes corregirlo si la IA se equivocó.</p></div>
+
     <div class="card" style="font-size:13.5px;color:var(--muted);line-height:1.65">${coachText}</div>
-    <div class="mini-grid">${mini('Esencial', money2(essT), 'var(--green)')}${mini('No Esencial', money2(fugT), '#B25E09')}</div>
-    ${fugasPct>30 ? `<div class="card center" style="background:var(--red-soft);border-color:#F6C8CA;color:var(--red);font-weight:800;font-size:14px">⚠️ ${fugasPct.toFixed(0)}% de este ticket son fugas</div>`:''}
-    ${debt>0 && fugT>0 ? `<div class="card" style="background:var(--orange-soft);border-color:#F9DFB8">
-      <h3 style="color:#B25E09;font-size:14.5px">🛣️ Oportunidad de Ruta de Rescate</h3>
+    <div class="mini-grid">${mini('Esencial', money2(essT), 'var(--green)')}${mini('No Esencial', money2(fugT), 'var(--orange-ink)')}</div>
+    ${category==='Fugas_Invisibles' ? `<div class="card center" style="background:var(--red-soft);border-color:var(--red-border);color:var(--red);font-weight:800;font-size:14px">⚠️ ${fugasPct.toFixed(0)}% de este ticket son fugas</div>`:''}
+    ${debt>0 && fugT>0 ? `<div class="card" style="background:var(--orange-soft);border-color:var(--orange-border)">
+      <h3 style="color:var(--orange-ink);font-size:14.5px">🛣️ Oportunidad de Ruta de Rescate</h3>
       <p class="hint" style="margin:0">Si rediriges la mitad de estas fugas (${money(fugT/2)}) a tu deuda de ${money(debt)}, te acercas a la libertad.</p></div>`:''}
-    <p style="font-size:15.5px;font-weight:800;margin:4px 0 12px 4px;">Productos detectados</p>
+
+    <p style="font-size:15.5px;font-weight:800;margin:4px 0 4px 4px;">Productos detectados</p>
+    <p class="muted" style="font-size:12px;margin:0 4px 12px;">Toca un producto para corregir si es esencial 🟢 o fuga 🟠</p>
     <div style="max-height:260px;overflow-y:auto;margin-bottom:14px">
-      ${items.length ? items.map(i=>`<div class="item-row">
-        <span class="ic" style="background:${i.is_essential?'var(--green-soft)':'var(--orange-soft)'};color:${i.is_essential?'var(--green)':'#B25E09'}">${i.is_essential?ICONS.check:ICONS.warn}</span>
-        <span class="nm"><span class="n">${esc(i.name||'Desconocido')}</span><br><span class="e">${i.is_essential?'ESENCIAL':'NO ESENCIAL'}</span></span>
+      ${items.length ? items.map((i,idx)=>`<div class="item-row" onclick="resToggleItem(${idx})">
+        <span class="ic" style="background:${i.is_essential?'var(--green-soft)':'var(--orange-soft)'};color:${i.is_essential?'var(--green)':'var(--orange-ink)'}">${i.is_essential?ICONS.check:ICONS.warn}</span>
+        <span class="nm"><span class="n">${esc(i.name||'Desconocido')}</span><br><span class="e">${i.is_essential?'🟢 ESENCIAL · toca si no lo es':'🟠 FUGA · toca si es esencial'}</span></span>
         <span class="pr">${money2(i.price||0)}</span></div>`).join('') : '<div class="empty">Sin productos detectados</div>'}</div>
+
     <div class="card"><h3 style="font-size:14.5px">Agregar nota (opcional)</h3>
-      <textarea class="input" id="res-notes" placeholder="Ej: Compra del súper del fin de semana..."></textarea></div>
+      <textarea class="input" id="res-notes" placeholder="Ej: Compra del súper del fin de semana...">${esc(d.notes||'')}</textarea></div>
     <button class="btn" onclick="saveResult(true)">💾 Guardar y seguir</button>
-    <button class="btn blue" onclick="saveResult(false)">🕘 Guardar y ver historial</button>
+    <button class="btn blue" onclick="saveResult(false)">🕘 Guardar y ver movimientos</button>
     <button class="btn outline" onclick="renderHome()">Descartar</button></div>`;
 }
 function saveResult(goHome){
@@ -685,8 +924,10 @@ function saveResult(goHome){
   const items = d.items || [];
   const fugT = items.filter(i=>!i.is_essential).reduce((s,i)=>s+(i.price||0),0);
   const total = d.total_amount || items.reduce((s,i)=>s+(i.price||0),0);
-  d.category = (total>0 && fugT/total>0.3) ? 'Fugas_Invisibles' : 'Gasto_Normal';
+  d.category = effCategory(d, total>0 ? fugT/total*100 : 0);
   d.notes = $('#res-notes') ? $('#res-notes').value : '';
+  d.method = resMethod;
+  lastMethod = resMethod; store.set('method', resMethod);
   saveTxLocal(d);
   toast('¡Ticket guardado! Tu copiloto aprendió de este gasto.');
   goHome ? renderHome() : renderHistory();
@@ -697,6 +938,7 @@ function saveResult(goHome){
    ============================================================ */
 let histMonth = thisMonth();
 function renderHistory(){
+  screenFn = renderHistory;
   const months = monthsWithData();
   if(!months.includes(histMonth)) histMonth = months[0];
   app.innerHTML = `<div class="screen withtab">
@@ -718,13 +960,14 @@ function renderHistList(){
   $('#hist-list').innerHTML = list.length ? list.map(t => {
     const ess = (t.items||[]).filter(i=>i.is_essential).length, non = (t.items||[]).length - ess;
     const isF = t.category === 'Fugas_Invisibles';
+    const mth = t.method === 'tarjeta' ? '💳 Tarjeta' : '💵 Efectivo';
     return `<div class="tx-item">
       <div class="tx-top"><span style="display:flex;align-items:center;gap:10px;">
         <span class="tx-ico" style="background:${isF?'var(--orange-soft)':'var(--green-soft)'}">${isF?'🟠':'🟢'}</span>
         <span class="tx-name">${esc(t.merchant_name)}</span></span>
         <span class="tx-amt">${money2(t.total_amount)}</span></div>
       <div class="tx-date">${esc(t.date)}</div>
-      <div><span class="chip ess">${ess} esencial</span>${non>0?`<span class="chip fug">${non} no esencial</span>`:''}
+      <div><span class="chip mth">${mth}</span><span class="chip ess">${ess} esencial</span>${non>0?`<span class="chip fug">${non} no esencial</span>`:''}
         <span class="chip ${isF?'cat-fug':'cat-ess'}">${t.category.replace('_',' ')}</span></div>
       ${t.notes ? `<div class="tx-notes">"${esc(t.notes)}"</div>` : ''}</div>`;
   }).join('') : `<div class="empty"><div class="ic">📭</div>No hay tickets en este mes<br><br>
@@ -735,20 +978,26 @@ function renderHistList(){
    ESTADÍSTICAS
    ============================================================ */
 function renderStats(){
+  screenFn = renderStats;
   const totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0);
   const avg = txs.length ? totalAll/txs.length : 0;
   const tops = topMerchants(5);
   let essT=0, fugT=0;
   txs.forEach(t => (t.items||[]).forEach(i => i.is_essential ? essT+=(i.price||0) : fugT+=(i.price||0)));
   const ti = essT+fugT, essPct = ti>0 ? essT/ti*100 : 0, fugPct = ti>0 ? fugT/ti*100 : 0;
+  const cash = txs.filter(t=>t.method!=='tarjeta').reduce((s,t)=>s+(t.total_amount||0),0);
+  const card = totalAll - cash;
   app.innerHTML = `<div class="screen withtab">
-    ${appbar('Análisis', null, '')}
+    ${appbar('Análisis', null, themeBtn())}
     <h2 class="title">Resumen de ${esc(profile.name)}</h2>
     <p class="sub">Tu panorama financiero completo</p>
     <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
+    ${totalAll>0 ? `<div class="chart-card"><div class="chart-title">¿De dónde salió el dinero?</div>
+      <div class="pbar-wrap h16" style="max-width:250px;margin:0 auto"><div class="pbar-ess" style="width:${totalAll?cash/totalAll*100:0}%;border-radius:99px;"></div><div class="pbar-fug" style="width:${totalAll?card/totalAll*100:0}%;border-radius:99px;"></div></div>
+      <div class="legend"><span style="color:var(--green)">💵 Efectivo ${money(cash)}</span><span style="color:var(--orange-ink)">💳 Tarjeta ${money(card)}</span></div></div>`:''}
     <div class="chart-card"><div class="chart-title">Distribución histórica</div>
       <div class="pbar-wrap h16" style="max-width:250px;margin:0 auto"><div class="pbar-ess" style="width:${essPct}%;border-radius:99px;"></div><div class="pbar-fug" style="width:${fugPct}%;border-radius:99px;"></div></div>
-      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:#B25E09">Fugas ${fugPct.toFixed(0)}%</span></div></div>
+      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange-ink)">Fugas ${fugPct.toFixed(0)}%</span></div></div>
     ${barChart()}
     <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Top comercios (este mes)</p>
     ${tops.length ? tops.map((t,i)=>`<div class="stat-line"><span><span class="badge-num">${i+1}</span>${esc(t[0])}</span><b style="color:var(--primary)">${money(t[1])}</b></div>`).join('')
@@ -757,10 +1006,11 @@ function renderStats(){
     <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Contexto financiero</p>
     <div class="card" style="font-size:14.5px;color:var(--muted);line-height:2;">
       Ingreso mensual: <b style="color:var(--ink)">${money(profile.income_amount)} MXN</b><br>
+      ${(profile.sources||[]).map(s=>`<span style="font-size:13px;">&nbsp;&nbsp;· ${esc(s.name)}: <b style="color:var(--ink)">${money(s.amount)}</b></span><br>`).join('')}
       Disponible real: <b style="color:var(--ink)">${money(profile.available_real)} MXN</b><br>
       Deuda activa: <b style="color:var(--ink)">${money(profile.debt_amount)} MXN</b><br>
       Total gastado (histórico): <b style="color:var(--ink)">${money(totalAll)} MXN</b><br>
-      De eso, fugas: <span style="color:#B25E09;font-weight:700;">${money(fugT)} MXN (${fugPct.toFixed(0)}%)</span></div></div>
+      De eso, fugas: <span style="color:var(--orange-ink);font-weight:700;">${money(fugT)} MXN (${fugPct.toFixed(0)}%)</span></div></div>
     ${tabbar('stats')}`;
 }
 
@@ -768,58 +1018,134 @@ function renderStats(){
    NOTIFICACIONES
    ============================================================ */
 function renderNotif(){
+  screenFn = renderNotif;
   const row = (key, t, d) => `<div class="card row between" style="margin-bottom:10px">
     <div><div style="font-size:15.5px;font-weight:800">${t}</div><div class="muted" style="font-size:12.5px;margin-top:3px;">${d}</div></div>
     <label class="switch"><input type="checkbox" id="nt-${key}" ${notif[key]?'checked':''}><span class="sl"></span></label></div>`;
   app.innerHTML = `<div class="screen">
-    ${appbar('Alertas del Coach', 'renderHome()')}
+    ${appbar('Alertas del Coach', 'renderHome()', themeBtn())}
     <p class="muted" style="font-size:14px;margin:0 4px 16px;">Elige qué alertas quieres recibir</p>
     ${row('scan_reminder','Recordatorio de escaneo','Si llevas más de 7 días sin escanear')}
+    ${row('bills_reminder','Recordatorio de pagos','Cuando se acerque la fecha de luz, agua, internet…')}
     ${row('budget_alert','Alerta de presupuesto','Cuando tu disponible real baje del 15%')}
     ${row('fugas_alert','Alerta de fugas','Cuando tus gastos no esenciales superen el 25%')}
     ${row('debt_opportunity','Oportunidades de deuda','Sugerencias para acelerar tu Ruta de Rescate')}
-    ${insight('Estas alertas aparecen en la pantalla principal. En el futuro podrán llegar como notificaciones push.')}
+    ${insight('Estas alertas aparecen en la pantalla principal al abrir la app.')}
     <button class="btn" onclick="saveNotif()">💾 Guardar configuración</button></div>`;
 }
 function saveNotif(){
-  ['scan_reminder','budget_alert','fugas_alert','debt_opportunity'].forEach(k => notif[k] = $('#nt-'+k).checked);
+  ['scan_reminder','bills_reminder','budget_alert','fugas_alert','debt_opportunity'].forEach(k => notif[k] = $('#nt-'+k).checked);
   store.set('notif', notif);
   toast('Configuración de alertas guardada');
   renderHome();
 }
 
 /* ============================================================
-   PERFIL
+   PERFIL (completo)
    ============================================================ */
+let profDraft = null, profSources = null, profBills = null, profType = null, profPeriod = null;
+function profCollect(){
+  profDraft = {
+    name: $('#pf-name')?.value ?? profDraft?.name ?? profile.name,
+    income: $('#pf-income')?.value ?? profDraft?.income,
+    fixed: $('#pf-fixed')?.value ?? profDraft?.fixed,
+    debt: $('#pf-debt')?.value ?? profDraft?.debt,
+    interest: $('#pf-interest')?.value ?? profDraft?.interest,
+    savings: $('#pf-savings')?.value ?? profDraft?.savings,
+    api: $('#pf-api')?.value ?? profDraft?.api ?? apiUrl,
+    pin: $('#pf-pin')?.value ?? '', pin2: $('#pf-pin2')?.value ?? '',
+  };
+  profSources = [...document.querySelectorAll('.src-row')].map(r => ({
+    name: r.querySelector('[data-n]').value, amount: parseNum(r.querySelector('[data-a]').value) }));
+  profBills = [...document.querySelectorAll('.bill-row')].map(r => ({
+    name: r.querySelector('[data-n]').value, amount: parseNum(r.querySelector('[data-a]').value),
+    day: Math.min(31, Math.max(1, parseNum(r.querySelector('[data-d]').value) || 1)) }));
+}
+function profAddSrc(){ profCollect(); profSources.push({name:'', amount:0}); renderProfile(); }
+function profDelSrc(i){ profCollect(); profSources.splice(i,1); renderProfile(); }
+function profAddBill(){ profCollect(); profBills.push({name:'', amount:0, day:1}); renderProfile(); }
+function profDelBill(i){ profCollect(); profBills.splice(i,1); renderProfile(); }
+
 function renderProfile(){
-  const p = profile, totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0), avg = txs.length ? totalAll/txs.length : 0;
+  screenFn = renderProfile;
+  const p = profile;
+  if(profSources === null){ profSources = JSON.parse(JSON.stringify(p.sources||[])); }
+  if(profBills === null){ profBills = JSON.parse(JSON.stringify(p.bills||[])); }
+  profDraft = profDraft || { name:p.name, income:(p.income_amount||0).toLocaleString('en-US'),
+    fixed:(p.fixed_expenses||0).toLocaleString('en-US'), debt:(p.debt_amount||0).toLocaleString('en-US'),
+    interest:p.debt_interest||'', savings:p.savings_goal?String(p.savings_goal):'', api:apiUrl, pin:'', pin2:'' };
+  if(profType===null) profType = p.income_type;
+  if(profPeriod===null) profPeriod = p.budget_period || 'mensual';
+  const totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0), avg = txs.length ? totalAll/txs.length : 0;
   const tops = topMerchants(3);
   const types = [['fijo','💼','Salario fijo'],['eventual','🔧','Informal'],['negocio','🏪','Negocio'],['pension','🧓','Pensión']];
   const progress = p.debt_amount>0 ? Math.min(100, (txs.filter(t=>t.category==='Fugas_Invisibles').reduce((s,t)=>s+(t.total_amount||0),0)*0.3)/p.debt_amount*100) : 0;
+
   app.innerHTML = `<div class="screen withtab">
-    ${appbar('Mi Perfil', null, '')}
+    ${appbar('Mi Perfil', null, themeBtn())}
     <div class="avatar">${ICONS.user}</div>
     <h2 class="center title">${esc(p.name)}</h2>
     <p class="sub center" style="margin-bottom:16px">Configuración financiera</p>
-    <div class="row wrap" style="margin-bottom:14px" id="prof-types">
-      ${types.map(t=>`<button class="opt ${p.income_type===t[0]?'sel':''}" data-v="${t[0]}" onclick="profPickType(this)" style="width:auto;padding:9px 14px;margin:0 6px 8px 0">
-        <span style="font-size:19px">${t[1]}</span><span class="tt" style="font-size:13.5px">${t[2]}</span></button>`).join('')}</div>
-    <label class="lbl">Nombre / Apodo</label><input class="input" id="pf-name" value="${esc(p.name)}">
-    <label class="lbl">Ingreso mensual</label><input class="input" id="pf-income" inputmode="numeric" value="${(p.income_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
-    <label class="lbl">Gastos fijos</label><input class="input" id="pf-fixed" inputmode="numeric" value="${(p.fixed_expenses||0).toLocaleString('en-US')}" oninput="fmtNumInput(this);profCalc()">
+
+    <div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.wallet} Tipo de ingreso</h3>
+      <div class="row wrap" id="prof-types">
+        ${types.map(t=>`<button class="opt ${profType===t[0]?'sel':''}" data-v="${t[0]}" onclick="profPickType(this)" style="width:auto;padding:9px 14px;margin:0 6px 8px 0">
+          <span style="font-size:19px">${t[1]}</span><span class="tt" style="font-size:13.5px">${t[2]}</span></button>`).join('')}</div>
+      <label class="lbl">¿Cada cuándo presupuestas?</label>
+      <div class="seg" style="margin-bottom:0;">
+        <button class="${profPeriod==='mensual'?'on':''}" onclick="profSetPeriod('mensual')">📅 Mensual</button>
+        <button class="${profPeriod==='quincenal'?'on':''}" onclick="profSetPeriod('quincenal')">📆 Quincenal</button></div></div>
+
+    <div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.trend} Fuentes de ingreso</h3>
+      ${profSources.map((s,i)=>`<div class="edit-row src-row">
+        <input class="input" style="flex:1.3" data-n placeholder="Fuente (ej. Pensión IMSS)" value="${esc(s.name)}">
+        <input class="input" style="flex:1" data-a inputmode="numeric" placeholder="$ mensual" value="${s.amount?s.amount.toLocaleString('en-US'):''}" oninput="fmtNumInput(this)">
+        ${profSources.length>1?`<button class="icon-mini" onclick="profDelSrc(${i})">✕</button>`:''}
+      </div>`).join('')}
+      <button class="btn ghost small" onclick="profAddSrc()">＋ Agregar fuente</button></div>
+
+    <label class="lbl">Nombre / Apodo</label><input class="input" id="pf-name" value="${esc(profDraft.name)}">
+    <label class="lbl">Gastos fijos (total mensual)</label><input class="input" id="pf-fixed" inputmode="numeric" value="${profDraft.fixed}" oninput="fmtNumInput(this);profCalc()">
     <div class="center" id="pf-avail" style="color:var(--primary);font-weight:800;font-size:18px;margin:2px 0 14px;"></div>
-    <label class="lbl">Deuda total</label><input class="input" id="pf-debt" inputmode="numeric" value="${(p.debt_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
-    <label class="lbl">Interés anual aprox (%)</label><input class="input" id="pf-interest" inputmode="numeric" value="${p.debt_interest||''}">
-    <label class="lbl">Meta de ahorro mensual</label><input class="input" id="pf-savings" inputmode="numeric" value="${p.savings_goal?(p.savings_goal).toLocaleString('en-US'):''}" oninput="fmtNumInput(this)">
-    <div class="divider"></div>
-    <div class="card" style="border:2px solid #CFE0FF"><h3 style="font-size:14.5px;color:var(--primary)">🔌 Backend (donde vive tu key de Groq)</h3>
+    <label class="lbl">Deuda total</label><input class="input" id="pf-debt" inputmode="numeric" value="${profDraft.debt}" oninput="fmtNumInput(this)">
+    <label class="lbl">Interés anual aprox (%)</label><input class="input" id="pf-interest" inputmode="numeric" value="${profDraft.interest}">
+    <label class="lbl">Meta de ahorro mensual</label><input class="input" id="pf-savings" inputmode="numeric" value="${profDraft.savings}" oninput="fmtNumInput(this)">
+
+    <div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.cal} Pagos fijos mensuales</h3>
+      <p class="hint">Registra luz, agua, internet, suscripciones… La app te avisará antes de que toquen.</p>
+      ${profBills.map((b,i)=>`<div class="edit-row bill-row" style="flex-wrap:wrap;">
+        <input class="input" style="flex:1.4" data-n placeholder="Concepto (ej. Luz CFE)" value="${esc(b.name)}">
+        <input class="input" style="flex:1" data-a inputmode="numeric" placeholder="$ monto" value="${b.amount?b.amount.toLocaleString('en-US'):''}" oninput="fmtNumInput(this)">
+        <input class="input" style="flex:.6" data-d inputmode="numeric" placeholder="Día" value="${b.day||''}">
+        <button class="icon-mini" onclick="profDelBill(${i})">✕</button>
+      </div>`).join('')}
+      <button class="btn ghost small" onclick="profAddBill()">＋ Agregar pago</button></div>
+
+    <div class="card" style="border:2px solid var(--blue-border)"><h3 style="font-size:14.5px;color:var(--primary)">🔌 Backend (donde vive tu key de Groq)</h3>
       <p class="hint">Pega aquí la URL de tu backend (Cloudflare Worker). Tu API key <b>NUNCA</b> se guarda en esta web; vive solo en el servidor.</p>
-      <input class="input" id="pf-api" placeholder="https://tu-worker.tu-usuario.workers.dev" value="${esc(apiUrl)}" autocapitalize="off" autocorrect="off" spellcheck="false">
-      <p class="hint" style="margin:0;font-size:12px">📖 Guía para crearlo: busca "Cloudflare Workers" en la documentación que te compartí.</p></div>
-    ${p.debt_amount>0?`<div class="card" style="background:var(--orange-soft);border-color:#F9DFB8">
-      <div style="font-size:14.5px;font-weight:800;color:#B25E09">🛣️ Progreso Ruta de Rescate</div>
+      <input class="input" id="pf-api" placeholder="https://tu-worker.tu-usuario.workers.dev" value="${esc(profDraft.api)}" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+
+    <div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.lock} Bloqueo con PIN</h3>
+      <p class="hint">Protege tu información cuando prestes el teléfono. PIN de 4 dígitos.</p>
+      ${pinHash ? `<p class="hint" style="color:var(--green);font-weight:700;margin:0 0 10px;">✓ Bloqueo activado</p>` : ''}
+      <div class="row" style="gap:8px;">
+        <input class="input" id="pf-pin" style="flex:1" inputmode="numeric" maxlength="4" type="password" placeholder="PIN (4 dígitos)" value="${profDraft.pin}">
+        <input class="input" id="pf-pin2" style="flex:1" inputmode="numeric" maxlength="4" type="password" placeholder="Repite el PIN" value="${profDraft.pin2}"></div>
+      <div class="row">
+        <button class="btn small" onclick="profSetPin()">${pinHash?'Cambiar PIN':'Activar bloqueo'}</button>
+        ${pinHash?`<button class="btn small outline" onclick="profClearPin()">Quitar</button>`:''}</div></div>
+
+    <div class="card"><h3 style="display:flex;align-items:center;gap:8px;">${ICONS.save} Respaldo de datos</h3>
+      <p class="hint">Guarda una copia de TODO (perfil, tickets, ajustes) o restáurala en este u otro teléfono.</p>
+      <div class="row">
+        <button class="btn small" onclick="backupExport()">${ICONS.download} Exportar</button>
+        <button class="btn small blue" onclick="importInput.click()">${ICONS.upload} Restaurar</button></div></div>
+
+    ${p.debt_amount>0?`<div class="card" style="background:var(--orange-soft);border-color:var(--orange-border)">
+      <div style="font-size:14.5px;font-weight:800;color:var(--orange-ink)">🛣️ Progreso Ruta de Rescate</div>
       <div class="pbar-wrap" style="margin:12px 0 8px"><div class="pbar-fill" style="width:${progress}%"></div></div>
       <p class="muted" style="font-size:12.5px;margin:0;font-weight:600;">Estimado pagado: ${money(p.debt_amount*progress/100)} de ${money(p.debt_amount)} (${progress.toFixed(1)}%)</p></div>`:''}
+
     <p style="font-size:16px;font-weight:800;margin:8px 4px 12px;">Tus estadísticas</p>
     <div class="mini-grid">${mini('Tickets', txs.length)}${mini('Promedio', money(avg))}${mini('Total', money(totalAll))}</div>
     <p style="font-size:14.5px;font-weight:800;margin:4px 4px 10px;">Comercios más frecuentes</p>
@@ -831,34 +1157,91 @@ function renderProfile(){
     ${tabbar('prof')}`;
   profCalc();
 }
-let profType = profile ? profile.income_type : 'fijo';
 function profPickType(el){ profType = el.dataset.v; document.querySelectorAll('#prof-types .opt').forEach(o=>o.classList.toggle('sel', o===el)); }
+function profSetPeriod(v){ profPeriod = v; profCollect(); renderProfile(); }
 function profCalc(){
-  const avail = Math.max(0, parseNum($('#pf-income').value) - parseNum($('#pf-fixed').value));
-  $('#pf-avail').textContent = 'Disponible REAL: ' + money(avail) + ' MXN';
+  const income = (profSources||[]).reduce((s,x)=>s+(Number(x.amount)||0),0);
+  const avail = Math.max(0, income - parseNum($('#pf-fixed')?.value));
+  const el = $('#pf-avail');
+  if(el) el.textContent = 'Disponible REAL: ' + money(avail) + ' MXN';
+}
+function profSetPin(){
+  profCollect();
+  const p1 = profDraft.pin, p2 = profDraft.pin2;
+  if(!/^\d{4}$/.test(p1)) return toast('El PIN debe tener exactamente 4 números', {err:true});
+  if(p1 !== p2) return toast('Los PIN no coinciden. Escríbelo dos veces igual.', {err:true});
+  pinHash = hashPin(p1); store.set('pin', pinHash);
+  profDraft.pin=''; profDraft.pin2='';
+  toast('Bloqueo con PIN activado');
+  renderProfile();
+}
+function profClearPin(){
+  if(!confirm('¿Quitar el bloqueo con PIN?')) return;
+  pinHash = null; localStorage.removeItem('mt_pin');
+  toast('Bloqueo desactivado'); renderProfile();
 }
 function saveProfile(){
-  const inc = parseNum($('#pf-income').value), fix = parseNum($('#pf-fixed').value);
-  profile = { ...profile, name: $('#pf-name').value.trim() || profile.name, income_type: profType,
+  profCollect();
+  const inc = (profSources||[]).reduce((s,x)=>s+(Number(x.amount)||0),0);
+  const fix = parseNum(profDraft.fixed);
+  if(inc<=0) return toast('Tus fuentes de ingreso deben sumar más de $0', {err:true});
+  profile = { ...profile, name: profDraft.name.trim() || profile.name, income_type: profType,
+    sources: profSources.filter(s=>s.name.trim()||s.amount>0),
+    bills: profBills.filter(b=>b.name.trim()),
+    budget_period: profPeriod,
     income_amount: inc, fixed_expenses: fix, available_real: Math.max(0, inc-fix),
-    debt_amount: parseNum($('#pf-debt').value), debt_interest: parseNum($('#pf-interest').value),
-    savings_goal: parseNum($('#pf-savings').value) };
-  apiUrl = $('#pf-api').value.trim();
+    debt_amount: parseNum(profDraft.debt), debt_interest: parseNum(profDraft.interest),
+    savings_goal: parseNum(profDraft.savings) };
+  apiUrl = (profDraft.api||'').trim();
   store.set('profile', profile); store.set('api', apiUrl);
+  profDraft = null; profSources = null; profBills = null; profType = null; profPeriod = null;
   toast('Perfil actualizado correctamente');
   renderHome();
 }
 function resetApp(){
   if(!confirm('¿Reiniciar MyTicket?\n\nSe borrarán TODOS tus datos: perfil, tickets e historial. Esta acción no se puede deshacer.')) return;
-  localStorage.removeItem('mt_profile'); localStorage.removeItem('mt_txs');
-  localStorage.removeItem('mt_notif');
-  profile = null; txs = []; notif = {scan_reminder:true,budget_alert:true,fugas_alert:true,debt_opportunity:true};
+  ['mt_profile','mt_txs','mt_notif','mt_pin'].forEach(k=>localStorage.removeItem(k));
+  profile = null; txs = []; pinHash = null;
+  notif = {scan_reminder:true,budget_alert:true,fugas_alert:true,debt_opportunity:true,bills_reminder:true};
   toast('App reiniciada. Configura tu perfil de nuevo.');
   renderStep1();
 }
 
+/* ---------- Respaldo / Restaurar ---------- */
+function backupExport(){
+  const data = { app:'myticket', version:3, exported: new Date().toISOString(),
+    profile, txs, notif, theme, apiUrl };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)], {type:'application/json'}));
+  a.download = 'myticket_respaldo_' + today() + '.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('Respaldo descargado. Guárdalo en un lugar seguro.');
+}
+importInput.addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = '';
+  if(!f) return;
+  try{
+    const data = JSON.parse(await f.text());
+    if(!data || (!data.profile && !Array.isArray(data.txs))) throw new Error('no es un respaldo de MyTicket');
+    if(!confirm('Se reemplazarán TODOS los datos actuales con los del respaldo.\n\n¿Continuar?')) return;
+    profile = data.profile || null;
+    txs = Array.isArray(data.txs) ? data.txs : [];
+    if(data.notif) notif = data.notif;
+    if(data.theme){ theme = data.theme; store.set('theme', theme); applyTheme(); }
+    if(data.apiUrl !== undefined){ apiUrl = data.apiUrl || ''; store.set('api', apiUrl); }
+    migrateProfile();
+    store.set('profile', profile); store.set('txs', txs); store.set('notif', notif);
+    toast('✅ Respaldo restaurado correctamente');
+    profile ? renderHome() : renderStep1();
+  }catch(err){
+    toast('😕 Ese archivo no es un respaldo válido de MyTicket.', {err:true, detail: String(err.message||err)});
+  }
+});
+
 /* ---------- Arranque ---------- */
-profile ? renderHome() : renderStep1();
+applyTheme();
+if(pinHash) renderLock();
+else profile ? renderHome() : renderStep1();
 </script>
 </body>
 </html>
