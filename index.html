@@ -1,711 +1,279 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<title>MyTicket — Mobile Banking Edition</title>
-
-<!-- Tus enlaces de configuración y recursos nativos -->
+  <!-- Tus enlaces de configuración y recursos nativos -->
 <link rel="icon" type="image/png" href="./favicon.png">
 <link rel="apple-touch-icon" href="./logo-192.png">
 <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Vault Mobile Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-<style>
-:root{
-  --bg:#07090E; --card:#121824; --card-glass:rgba(18, 24, 36, 0.75); --border:rgba(255,255,255,0.08);
-  --primary:#2563EB; --primary-glow:rgba(37,99,235,0.3); --accent:#38BDF8;
-  --green:#10B981; --green-glow:rgba(16,185,129,0.2);
-  --orange:#F59E0B; --red:#EF4444; --purple:#8B5CF6; --gray:#64748B;
-  --text:#F8FAFC; --muted:#94A3B8;
-}
-*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{
-  margin:0; padding:0; background:#000; color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  display:flex; justify-content:center; align-items:flex-start; min-height:100dvh; overflow-x:hidden;
-}
-/* Contenedor estricto para simular la pantalla del móvil en cualquier dispositivo */
-#app{
-  width:100%; max-width:480px; min-height:100dvh; background:var(--bg);
-  display:flex; flex-direction:column; padding-bottom:90px; position:relative;
-  box-shadow: 0 0 40px rgba(0,0,0,0.8);
-}
+        body {
+            background-color: #050507;
+            color: #F4F4F5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
 
-/* Pantallas y Animaciones */
-.screen{flex:1;display:flex;flex-direction:column;padding:20px 16px;animation:fadeIn .3s cubic-bezier(0.16, 1, 0.3, 1);}
-@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+        /* Contenedor tipo pantalla de teléfono con acabado de alta gama */
+        .phone-viewport {
+            width: 100%;
+            max-width: 412px;
+            height: 100vh;
+            max-height: 892px;
+            background: #09090B;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 24px 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            overflow-y: auto;
+        }
 
-/* Barra Superior Tipo App de Banco */
-.bank-header{display:flex;align-items:center;justify-content:space-between;padding:12px 0 20px;position:sticky;top:0;background:var(--bg);z-index:10;backdrop-filter:blur(10px);}
-.user-info{display:flex;align-items:center;gap:12px;}
-.user-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;box-shadow:0 4px 12px var(--primary-glow);}
-.user-text .greeting{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
-.user-text .name{font-size:16px;font-weight:700;}
-.header-actions{display:flex;gap:8px;}
-.icon-btn{background:var(--card);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:transform .15s;}
-.icon-btn:active{transform:scale(0.92);}
+        @media (min-width: 480px) {
+            .phone-viewport {
+                height: 844px;
+                border-radius: 40px;
+                border: 8px solid #27272A;
+            }
+        }
 
-/* Tarjeta Principal Dinero Disponible (Estilo Neobanco) */
-.balance-card{background:linear-gradient(135deg, #1E3A8A 0%, #111827 100%);border:1px solid rgba(59,130,246,0.3);border-radius:24px;padding:24px;margin-bottom:16px;box-shadow:0 12px 32px rgba(0,0,0,0.4);position:relative;overflow:hidden;}
-.balance-card::before{content:"";position:absolute;top:-50px;right:-50px;width:150px;height:150px;background:radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);border-radius:50%;pointer-events:none;}
-.card-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-.card-chip{width:36px;height:26px;background:linear-gradient(135deg, #FDE047, #CA8A04);border-radius:5px;position:relative;}
-.card-chip::after{content:"";position:absolute;inset:4px;border:1px solid rgba(0,0,0,0.3);border-radius:2px;}
-.hide-toggle{background:rgba(255,255,255,0.1);border:none;color:var(--text);padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-weight:600;}
-.balance-label{font-size:13px;color:var(--muted);margin-bottom:4px;}
-.balance-amount{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:12px;}
-.balance-details{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.1);padding-top:12px;}
-.balance-details b{color:var(--text);}
+        /* Header Minimalista */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
 
-/* Tarjetas y Contenedores */
-.card{background:var(--card-glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
-.card h3{margin:0 0 8px;font-size:16px;font-weight:700;}
-.card p.hint{color:var(--muted);font-size:13px;margin:0 0 12px;line-height:1.5;}
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-/* Alertas e Insights */
-.insight{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:14px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
-.alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:14px;margin-bottom:12px;backdrop-filter:blur(8px);}
-.alert-card .emoji{font-size:24px;line-height:1;}
-.alert-card .t{font-size:14px;font-weight:700;margin-bottom:2px;}
-.alert-card .m{font-size:12px;color:var(--muted);line-height:1.4;}
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #27272A, #18181B);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: #E4E4E7;
+        }
 
-/* Botones Modernos */
-.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;border:none;cursor:pointer;border-radius:16px;padding:16px 20px;font-size:16px;font-weight:700;color:#fff;background:var(--primary);margin-bottom:10px;min-height:54px;box-shadow:0 4px 16px var(--primary-glow);transition:transform .1s, opacity .1s;}
-.btn:active{transform:scale(0.97);opacity:0.9;}
-.btn.small{padding:10px 14px;font-size:13px;border-radius:12px;min-height:40px;width:auto;}
-.btn.secondary{background:rgba(255,255,255,0.08);box-shadow:none;border:1px solid var(--border);}
-.btn.green{background:var(--green);box-shadow:0 4px 16px var(--green-glow);}
-.btn.purple{background:var(--purple);box-shadow:0 4px 16px rgba(139,92,246,0.3);}
-.btn.outline{background:transparent;border:2px solid var(--red);color:var(--red);box-shadow:none;}
-.btn.ghost{background:transparent;color:var(--muted);font-weight:500;box-shadow:none;}
+        .greeting span {
+            font-size: 12px;
+            color: #71717A;
+            display: block;
+        }
 
-/* Navegación Inferior (Bottom Nav Bar tipo Banco) */
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(18, 24, 36, 0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:50;}
-.nav-item{background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:600;cursor:pointer;flex:1;padding:6px;transition:color .2s;}
-.nav-item span.icon{font-size:20px;}
-.nav-item.active{color:var(--accent);}
-.scan-fab{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));border:none;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px var(--primary-glow);cursor:pointer;margin-top:-20px;transition:transform .15s;}
-.scan-fab:active{transform:scale(0.9);}
+        .greeting h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FAFAFA;
+        }
 
-/* Inputs y Formularios */
-.input{width:100%;background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:14px;color:var(--text);padding:14px;font-size:16px;margin-bottom:12px;outline:none;transition:border-color .2s;}
-.input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,0.15);}
-textarea.input{resize:vertical;min-height:80px;}
-label.lbl{font-size:12px;color:var(--muted);display:block;margin:0 0 6px 4px;font-weight:600;}
-select.input{appearance:none;}
+        /* Tarjeta de Balance Principal (Estilo Black Card) */
+        .balance-card {
+            background: linear-gradient(145deg, #18181B 0%, #0F0F12 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-/* Utilidades y Rejillas */
-.row{display:flex;gap:10px;width:100%;}.row.between{justify-content:space-between;align-items:center;}.row.wrap{flex-wrap:wrap;}
-.mini-grid{display:flex;gap:10px;width:100%;margin-bottom:14px;}
-.mini{flex:1;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 10px;text-align:center;}
-.mini .l{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.3px;}
-.mini .v{font-size:16px;font-weight:800;margin-top:4px;}
-.pbar-wrap{background:rgba(255,255,255,0.08);border-radius:8px;height:10px;overflow:hidden;display:flex;width:100%;}
-.pbar-wrap.h14{height:14px;border-radius:7px;}
-.pbar-spent{background:var(--red);height:100%;border-radius:8px 0 0 8px;}
-.pbar-rest{background:var(--green);height:100%;}
-.pbar-ess{background:var(--green);height:100%;border-radius:8px 0 0 8px;}
-.pbar-fug{background:var(--orange);height:100%;}
-.chart-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px;}
-.chart-title{font-size:14px;font-weight:700;margin-bottom:14px;}
-.bars{display:flex;justify-content:space-around;align-items:flex-end;height:120px;gap:8px;}
-.bar-col{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;}
-.bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:24px;border-radius:6px;overflow:hidden;}
-.bar-ess{background:var(--green);width:100%;} .bar-fug{background:var(--orange);width:100%;}
-.bar-lbl{font-size:10px;color:var(--muted);margin-top:6px;}
-.legend{display:flex;justify-content:center;gap:16px;margin-top:10px;font-size:11px;color:var(--muted);}
-.legend span{display:flex;align-items:center;gap:4px;}
-.legend .sw{width:8px;height:8px;border-radius:2px;display:inline-block;}
+        .balance-card:active {
+            transform: scale(0.98);
+        }
 
-/* Transacciones y Listas */
-.tx-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;transition:transform .1s;}
-.tx-item:active{transform:scale(0.99);}
-.tx-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
-.tx-name{font-weight:700;font-size:15px;} .tx-amt{font-weight:800;color:var(--accent);white-space:nowrap;}
-.tx-date{font-size:12px;color:var(--muted);margin:3px 0 8px;}
-.chip{display:inline-block;font-size:11px;padding:3px 8px;border-radius:6px;margin-right:6px;font-weight:600;}
-.chip.ess{background:rgba(16,185,129,0.15);color:var(--green);} .chip.fug{background:rgba(245,158,11,0.15);color:var(--orange);}
-.item-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:8px;}
-.item-row .ic{font-size:18px;} .item-row .nm{flex:1;} .item-row .nm .n{font-size:14px;font-weight:600;}
-.item-row .nm .e{font-size:11px;color:var(--muted);} .item-row .pr{font-weight:800;font-size:15px;}
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        }
 
-/* Onboarding y Modales */
-.dots{display:flex;gap:6px;justify-content:center;margin-bottom:20px;}
-.dot{width:32px;height:5px;border-radius:3px;background:var(--border);transition:background .3s;}
-.dot.done{background:var(--green);} .dot.cur{background:var(--accent);}
-.opt{display:flex;gap:12px;align-items:center;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--card);margin-bottom:8px;cursor:pointer;width:100%;color:var(--text);transition:all .2s;}
-.opt.sel{background:rgba(37,99,235,0.15);border-color:var(--primary);}
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;padding:12px 20px;border-radius:14px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:90%;text-align:center;}
-.toast.err{background:var(--red);} .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.overlay{position:fixed;inset:0;background:rgba(7,9,14,0.85);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;}
-.overlay.hidden{display:none;}
-.modal-card{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:24px;width:100%;max-width:340px;box-shadow:0 16px 40px rgba(0,0,0,0.5);}
-.spinner{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.empty{padding:40px 16px;text-align:center;color:var(--muted);} .empty .ic{font-size:48px;margin-bottom:12px;}
-.divider{height:16px;}
-</style>
+        .balance-label {
+            font-size: 13px;
+            color: #A1A1AA;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .balance-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 12px;
+            border-radius: 14px;
+            color: #F4F4F5;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-action.primary {
+            background: #FAFAFA;
+            color: #09090B;
+        }
+
+        .btn-action.primary:hover {
+            background: #E4E4E7;
+        }
+
+        /* Sección de Transacciones Recientes */
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #A1A1AA;
+            margin: 24px 0 12px 0;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .tx-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tx-item {
+            background: #121216;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 14px 16px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tx-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #E4E4E7;
+            margin-bottom: 2px;
+        }
+
+        .tx-info span {
+            font-size: 11px;
+            color: #71717A;
+        }
+
+        .tx-amount {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            color: #34D399;
+        }
+
+        .tx-amount.negative {
+            color: #F43F5E;
+        }
+
+        /* Indicador Home iOS inferior */
+        .ios-indicator {
+            width: 120px;
+            height: 4px;
+            background: #3F3F46;
+            border-radius: 2px;
+            margin: 20px auto 0 auto;
+        }
+    </style>
 </head>
 <body>
-<div id="app"></div>
-<div id="toast" class="toast"></div>
-<div id="overlay" class="overlay hidden"><div class="modal-card" style="text-align:center">
-  <div class="spinner"></div>
-  <div style="font-weight:800;font-size:16px;margin-bottom:6px;">Analizando ticket con IA...</div>
-  <div class="muted" style="font-size:13px;">Extrayendo productos y precios</div>
-</div></div>
-<input type="file" id="fileInput" accept="image/*" style="display:none">
 
-<script>
-const $ = s => document.querySelector(s);
-const app = $('#app');
-const fileInput = $('#fileInput');
+    <div class="phone-viewport">
+        <!-- Header -->
+        <div class="header">
+            <div class="user-profile">
+                <div class="avatar">RGS</div>
+                <div class="greeting">
+                    <span>Bienvenido de vuelta</span>
+                    <h2>RGS Labs Vault</h2>
+                </div>
+            </div>
+        </div>
 
-const store = {
-  get(k, d){ try{ const v = localStorage.getItem('mt_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
-  set(k, v){ localStorage.setItem('mt_'+k, JSON.stringify(v)); }
-};
-let profile = store.get('profile', null);
-let txs = store.get('txs', []);
-let notif = store.get('notif', {scan_reminder:true, budget_alert:true, fugas_alert:true, debt_opportunity:true});
-let apiUrl = store.get('api', '');
-let hideBalance = false;
-let onboardingData = {};
-let lastScan = null;
-let currentTab = 'home';
+        <!-- Tarjeta de Balance -->
+        <div class="balance-card">
+            <div class="balance-label">Balance Total Disponible</div>
+            <div class="balance-amount">$142,850.40</div>
+            <div class="card-actions">
+                <button class="btn-action primary">Depositar</button>
+                <button class="btn-action">Enviar</button>
+            </div>
+        </div>
 
-const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money = n => '$ ' + (Number(n)||0).toLocaleString('es-MX',{maximumFractionDigits:0});
-const money2 = n => '$ ' + (Number(n)||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2});
-const thisMonth = () => new Date().toISOString().slice(0,7);
-const today = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+        <!-- Historial / Movimientos -->
+        <div>
+            <div class="section-title">Actividad Reciente</div>
+            <div class="tx-list">
+                <div class="tx-item">
+                    <div class="tx-info">
+                        <h4>Stripe Payout</h4>
+                        <span>Hoy, 14:20 hrs</span>
+                    </div>
+                    <div class="tx-amount">+$12,400.00</div>
+                </div>
+                <div class="tx-item">
+                    <div class="tx-info">
+                        <h4>Server Infrastructure</h4>
+                        <span>Ayer, 09:15 hrs</span>
+                    </div>
+                    <div class="tx-amount negative">-$1,250.00</div>
+                </div>
+            </div>
+        </div>
 
-function toast(msg, err){
-  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '');
-  clearTimeout(t._h); t._h = setTimeout(()=> t.className='toast', 3000);
-}
-function overlay(show){ $('#overlay').classList.toggle('hidden', !show); }
-function fmtNumInput(el){
-  const digits = (el.value||'').replace(/\D/g,'').slice(0,10);
-  el.value = digits ? Number(digits).toLocaleString('en-US') : '';
-}
-function parseNum(s){ return Number(String(s||'').replace(/,/g,'').replace('$','').trim()) || 0; }
-
-function monthlySummary(month){
-  month = month || thisMonth();
-  let t=0, spent=0, fugas=0;
-  txs.forEach(x => { if((x.date||'').slice(0,7)===month){ t++; spent+=x.total_amount||0; if(x.category==='Fugas_Invisibles') fugas+=x.total_amount||0; } });
-  return {tickets:t, spent, fugas};
-}
-function lastScanDate(){ return txs.length ? txs.map(x=>x.date).sort().pop() : null; }
-function topMerchants(limit){
-  const agg = {};
-  txs.forEach(x => { if((x.date||'').slice(0,7)===thisMonth()) agg[x.merchant_name] = (agg[x.merchant_name]||0) + (x.total_amount||0); });
-  return Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0, limit||5);
-}
-function monthsWithData(){
-  const set = new Set(txs.map(x => (x.date||'').slice(0,7)).filter(Boolean));
-  const m = thisMonth(); if(!set.has(m)) set.add(m);
-  return [...set].sort().reverse();
-}
-function chartData(){
-  const map = {}; const now = new Date();
-  for(let i=5;i>=0;i--){
-    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
-    const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
-    map[k] = {total:0, fugas:0};
-  }
-  txs.forEach(x => {
-    const k = (x.date||'').slice(0,7);
-    if(map[k]){ map[k].total += x.total_amount||0; if(x.category==='Fugas_Invisibles') map[k].fugas += x.total_amount||0; }
-  });
-  return Object.entries(map);
-}
-function coachAlerts(){
-  const a = []; if(!profile) return a;
-  const s = monthlySummary();
-  const avail = profile.available_real||0, name = profile.name;
-  if(notif.scan_reminder){
-    const l = lastScanDate();
-    if(l){ const days = Math.floor((Date.now()-new Date(l).getTime())/86400000);
-      if(days>7) a.push(['📸',`Hace ${days} días sin escanear`,`${name}, escanea tu próximo ticket para mantener el control.`,'var(--accent)']);
-    } else if(s.tickets===0) a.push(['🚀','Primer paso',`${name}, escanea tu primer ticket para que tu copiloto empiece a aprender.`,'var(--green)']);
-  }
-  if(notif.fugas_alert && s.spent>0 && (s.fugas/s.spent)>0.25)
-    a.push(['🔥','Fugas detectadas',`Llevas ${money(s.fugas)} en gastos no esenciales (${Math.round(s.fugas/s.spent*100)}%).`,'var(--orange)']);
-  if(notif.budget_alert && avail>0 && s.spent > avail*0.85)
-    a.push(['⚠️','Presupuesto bajo',`Solo quedan ${money(avail-s.spent)} de tu disponible real.`,'var(--red)']);
-  return a;
-}
-function saveTxLocal(data){
-  txs.unshift({
-    id: Date.now(), date: data.date || today(), merchant_name: data.merchant_name || 'Desconocido',
-    total_amount: data.total_amount||0, currency: data.currency||'MXN',
-    category: data.category||'Gasto_Normal', items: data.items||[], notes: data.notes||'',
-    created_at: new Date().toISOString()
-  });
-  store.set('txs', txs);
-}
-function exportCSV(){
-  let csv = 'Fecha,Comercio,Total,Categoria,Esenciales,No Esenciales,Notas\n';
-  txs.forEach(t => {
-    const ess = (t.items||[]).filter(i=>i.is_essential).length;
-    csv += [t.date, `"${(t.merchant_name||'').replace(/"/g,'""')}"`, t.total_amount, t.category, ess, (t.items||[]).length-ess, `"${(t.notes||'').replace(/"/g,'""')}"`].join(',') + '\n';
-  });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'}));
-  a.download = 'myticket_export.csv'; a.click(); URL.revokeObjectURL(a.href);
-  toast('CSV exportado con éxito');
-}
-
-/* Componentes Comunes IU */
-function bottomNav(activeTab){
-  return `<nav class="bottom-nav">
-    <button class="nav-item ${activeTab==='home'?'active':''}" onclick="navigate('home')"><span class="icon">🏠</span>Inicio</button>
-    <button class="nav-item ${activeTab==='history'?'active':''}" onclick="navigate('history')"><span class="icon">🕘</span>Historial</button>
-    <button class="scan-fab" onclick="openScanDialog()" title="Escanear">📸</button>
-    <button class="nav-item ${activeTab==='stats'?'active':''}" onclick="navigate('stats')"><span class="icon">📊</span>Análisis</button>
-    <button class="nav-item ${activeTab==='profile'?'active':''}" onclick="navigate('profile')"><span class="icon">👤</span>Perfil</button>
-  </nav>`;
-}
-function navigate(tab){
-  currentTab = tab;
-  if(tab==='home') renderHome();
-  else if(tab==='history') renderHistory();
-  else if(tab==='stats') renderStats();
-  else if(tab==='profile') renderProfile();
-}
-function barChart(){
-  const rows = chartData();
-  if(!txs.length) return `<div class="chart-card" style="text-align:center;color:var(--muted)">Sin tickets registrados para gráfica</div>`;
-  const max = Math.max(...rows.map(r=>r[1].total), 1);
-  const bars = rows.map(([m,d]) => {
-    const th = Math.max(4, d.total/max*100);
-    const fh = d.total>0 ? d.fugas/max*100 : 0;
-    return `<div class="bar-col"><div class="bar-stack" style="height:100px;">
-      <div class="bar-fug" style="height:${fh}px"></div>
-      <div class="bar-ess" style="height:${Math.max(0,th-fh)}px"></div></div>
-      <div class="bar-lbl">${m.slice(5)}</div></div>`;
-  }).join('');
-  return `<div class="chart-card"><div class="chart-title">Evolución mensual de gastos</div>
-    <div class="bars">${bars}</div>
-    <div class="legend"><span><span class="sw" style="background:var(--green)"></span>Esencial</span>
-    <span><span class="sw" style="background:var(--orange)"></span>Fugas</span></div></div>`;
-}
-function mini(l, v, c){
-  return `<div class="mini"><div class="l">${l}</div><div class="v" ${c?`style="color:${c}"`:''}>${v}</div></div>`;
-}
-function alertCard(em, t, m, c){
-  return `<div class="alert-card" style="background:${c}15;border:1px solid ${c}30"><span class="emoji">${em}</span><div><div class="t" style="color:${c}">${t}</div><div class="m">${m}</div></div></div>`;
-}
-
-/* ============================================================
-   ONBOARDING (5 Pasos)
-   ============================================================ */
-function dots(cur){
-  return `<div class="dots">${[0,1,2,3,4].map(i=>`<div class="dot ${i<cur?'done':i===cur?'cur':''}"></div>`).join('')}</div>`;
-}
-function renderStep1(){
-  app.innerHTML = `<div class="screen">${dots(0)}
-    <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Bienvenido a MyTicket</h2>
-    <p class="hint">Paso 1 de 5 — Tu identidad en la app</p>
-    <div class="card"><h3>¿Cómo te llamas?</h3>
-      <p class="hint">Un apodo o nombre para personalizar tus reportes financieros.</p>
-      <input class="input" id="ob-name" placeholder="Ej: Papá Juan, Mamá, Yo..." maxlength="30"></div>
-    <button class="btn" onclick="obNext1()">Continuar ➜</button></div>`;
-  setTimeout(()=> $('#ob-name').focus(), 100);
-}
-function obNext1(){
-  const v = $('#ob-name').value.trim();
-  if(!v) return toast('Por favor escribe un nombre', true);
-  onboardingData.name = v; renderStep2();
-}
-function renderStep2(){
-  const opts = [['fijo','💼','Salario fijo','Quincena o mensualidad estable'],
-    ['eventual','🔧','Trabajo informal','Ingresos variables o freelance'],
-    ['negocio','🏪','Negocio propio','Comercio o servicios'],
-    ['pension','🧓','Pensión / Jubilación','Ingreso de retiro']];
-  app.innerHTML = `<div class="screen">${dots(1)}
-    <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Tus ingresos</h2>
-    <p class="hint">Paso 2 de 5 — Sin conectar bancos</p>
-    <div class="card"><h3>¿Cómo percibes ingresos?</h3>
-      ${opts.map(o=>`<button class="opt" data-v="${o[0]}" onclick="obPickType(this)"><span style="font-size:24px">${o[1]}</span>
-        <span><b style="font-size:15px">${o[2]}</b><br><span style="font-size:12px;color:var(--muted)">${o[3]}</span></span></button>`).join('')}
-      <div class="divider"></div>
-      <label class="lbl">Ingreso mensual aproximado</label>
-      <input class="input" id="ob-income" inputmode="numeric" placeholder="Ej: 15,000" oninput="fmtNumInput(this)">
-      <div style="text-align:center;color:var(--accent);font-weight:700;font-size:15px" id="ob-income-disp">$ 0 MXN</div></div>
-    <div class="row">
-      <button class="btn secondary" onclick="renderStep1()">‹ Atrás</button>
-      <button class="btn" onclick="obNext2()">Siguiente ➜</button></div></div>`;
-  $('#ob-income').addEventListener('input', ()=> $('#ob-income-disp').textContent = money(parseNum($('#ob-income').value)) + ' MXN');
-  obPickType(document.querySelector('.opt'));
-}
-function obPickType(el){
-  onboardingData.income_type = el.dataset.v;
-  document.querySelectorAll('.opt').forEach(o=> o.classList.toggle('sel', o===el));
-}
-function obNext2(){
-  const amt = parseNum($('#ob-income').value);
-  if(amt<=0) return toast('Ingresa un monto válido', true);
-  onboardingData.income_amount = amt; renderStep3();
-}
-function renderStep3(){
-  app.innerHTML = `<div class="screen">${dots(2)}
-    <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Gastos fijos</h2>
-    <p class="hint">Paso 3 de 5 — Lo comprometido del mes</p>
-    <div class="card"><h3>¿Qué pagas SÍ o SÍ cada mes?</h3>
-      <p class="hint">Renta, servicios, luz, internet, créditos fijos...</p>
-      <input class="input" id="ob-fixed" inputmode="numeric" placeholder="Ej: 6,000" oninput="fmtNumInput(this);obMath()">
-      <div style="text-align:center;color:var(--accent);font-weight:700;font-size:15px;margin-bottom:10px" id="ob-fixed-disp">$ 0 MXN</div></div>
-    <div class="card" id="ob-math"></div>
-    <div class="row">
-      <button class="btn secondary" onclick="renderStep2()">‹ Atrás</button>
-      <button class="btn" onclick="obNext3()">Siguiente ➜</button></div></div>`;
-  obMath();
-}
-function obMath(){
-  const income = onboardingData.income_amount;
-  const fixed = parseNum($('#ob-fixed')?.value);
-  $('#ob-fixed-disp') && ($('#ob-fixed-disp').textContent = money(fixed) + ' MXN');
-  const avail = Math.max(0, income - fixed);
-  $('#ob-math').innerHTML = `<h3 style="font-size:14px;margin-bottom:8px">Cálculo de Dinero REAL:</h3>
-    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0"><span>Ingresos</span><span>${money(income)}</span></div>
-    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0"><span>Gastos Fijos</span><span>${money(fixed)}</span></div>
-    <div style="font-size:18px;font-weight:800;color:var(--accent);text-align:center;padding-top:8px">Disponible REAL: ${money(avail)}</div>`;
-}
-function obNext3(){
-  onboardingData.fixed_expenses = parseNum($('#ob-fixed').value);
-  onboardingData.available_real = Math.max(0, onboardingData.income_amount - onboardingData.fixed_expenses);
-  renderStep4();
-}
-function renderStep4(){
-  app.innerHTML = `<div class="screen">${dots(3)}
-    <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Ruta de Rescate</h2>
-    <p class="hint">Paso 4 de 5 — Control de deudas (Opcional)</p>
-    <div class="card"><h3>¿Tienes deudas activas?</h3>
-      <div class="row" style="margin-bottom:12px">
-        <button class="opt sel" id="debt-no" onclick="obDebt('no')" style="justify-content:center"><b style="font-size:14px">No tengo deudas</b></button>
-        <button class="opt" id="debt-si" onclick="obDebt('si')" style="justify-content:center"><b style="font-size:14px">Sí, tengo deudas</b></button></div>
-      <div id="debt-fields" style="display:none">
-        <input class="input" id="ob-debt" inputmode="numeric" placeholder="¿Cuánto debes en total?" oninput="fmtNumInput(this)">
-        <input class="input" id="ob-interest" inputmode="numeric" placeholder="¿Interés anual aprox (%)?"></div></div>
-    <div class="row">
-      <button class="btn secondary" onclick="renderStep3()">‹ Atrás</button>
-      <button class="btn" onclick="obNext4()">Siguiente ➜</button></div></div>`;
-}
-function obDebt(v){
-  onboardingData._hasDebt = v;
-  $('#debt-si').classList.toggle('sel', v==='si');
-  $('#debt-no').classList.toggle('sel', v==='no');
-  $('#debt-fields').style.display = v==='si' ? 'block' : 'none';
-}
-function obNext4(){
-  if(onboardingData._hasDebt==='si'){
-    onboardingData.debt_amount = parseNum($('#ob-debt').value);
-    onboardingData.debt_interest = parseNum($('#ob-interest').value);
-  } else { onboardingData.debt_amount = 0; onboardingData.debt_interest = 0; }
-  renderStep5();
-}
-function renderStep5(){
-  const d = onboardingData;
-  app.innerHTML = `<div class="screen">${dots(4)}
-    <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Todo listo</h2>
-    <p class="hint">Paso 5 de 5 — Resumen de configuración</p>
-    <div class="card" style="text-align:center"><h3 style="font-size:20px">${esc(d.name)}</h3>
-      <p class="hint" style="margin:4px 0">Ingreso: <b>${money(d.income_amount)} MXN</b></p>
-      <div style="font-size:20px;font-weight:800;color:var(--accent);margin-top:8px">Disponible REAL: ${money(d.available_real)}</div></div>
-    <div class="row">
-      <button class="btn secondary" onclick="renderStep4()">‹ Atrás</button>
-      <button class="btn green" onclick="finishOnboarding()">🚀 ¡Empezar a usar MyTicket!</button></div></div>`;
-}
-function finishOnboarding(){
-  profile = { name:onboardingData.name, income_type:onboardingData.income_type||'fijo',
-    income_amount:onboardingData.income_amount, fixed_expenses:onboardingData.fixed_expenses,
-    available_real:onboardingData.available_real, debt_amount:onboardingData.debt_amount||0,
-    debt_interest:onboardingData.debt_interest||0, savings_goal:0, currency:'MXN' };
-  store.set('profile', profile);
-  toast(`¡Bienvenido, ${profile.name}!`);
-  navigate('home');
-}
-
-/* ============================================================
-   HOME / DASHBOARD (Estilo Neobanco)
-   ============================================================ */
-function renderHome(){
-  if(!profile) return renderStep1();
-  currentTab = 'home';
-  const s = monthlySummary(), avail = profile.available_real||0;
-  const spentPct = avail>0 ? Math.min(100, s.spent/avail*100) : 0;
-  const restPct = Math.max(0, 100-spentPct);
-  const realBalance = Math.max(0, avail - s.spent);
-  const fugasPct = s.spent>0 ? s.fugas/s.spent*100 : 0;
-  const ac = fugasPct<10 ? 'var(--green)' : fugasPct<20 ? 'var(--orange)' : 'var(--red)';
-
-  let coach = s.tickets===0 ? `Hola ${esc(profile.name)}, escanea tu primer ticket para activar tu copiloto financiero.`
-    : `Llevas un ${fugasPct.toFixed(0)}% de fugas este mes. ¡Mantén el ojo abierto!`;
-
-  const alerts = coachAlerts().map(a=>alertCard(...a)).join('');
-
-  app.innerHTML = `<div class="screen">
-    <div class="bank-header">
-      <div class="user-info">
-        <div class="user-avatar">${esc(profile.name.charAt(0)).toUpperCase()}</div>
-        <div class="user-text"><div class="greeting">Hola de nuevo</div><div class="name">${esc(profile.name)}</div></div>
-      </div>
-      <div class="header-actions">
-        <button class="icon-btn" onclick="navigate('profile')" title="Perfil">⚙️</button>
-      </div>
+        <!-- Indicador Home iOS inferior -->
+        <div class="ios-indicator"></div>
     </div>
 
-    <!-- Tarjeta Estilo Neobanco Principal -->
-    <div class="balance-card">
-      <div class="card-top-row">
-        <div class="card-chip"></div>
-        <button class="hide-toggle" onclick="hideBalance=!hideBalance;renderHome()">👁️ ${hideBalance?'Mostrar':'Ocultar'}</button>
-      </div>
-      <div class="balance-label">DISPONIBLE REAL ESTE MES</div>
-      <div class="balance-amount">${hideBalance?'$ ••••••':money(realBalance)}</div>
-      <div class="balance-details">
-        <span>Presupuesto base: <b>${hideBalance?'••••':money(avail)}</b></span>
-        <span>Gastado: <b>${hideBalance?'••••':money(s.spent)}</b></span>
-      </div>
-    </div>
-
-    <!-- Barra de progreso visual -->
-    <div class="card" style="padding:14px 16px;">
-      <div class="row between" style="margin-bottom:8px;font-size:13px">
-        <span style="color:var(--muted)">Consumo del mes</span>
-        <span style="font-weight:700">${spentPct.toFixed(0)}% gastado</span>
-      </div>
-      <div class="pbar-wrap h14"><div class="pbar-spent" style="width:${spentPct}%"></div><div class="pbar-rest" style="width:${restPct}%"></div></div>
-    </div>
-
-    <div class="insight" style="display:flex;gap:12px;align-items:center">
-      <span style="font-size:22px">🤖</span>
-      <div style="flex:1;font-size:13px;line-height:1.4">${coach}</div>
-    </div>
-
-    ${alerts}
-
-    <div class="mini-grid">
-      ${mini('Tickets', s.tickets)}
-      ${mini('Gastado', money(s.spent))}
-      ${mini('Fugas', money(s.fugas), ac)}
-    </div>
-
-    ${barChart()}
-  </div>${bottomNav('home')}`;
-}
-
-/* ============================================================
-   ESCANEO & RESULTADOS
-   ============================================================ */
-function openScanDialog(){
-  overlay(false);
-  app.insertAdjacentHTML('beforeend', `<div class="overlay" id="scanDlg"><div class="modal-card">
-    <h3 style="margin:0 0 6px">Escanear ticket</h3>
-    <p class="muted" style="font-size:13px;margin:0 0 16px">Selecciona el origen de la imagen</p>
-    <button class="btn" onclick="pickImage('camera')">📷 Tomar foto</button>
-    <button class="btn purple" onclick="pickImage('gallery')">🖼️ Elegir de galería</button>
-    <button class="btn ghost" onclick="$('#scanDlg').remove()">Cancelar</button></div></div>`);
-}
-function pickImage(source){
-  $('#scanDlg').remove();
-  if(source==='camera') fileInput.setAttribute('capture','environment'); else fileInput.removeAttribute('capture');
-  fileInput.value = ''; fileInput.click();
-}
-fileInput.addEventListener('change', () => { if(fileInput.files[0]) processScan(fileInput.files[0]); });
-
-function compressImage(file){
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const max = 1024; let w = img.width, h = img.height;
-      if(w > max){ h = Math.round(h * max/w); w = max; }
-      const c = document.createElement('canvas'); c.width = w; c.height = h;
-      c.getContext('2d').drawImage(img, 0, 0, w, h);
-      c.toBlob(b => resolve(b || file), 'image/jpeg', 0.85);
-      URL.revokeObjectURL(img.src);
-    };
-    img.onerror = () => resolve(file);
-    img.src = URL.createObjectURL(file);
-  });
-}
-async function processScan(file){
-  if(!apiUrl){ toast('⚠️ Configura tu Backend API URL en tu Perfil', true); return navigate('profile'); }
-  overlay(true);
-  try{
-    const blob = await compressImage(file);
-    const fd = new FormData(); fd.append('file', blob, 'ticket.jpg');
-    let result = null, err = '';
-    for(let attempt=0; attempt<2 && !result; attempt++){
-      try{
-        const r = await fetch(apiUrl.replace(/\/+$/,'') + '/scan-ticket', { method:'POST', body:fd });
-        const j = await r.json();
-        if(r.ok && !j.error) result = j; else err = j.error || ('Error HTTP: ' + r.status);
-      }catch(ex){ err = ex.message; }
-      if(!result && attempt===0) await new Promise(r=>setTimeout(r,2000));
-    }
-    overlay(false);
-    if(result){ lastScan = result; renderResult(); }
-    else toast('Error: ' + (err || 'no se pudo analizar el ticket'), true);
-  }catch(e){ overlay(false); toast('Error: ' + e.message, true); }
-}
-
-function renderResult(){
-  const d = lastScan; if(!d) return navigate('home');
-  const items = d.items || [];
-  let essT = 0, fugT = 0;
-  items.forEach(i => { i.is_essential ? essT += (i.price||0) : fugT += (i.price||0); });
-  const total = d.total_amount || essT + fugT;
-  const essPct = total>0 ? essT/total*100 : 0, fugPct = total>0 ? fugT/total*100 : 0;
-
-  app.innerHTML = `<div class="screen">
-    <div class="bank-header"><h2 style="font-size:18px;margin:0">Resultado del Análisis</h2><button class="icon-btn" onclick="navigate('home')">✕</button></div>
-    <div class="card" style="text-align:center">
-      <h3 style="font-size:18px">${esc(d.merchant_name||'Comercio')}</h3>
-      <p class="muted" style="font-size:12px;margin:2px 0 10px">${esc(d.date||today())}</p>
-      <div style="font-size:28px;font-weight:800;color:var(--accent)">${money2(total)} MXN</div>
-    </div>
-    <div class="card">
-      <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Clasificación de productos</div>
-      <div class="pbar-wrap h14"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
-      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div>
-    </div>
-    <p style="font-size:14px;font-weight:700;margin:4px 0 10px">Artículos detectados (${items.length}):</p>
-    <div style="max-height:220px;overflow-y:auto;margin-bottom:14px">
-      ${items.length ? items.map(i=>`<div class="item-row">
-        <span class="ic">${i.is_essential?'🟢':'🟠'}</span>
-        <span class="nm"><span class="n">${esc(i.name)}</span><br><span class="e">${i.is_essential?'Esencial':'No esencial'}</span></span>
-        <span class="pr">${money2(i.price||0)}</span></div>`).join('') : '<div class="empty">Sin artículos individuales</div>'}
-    </div>
-    <div class="card"><label class="lbl">Nota opcional</label><textarea class="input" id="res-notes" placeholder="Ej: Supermercado semanal..."></textarea></div>
-    <button class="btn green" onclick="saveResult(true)">💾 Guardar ticket</button>
-    <button class="btn secondary" onclick="navigate('home')">Descartar</button>
-  </div>${bottomNav('home')}`;
-}
-function saveResult(goHome){
-  const d = lastScan || {};
-  const items = d.items || [];
-  const fugT = items.filter(i=>!i.is_essential).reduce((s,i)=>s+(i.price||0),0);
-  const total = d.total_amount || items.reduce((s,i)=>s+(i.price||0),0);
-  d.category = (total>0 && fugT/total>0.3) ? 'Fugas_Invisibles' : 'Gasto_Normal';
-  d.notes = $('#res-notes') ? $('#res-notes').value : '';
-  saveTxLocal(d);
-  toast('¡Ticket guardado correctamente!');
-  navigate(goHome ? 'home' : 'history');
-}
-
-/* ============================================================
-   HISTORIAL
-   ============================================================ */
-let histMonth = thisMonth();
-function renderHistory(){
-  currentTab = 'history';
-  const months = monthsWithData();
-  if(!months.includes(histMonth)) histMonth = months[0];
-  app.innerHTML = `<div class="screen">
-    <div class="bank-header"><h2 style="font-size:18px;margin:0">Historial de Gastos</h2><button class="icon-btn" onclick="exportCSV()" title="Exportar CSV">⬇️</button></div>
-    <div class="row between" style="margin-bottom:12px">
-      <span style="font-size:13px;color:var(--muted)">Mes:</span>
-      <select class="input" style="width:140px;margin:0;padding:10px" onchange="histMonth=this.value;renderHistory()">
-        ${months.map(m=>`<option value="${m}" ${m===histMonth?'selected':''}>${m}</option>`).join('')}
-      </select>
-    </div>
-    <div id="hist-list" style="flex:1"></div>
-  </div>${bottomNav('history')}`;
-  renderHistList();
-}
-function renderHistList(){
-  const list = txs.filter(x => (x.date||'').slice(0,7) === histMonth);
-  $('#hist-list').innerHTML = list.length ? list.map(t => {
-    const ess = (t.items||[]).filter(i=>i.is_essential).length, non = (t.items||[]).length - ess;
-    const isF = t.category === 'Fugas_Invisibles';
-    return `<div class="tx-item">
-      <div class="tx-top"><span>${isF?'🟠':'🟢'} <span class="tx-name">${esc(t.merchant_name)}</span></span>
-        <span class="tx-amt">${money2(t.total_amount)}</span></div>
-      <div class="tx-date">${esc(t.date)}</div>
-      <div><span class="chip ess">${ess} esencial</span>${non>0?`<span class="chip fug">${non} no esencial</span>`:''}</div>
-      ${t.notes ? `<div style="font-size:12px;color:var(--muted);font-style:italic;margin-top:6px">"${esc(t.notes)}"</div>` : ''}</div>`;
-  }).join('') : `<div class="empty"><div class="ic">📭</div>No hay registros en este mes</div>`;
-}
-
-/* ============================================================
-   ESTADÍSTICAS & ANÁLISIS
-   ============================================================ */
-function renderStats(){
-  currentTab = 'stats';
-  const totalAll = txs.reduce((s,t)=>s+(t.total_amount||0),0);
-  const avg = txs.length ? totalAll/txs.length : 0;
-  const tops = topMerchants(5);
-  let essT=0, fugT=0;
-  txs.forEach(t => (t.items||[]).forEach(i => i.is_essential ? essT+=(i.price||0) : fugT+=(i.price||0)));
-  const ti = essT+fugT, essPct = ti>0 ? essT/ti*100 : 0, fugPct = ti>0 ? fugT/ti*100 : 0;
-
-  app.innerHTML = `<div class="screen">
-    <div class="bank-header"><h2 style="font-size:18px;margin:0">Análisis Financiero</h2></div>
-    <div class="mini-grid">
-      ${mini('Tickets', txs.length)}
-      ${mini('Promedio', money(avg))}
-      ${mini('Acumulado', money(totalAll))}
-    </div>
-    <div class="card">
-      <div class="chart-title">Distribución General</div>
-      <div class="pbar-wrap h14"><div class="pbar-ess" style="width:${essPct}%"></div><div class="pbar-fug" style="width:${fugPct}%"></div></div>
-      <div class="legend"><span style="color:var(--green)">Esencial ${essPct.toFixed(0)}%</span><span style="color:var(--orange)">Fugas ${fugPct.toFixed(0)}%</span></div>
-    </div>
-    ${barChart()}
-    <div class="card">
-      <div class="chart-title">Top Comercios (Este mes)</div>
-      ${tops.length ? tops.map((t,i)=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><span>${i+1}.${esc(t[0])}</span><b style="color:var(--accent)">${money(t[1])}</b></div>`).join('')
-        : '<p class="muted" style="font-size:12px;margin:0">Sin datos este mes</p>'}
-    </div>
-  </div>${bottomNav('stats')}`;
-}
-
-/* ============================================================
-   PERFIL & CONFIGURACIÓN
-   ============================================================ */
-function renderProfile(){
-  currentTab = 'profile';
-  const p = profile;
-  app.innerHTML = `<div class="screen">
-    <div class="bank-header"><h2 style="font-size:18px;margin:0">Mi Perfil y Ajustes</h2></div>
-    <div class="card">
-      <label class="lbl">Nombre o apodo</label><input class="input" id="pf-name" value="${esc(p.name)}">
-      <label class="lbl">Ingreso mensual</label><input class="input" id="pf-income" inputmode="numeric" value="${(p.income_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
-      <label class="lbl">Gastos fijos</label><input class="input" id="pf-fixed" inputmode="numeric" value="${(p.fixed_expenses||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
-      <label class="lbl">Deuda total</label><input class="input" id="pf-debt" inputmode="numeric" value="${(p.debt_amount||0).toLocaleString('en-US')}" oninput="fmtNumInput(this)">
-    </div>
-    <div class="card" style="border-color:rgba(59,130,246,0.3)">
-      <h3 style="font-size:14px;color:var(--accent)">🔌 Backend API URL (Groq IA)</h3>
-      <p class="hint">Pega la URL de tu Cloudflare Worker backend.</p>
-      <input class="input" id="pf-api" placeholder="https://tu-worker.workers.dev" value="${esc(apiUrl)}" autocapitalize="off" autocorrect="off">
-    </div>
-    <button class="btn green" onclick="saveProfile()">💾 Guardar Cambios</button>
-    <button class="btn outline" onclick="resetApp()">🗑️ Reiniciar aplicación</button>
-  </div>${bottomNav('profile')}`;
-}
-function saveProfile(){
-  const inc = parseNum($('#pf-income').value), fix = parseNum($('#pf-fixed').value);
-  profile = { ...profile, name: $('#pf-name').value.trim() || profile.name,
-    income_amount: inc, fixed_expenses: fix, available_real: Math.max(0, inc-fix),
-    debt_amount: parseNum($('#pf-debt').value) };
-  apiUrl = $('#pf-api').value.trim();
-  store.set('profile', profile); store.set('api', apiUrl);
-  toast('Perfil actualizado');
-  navigate('home');
-}
-function resetApp(){
-  if(!confirm('¿Borrar todos los datos y reiniciar la app?')) return;
-  localStorage.clear(); profile = null; txs = [];
-  toast('App reiniciada');
-  renderStep1();
-}
-
-/* Arranque inicial */
-profile ? navigate('home') : renderStep1();
-</script>
 </body>
 </html>
