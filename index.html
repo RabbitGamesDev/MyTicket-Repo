@@ -1,22 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
-
-    <!-- El Favicon clásico para la pestaña del navegador -->
-<link rel="icon" type="image/png" href="./favicon.png">
-
-<!-- El icono para iPhone / iOS -->
-<link rel="apple-touch-icon" href="./logo-192.png">
-
-<!-- El archivo de configuración para Android -->
-<link rel="manifest" href="./manifest.json">
-  
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>MyTicket — Mobile Banking Edition</title>
-<meta name="theme-color" content="#07090E">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Tus enlaces de configuración y recursos nativos -->
+<link rel="icon" type="image/png" href="./favicon.png">
+<link rel="apple-touch-icon" href="./logo-192.png">
+<link rel="manifest" href="./manifest.json">
+
 <style>
 :root{
   --bg:#07090E; --card:#121824; --card-glass:rgba(18, 24, 36, 0.75); --border:rgba(255,255,255,0.08);
@@ -26,10 +19,17 @@
   --text:#F8FAFC; --muted:#94A3B8;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+html,body{
+  margin:0; padding:0; background:#000; color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-  overflow-x:hidden;}
-#app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding-bottom:90px;position:relative;}
+  display:flex; justify-content:center; align-items:flex-start; min-height:100dvh; overflow-x:hidden;
+}
+/* Contenedor estricto para simular la pantalla del móvil en cualquier dispositivo */
+#app{
+  width:100%; max-width:480px; min-height:100dvh; background:var(--bg);
+  display:flex; flex-direction:column; padding-bottom:90px; position:relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.8);
+}
 
 /* Pantallas y Animaciones */
 .screen{flex:1;display:flex;flex-direction:column;padding:20px 16px;animation:fadeIn .3s cubic-bezier(0.16, 1, 0.3, 1);}
@@ -62,7 +62,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
 .card h3{margin:0 0 8px;font-size:16px;font-weight:700;}
 .card p.hint{color:var(--muted);font-size:13px;margin:0 0 12px;line-height:1.5;}
 
-/* Alertas y Insights */
+/* Alertas e Insights */
 .insight{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:14px;padding:14px;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
 .alert-card{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:14px;margin-bottom:12px;backdrop-filter:blur(8px);}
 .alert-card .emoji{font-size:24px;line-height:1;}
@@ -80,7 +80,7 @@ html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
 .btn.ghost{background:transparent;color:var(--muted);font-weight:500;box-shadow:none;}
 
 /* Navegación Inferior (Bottom Nav Bar tipo Banco) */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:rgba(18, 24, 36, 0.85);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:50;}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(18, 24, 36, 0.9);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;align-items:center;padding:10px 8px calc(10px + env(safe-area-inset-bottom));z-index:50;}
 .nav-item{background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:600;cursor:pointer;flex:1;padding:6px;transition:color .2s;}
 .nav-item span.icon{font-size:20px;}
 .nav-item.active{color:var(--accent);}
@@ -106,9 +106,6 @@ select.input{appearance:none;}
 .pbar-rest{background:var(--green);height:100%;}
 .pbar-ess{background:var(--green);height:100%;border-radius:8px 0 0 8px;}
 .pbar-fug{background:var(--orange);height:100%;}
-.pbar-fill{background:linear-gradient(90deg,var(--orange),var(--green));height:100%;border-radius:7px;}
-.legend{display:flex;gap:14px;justify-content:center;font-size:11px;color:var(--muted);margin-top:10px;align-items:center;}
-.legend .sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;}
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:14px;}
 .chart-title{font-size:14px;font-weight:700;margin-bottom:14px;}
 .bars{display:flex;justify-content:space-around;align-items:flex-end;height:120px;gap:8px;}
@@ -116,6 +113,9 @@ select.input{appearance:none;}
 .bar-stack{display:flex;flex-direction:column;justify-content:flex-end;width:24px;border-radius:6px;overflow:hidden;}
 .bar-ess{background:var(--green);width:100%;} .bar-fug{background:var(--orange);width:100%;}
 .bar-lbl{font-size:10px;color:var(--muted);margin-top:6px;}
+.legend{display:flex;justify-content:center;gap:16px;margin-top:10px;font-size:11px;color:var(--muted);}
+.legend span{display:flex;align-items:center;gap:4px;}
+.legend .sw{width:8px;height:8px;border-radius:2px;display:inline-block;}
 
 /* Transacciones y Listas */
 .tx-item{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:10px;transition:transform .1s;}
@@ -197,11 +197,6 @@ function monthlySummary(month){
   txs.forEach(x => { if((x.date||'').slice(0,7)===month){ t++; spent+=x.total_amount||0; if(x.category==='Fugas_Invisibles') fugas+=x.total_amount||0; } });
   return {tickets:t, spent, fugas};
 }
-function weeklyFugas(){
-  const lim = Date.now() - 7*86400000; let s=0;
-  txs.forEach(x => { if(x.category==='Fugas_Invisibles' && new Date(x.date).getTime() >= lim) s += x.total_amount||0; });
-  return s;
-}
 function lastScanDate(){ return txs.length ? txs.map(x=>x.date).sort().pop() : null; }
 function topMerchants(limit){
   const agg = {};
@@ -229,7 +224,7 @@ function chartData(){
 function coachAlerts(){
   const a = []; if(!profile) return a;
   const s = monthlySummary();
-  const avail = profile.available_real||0, debt = profile.debt_amount||0, name = profile.name;
+  const avail = profile.available_real||0, name = profile.name;
   if(notif.scan_reminder){
     const l = lastScanDate();
     if(l){ const days = Math.floor((Date.now()-new Date(l).getTime())/86400000);
@@ -297,10 +292,19 @@ function barChart(){
     <div class="legend"><span><span class="sw" style="background:var(--green)"></span>Esencial</span>
     <span><span class="sw" style="background:var(--orange)"></span>Fugas</span></div></div>`;
 }
+function mini(l, v, c){
+  return `<div class="mini"><div class="l">${l}</div><div class="v" ${c?`style="color:${c}"`:''}>${v}</div></div>`;
+}
+function alertCard(em, t, m, c){
+  return `<div class="alert-card" style="background:${c}15;border:1px solid ${c}30"><span class="emoji">${em}</span><div><div class="t" style="color:${c}">${t}</div><div class="m">${m}</div></div></div>`;
+}
 
 /* ============================================================
    ONBOARDING (5 Pasos)
    ============================================================ */
+function dots(cur){
+  return `<div class="dots">${[0,1,2,3,4].map(i=>`<div class="dot ${i<cur?'done':i===cur?'cur':''}"></div>`).join('')}</div>`;
+}
 function renderStep1(){
   app.innerHTML = `<div class="screen">${dots(0)}
     <h2 style="font-size:24px;margin:0 0 6px;font-weight:800">Bienvenido a MyTicket</h2>
@@ -555,7 +559,6 @@ function renderResult(){
   let essT = 0, fugT = 0;
   items.forEach(i => { i.is_essential ? essT += (i.price||0) : fugT += (i.price||0); });
   const total = d.total_amount || essT + fugT;
-  const fugasPct = total>0 ? fugT/total*100 : 0;
   const essPct = total>0 ? essT/total*100 : 0, fugPct = total>0 ? fugT/total*100 : 0;
 
   app.innerHTML = `<div class="screen">
